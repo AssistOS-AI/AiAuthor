@@ -8,6 +8,8 @@ export class documentViewPage {
         this.invalidate();
         this.controller = new AbortController();
         this.boundedFn = this.highlightElement.bind(this, this.controller);
+        this.previouslySelectedChapter= "";
+        this.previouslySelectedParagraph=""
         document.removeEventListener("click", this.boundedFn);
         document.addEventListener("click", this.boundedFn, {signal: this.controller.signal});
     }
@@ -56,8 +58,9 @@ export class documentViewPage {
         if (!swapAction) {
             webSkel.currentUser.space.currentParagraph = null;
         }
-        paragraph.removeEventListener("keydown", this.resetTimer);
-        paragraph.setAttribute("contenteditable", "false");
+        paragraph["timer"].stop(true);
+        paragraph["paragraph"].removeEventListener("keydown", this.resetTimer);
+        paragraph["paragraph"].setAttribute("contenteditable", "false");
     }
 
     editParagraph(paragraph) {
@@ -65,12 +68,12 @@ export class documentViewPage {
             paragraph.setAttribute("contenteditable", "true");
             let paragraphUnit = webSkel.UtilsService.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
-            this.previouslySelectedParagraph = paragraph;
+            this.previouslySelectedParagraph["paragraph"] = paragraph;
             this.switchParagraphArrows(paragraphUnit, "on");
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
-            debugger;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
+
             let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
@@ -82,6 +85,7 @@ export class documentViewPage {
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapter.id, currentParagraph.id, paragraphText);
                 }
             }, 1000);
+            this.previouslySelectedParagraph["timer"]=timer;
             let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteParagraph");
             this.resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
