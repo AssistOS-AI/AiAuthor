@@ -8,7 +8,6 @@ export class documentViewPage {
         this.invalidate();
         this.controller = new AbortController();
         this.boundedFn = this.highlightElement.bind(this, this.controller);
-        this.previouslySelectedChapter= "";
         this.previouslySelectedParagraph=""
         document.removeEventListener("click", this.boundedFn);
         document.addEventListener("click", this.boundedFn, {signal: this.controller.signal});
