@@ -70,7 +70,7 @@ export class documentViewPage {
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
@@ -327,7 +327,7 @@ export class documentViewPage {
             title.focus();
             title.parentElement.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let titleText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, titleText);
@@ -355,7 +355,7 @@ export class documentViewPage {
             abstract.focus();
             abstractSection.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer =  webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let abstractText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, abstractText);
