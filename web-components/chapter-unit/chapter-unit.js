@@ -80,13 +80,13 @@ export class chapterUnit {
         title.addEventListener('keydown', titleEnterHandler);
         title.focus();
 
-        let timer = new (webSkel.getService("UtilsService").SaveElementTimer(async () => {
+        let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
             let titleText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(title.innerText))
             if (titleText !== this.chapter.title && titleText !== "") {
                 let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateChapterTitle");
                 await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapter.id, titleText);
             }
-        }, 3000));
+        }, 3000);
         /* NO chapter Title */
         /* constants for page names */
         /* save button hidden */

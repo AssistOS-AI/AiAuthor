@@ -70,7 +70,7 @@ export class documentViewPage {
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
-            let timer = new (webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
@@ -80,7 +80,7 @@ export class documentViewPage {
                     let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateParagraphText");
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapter.id, currentParagraph.id, paragraphText);
                 }
-            }, 1000));
+            }, 1000);
             let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteParagraph");
             this.resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
@@ -327,12 +327,12 @@ export class documentViewPage {
             title.focus();
             title.parentElement.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = new (webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let titleText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, titleText);
                 }
-            }, 1000));
+            }, 1000);
             title.addEventListener("blur", async () => {
                 title.innerText = webSkel.UtilsService.customTrim(title.innerText) || webSkel.UtilsService.unsanitize(this._document.title);
                 await timer.stop(true);
@@ -355,12 +355,12 @@ export class documentViewPage {
             abstract.focus();
             abstractSection.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
-            let timer = new (webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let abstractText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
                     await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, abstractText);
                 }
-            }, 1000));
+            }, 1000);
 
             abstract.addEventListener("blur", async () => {
                 abstract.innerText = webSkel.UtilsService.customTrim(abstract.innerText) || webSkel.UtilsService.unsanitize(this._document.abstract);
