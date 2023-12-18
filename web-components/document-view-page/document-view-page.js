@@ -8,7 +8,6 @@ export class documentViewPage {
         this.invalidate();
         this.controller = new AbortController();
         this.boundedFn = this.highlightElement.bind(this, this.controller);
-        this.previouslySelectedParagraph=""
         document.removeEventListener("click", this.boundedFn);
         document.addEventListener("click", this.boundedFn, {signal: this.controller.signal});
     }
@@ -67,6 +66,7 @@ export class documentViewPage {
             paragraph.setAttribute("contenteditable", "true");
             let paragraphUnit = webSkel.UtilsService.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
+            this.previouslySelectedParagraph={};
             this.previouslySelectedParagraph["paragraph"] = paragraph;
             this.switchParagraphArrows(paragraphUnit, "on");
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
@@ -128,7 +128,7 @@ export class documentViewPage {
                 this.displaySidebar("paragraph-sidebar", "on");
             } else {
                 /* clickul e pe acelasi capitol dar alt paragraf*/
-                if (this.paragraphUnit !== this.previouslySelectedParagraph) {
+                if (this.paragraphUnit !== this.previouslySelectedParagraph["paragraph"]) {
                     /* clickul e pe un paragraf diferit de cel curent */
                     if (this.previouslySelectedParagraph) {
                         this.saveParagraph(this.previouslySelectedParagraph);
@@ -158,9 +158,9 @@ export class documentViewPage {
                         this.saveParagraph(this.previouslySelectedParagraph, "swap");
                     }
                     if (webSkel.UtilsService.getClosestParentElement(event.target, ".arrow-up") || webSkel.UtilsService.getClosestParentElement(event.target, ".arrow-up-space")) {
-                        await this.moveParagraph(this.previouslySelectedParagraph, "up")
+                        await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "up")
                     } else {
-                        await this.moveParagraph(this.previouslySelectedParagraph, "down")
+                        await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "down")
                     }
                 } else {
                     if (webSkel.UtilsService.getClosestParentElement(event.target, ".chapter-arrows")) {
@@ -219,8 +219,8 @@ export class documentViewPage {
     deselectPreviousParagraph() {
         if (this.previouslySelectedParagraph) {
             webSkel.currentUser.space.currentParagraphId = null;
-            this.previouslySelectedParagraph.setAttribute("contenteditable", "false");
-            this.switchParagraphArrows(this.previouslySelectedParagraph, "off");
+            this.previouslySelectedParagraph["pragraph"].setAttribute("contenteditable", "false");
+            this.switchParagraphArrows(this.previouslySelectedParagraph["paragraph"], "off");
             delete this.previouslySelectedParagraph;
         }
     }
