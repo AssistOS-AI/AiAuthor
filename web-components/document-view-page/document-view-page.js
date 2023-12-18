@@ -69,6 +69,7 @@ export class documentViewPage {
             this.switchParagraphArrows(paragraphUnit, "on");
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
+            debugger;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
             let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 if (!currentParagraph) {
@@ -184,7 +185,6 @@ export class documentViewPage {
                 this.displaySidebar("chapter-sidebar", "off");
             }
             if(this.previouslySelectedParagraph){
-                debugger;
                 this.saveParagraph(this.previouslySelectedParagraph);
             }
             this.deselectPreviousParagraph();
