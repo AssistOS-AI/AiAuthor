@@ -24,6 +24,19 @@
       "cssPaths": [
         "web-components/action-box-with-clone/action-box-with-clone.css"
       ]
+    },
+    {
+      "componentName": "add-document-modal",
+      "componentPath": "web-components/add-document-modal/add-document-modal.html",
+      "cssPaths": [
+        "web-components/add-document-modal/add-document-modal.css"
+      ]
+    },{
+      "componentName": "generate-document-modal",
+      "componentPath": "web-components/generate-document-modal/generate-document-modal.html",
+      "cssPaths": [
+        "web-components/generate-document-modal/generate-document-modal.css"
+      ]
     }
   ],
   "presenters": [
@@ -31,6 +44,16 @@
       "presenterPath": "web-components/documents-page/documents-page.js",
       "presenterName":"documentsPage",
       "forComponent": "documents-page"
+    },
+    {
+      "presenterPath": "web-components/add-document-modal/add-document-modal.js",
+      "presenterName":"addDocumentModal",
+      "forComponent": "add-document-modal"
+    },
+    {
+      "presenterPath": "web-components/generate-document-modal/generate-document-modal.js",
+      "presenterName":"generateDocumentModal",
+      "forComponent": "generate-document-modal"
     }
   ]
 }
