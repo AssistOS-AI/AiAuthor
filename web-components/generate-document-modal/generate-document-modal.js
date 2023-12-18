@@ -11,7 +11,7 @@ export class generateDocumentModal{
         this.personalitiesOptions = stringHTML;
     }
     closeModal(_target) {
-        webSkel.utilsService.closeModal(_target);
+        webSkel.UtilsService.closeModal(_target);
     }
     async generateDocument(_target) {
         let formData = await webSkel.UtilsService.extractFormInformation(_target);
