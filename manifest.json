@@ -10,6 +10,20 @@
       "cssPaths": [
         "web-components/documents-page/documents-page.css"
       ]
+    },
+    {
+      "componentName": "documents-unit",
+      "componentPath": "web-components/documents-unit/documents-unit.html",
+      "cssPaths": [
+        "web-components/documents-unit/documents-unit.css"
+      ]
+    },
+    {
+      "componentName": "action-box-with-clone",
+      "componentPath": "web-components/action-box-with-clone/action-box-with-clone.html",
+      "cssPaths": [
+        "web-components/action-box-with-clone/action-box-with-clone.css"
+      ]
     }
   ],
   "presenters": [
