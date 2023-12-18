@@ -29,8 +29,8 @@
   "presenters": [
     {
       "presenterPath": "web-components/documents-page/documents-page.js",
-      "presenterName":"imageBrainstormingPage",
-      "forComponent": "documentsPage"
+      "presenterName":"documentsPage",
+      "forComponent": "documents-page"
     }
   ]
 }
