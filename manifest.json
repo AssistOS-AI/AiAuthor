@@ -12,10 +12,10 @@
       ]
     },
     {
-      "componentName": "documents-unit",
-      "componentPath": "web-components/documents-unit/documents-unit.html",
+      "componentName": "document-unit",
+      "componentPath": "web-components/document-unit/document-unit.html",
       "cssPaths": [
-        "web-components/documents-unit/documents-unit.css"
+        "web-components/document-unit/document-unit.css"
       ]
     },
     {
