@@ -34,7 +34,7 @@ export class editAbstractPage {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText =  webSkel.UtilsService.sanitize(abstract.innerText);
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
@@ -86,7 +86,7 @@ export class editAbstractPage {
             let abstract = this._document.getAlternativeAbstract(alternativeAbstractId);
             abstractText.setAttribute("contenteditable", "true");
             abstractText.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer =webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText =  webSkel.UtilsService.sanitize(abstractText.innerText);
                 let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAlternativeAbstract");

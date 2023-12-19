@@ -61,7 +61,7 @@ export class manageChaptersPage {
         if (mainIdeas.getAttribute("contenteditable") === "false") {
             mainIdeas.setAttribute("contenteditable", "true");
             mainIdeas.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let ideas = mainIdeas.innerText.split("\n");
                 let ideasString = ideas.join("");

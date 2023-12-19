@@ -54,7 +54,7 @@ export class paragraphBrainstormingPage {
             item.setAttribute("contenteditable", "true");
             item.focus();
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateParagraphMainIdea");
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(item.innerText);
                 if(itemName === "mainIdea"){
@@ -120,7 +120,7 @@ export class paragraphBrainstormingPage {
             let currentAltParagraph = this._paragraph.getAlternativeParagraph(paragraphId);
             paragraph.setAttribute("contenteditable", "true");
             paragraph.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(paragraph.innerText);
                 if (sanitizedText !== currentAltParagraph.text && !confirmationPopup) {

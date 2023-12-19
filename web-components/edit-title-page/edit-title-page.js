@@ -22,7 +22,7 @@ export class editTitlePage {
             title.setAttribute("contenteditable", "true");
             title.focus();
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(title.innerText);
                 if (sanitizedText !== this._document.title && !confirmationPopup) {
@@ -68,7 +68,7 @@ export class editTitlePage {
             let altTitleObj = this._document.getAlternativeTitle(component.getAttribute("data-id"));
             newTitle.setAttribute("contenteditable", "true");
             newTitle.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {

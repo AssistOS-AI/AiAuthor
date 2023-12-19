@@ -39,7 +39,7 @@ export class chapterTitlePage {
         if (title.getAttribute("contenteditable") === "false") {
             title.setAttribute("contenteditable", "true");
             title.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(title.innerText);
                 if (sanitizedText !== this._chapter.title && !confirmationPopup) {
@@ -78,7 +78,7 @@ export class chapterTitlePage {
             newTitle.setAttribute("contenteditable", "true");
             newTitle.focus();
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAlternativeChapterTitle");
-            let timer = new  webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {

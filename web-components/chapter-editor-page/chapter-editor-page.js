@@ -42,7 +42,7 @@ export class chapterEditorPage{
     async editChapterTitle(title){
         title.setAttribute("contenteditable", "true");
         title.focus();
-        let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+        let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
             if (title.innerText !== this._chapter.title) {
                 let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateChapterTitle");
                 await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
@@ -137,7 +137,7 @@ export class chapterEditorPage{
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this._chapter.getParagraph(currentParagraphId);
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;

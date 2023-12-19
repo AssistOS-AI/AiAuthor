@@ -68,7 +68,7 @@ export class paragraphProofreadPage {
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
             paragraph.focus();
-            let timer = new webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = webSkel.UtilsService.sanitize(paragraph.innerText);
                 if (sanitizedText !== this._paragraph.text && !confirmationPopup) {
