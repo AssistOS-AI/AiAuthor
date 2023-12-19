@@ -219,7 +219,7 @@ export class documentViewPage {
     deselectPreviousParagraph() {
         if (this.previouslySelectedParagraph) {
             webSkel.currentUser.space.currentParagraphId = null;
-            this.previouslySelectedParagraph["pragraph"].setAttribute("contenteditable", "false");
+            this.previouslySelectedParagraph["paragraph"].setAttribute("contenteditable", "false");
             this.switchParagraphArrows(this.previouslySelectedParagraph["paragraph"], "off");
             delete this.previouslySelectedParagraph;
         }
