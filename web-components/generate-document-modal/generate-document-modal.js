@@ -17,10 +17,9 @@ export class generateDocumentModal{
         let formData = await webSkel.UtilsService.extractFormInformation(_target);
         if(formData.isValid) {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateDocument");
+            webSkel.UtilsService.closeModal(_target);
             let result = await  webSkel.getService("LlmsService").callFlow(flowId, formData.data.documentTitle,
                 formData.data.documentTopic, formData.data.chaptersCount, formData.data.documentPersonality, "");
-
         }
-        webSkel.UtilsService.closeModal(_target);
     }
 }
