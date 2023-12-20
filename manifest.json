@@ -166,14 +166,14 @@
       ]
     },
     {
-      "componentName": "generate-chapters-page",
+      "componentName": "manage-chapters-page",
       "componentPath": "web-components/manage-chapters-page/manage-chapters-page.html",
       "cssPaths": [
         "web-components/manage-chapters-page/manage-chapters-page.css"
       ]
     },
     {
-      "componentName": "generate-paragraphs-page",
+      "componentName": "manage-paragraphs-page",
       "componentPath": "web-components/manage-paragraphs-page/manage-paragraphs-page.html",
       "cssPaths": [
         "web-components/manage-paragraphs-page/manage-paragraphs-page.css"
