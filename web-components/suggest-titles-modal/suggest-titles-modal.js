@@ -1,6 +1,7 @@
+import {parseURL} from "../../utils/index.js";
 export class suggestTitlesModal {
     constructor(element, invalidate) {
-        this.id = window.location.hash.split('/')[1];
+        this.id = parseURL();
         this._document = webSkel.currentUser.space.getDocument(this.id);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
