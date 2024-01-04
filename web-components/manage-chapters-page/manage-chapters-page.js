@@ -1,3 +1,5 @@
+import {parseURL,getBasePath} from "../../utils/index.js";
+
 export class manageChaptersPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -87,7 +89,7 @@ export class manageChaptersPage {
 
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
     async addChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddChapter");
@@ -99,7 +101,7 @@ export class manageChaptersPage {
     }
 
     async generateChapters(){
-        await webSkel.changeToDynamicPage("generate-chapters-page", `documents/${this._document.id}/generate-chapters-page`);
+        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/documents/${this._document.id}/generate-chapters-page`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
         await webSkel.UtilsService.showActionBox(_target, primaryKey, componentName, insertionMode);
@@ -109,7 +111,7 @@ export class manageChaptersPage {
         let chapter = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
         await webSkel.changeToDynamicPage("chapter-brainstorming-page",
-            `documents/${this._document.id}/chapter-brainstorming-page/${chapterId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${chapterId}/chapter-brainstorming-page`);
     }
     async deleteAction(_target){
         let chapter = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-chapter-unit");

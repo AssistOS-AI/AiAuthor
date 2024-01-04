@@ -1,3 +1,5 @@
+import {getBasePath,parseURL} from "../../utils/index.js";
+
 export class manageParagraphsPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -88,11 +90,11 @@ export class manageParagraphsPage {
     }
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async openChapterEditPage(){
-        await webSkel.changeToDynamicPage("chapter-edit-page", `documents/${this._document.id}/chapter-edit-page/${this._chapter.id}`);
+        await webSkel.changeToDynamicPage("chapter-edit-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-edit-page`);
     }
     async addParagraph(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
@@ -104,7 +106,7 @@ export class manageParagraphsPage {
     }
 
     async generateParagraphs(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `documents/${this._document.id}/generate-paragraphs-page/${this._chapter.id}`);
+        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/generate-paragraphs-page`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
         await webSkel.UtilsService.showActionBox(_target, primaryKey, componentName, insertionMode);
@@ -114,7 +116,7 @@ export class manageParagraphsPage {
         let paragraph = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
         await webSkel.changeToDynamicPage("paragraph-brainstorming-page",
-            `documents/${this._document.id}/paragraph-brainstorming-page/${this._chapter.id}/${paragraphId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${paragraphId}/paragraph-brainstorming-page`);
     }
     async deleteAction(_target){
         let paragraph = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-paragraph-unit");

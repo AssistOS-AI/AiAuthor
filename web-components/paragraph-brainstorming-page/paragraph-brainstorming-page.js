@@ -1,3 +1,5 @@
+import {getBasePath,parseURL} from "../../utils/index.js";
+
 export class paragraphBrainstormingPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -90,15 +92,15 @@ export class paragraphBrainstormingPage {
     }
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async openChapterBrainStormingPage(){
-        await webSkel.changeToDynamicPage("chapter-brainstorming-page", `documents/${this._document.id}/chapter-brainstorming-page/${this._chapter.id}`);
+        await webSkel.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-brainstorming-page`);
     }
 
     async openParagraphProofreadPage(){
-        await webSkel.changeToDynamicPage("paragraph-proofread-page", `documents/${this._document.id}/paragraph-proofread-page/${this._chapter.id}/${this._paragraph.id}`);
+        await webSkel.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}/paragraph-proofread-page`);
     }
 
     async summarize(){
