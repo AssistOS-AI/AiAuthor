@@ -10,12 +10,12 @@ export class generateChaptersPage {
     }
 
     beforeRender() {
-      let stringHMTL = "";
+        let stringHMTL = "";
         let i = 0;
         for(let idea of this.ideas){
-          i++;
-          if(i === this.ideas.length){
-              stringHMTL+=`<div class="generated-idea" data-id="${i+idea}">
+            i++;
+            if(i === this.ideas.length){
+                stringHMTL+=`<div class="generated-idea" data-id="${i+idea}">
                 <div class="idea-container">
                   <span class="alt-title-span">${i}.</span>
                   <label for="${i+idea}" class="alt-title-label">${idea}</label>
@@ -23,8 +23,8 @@ export class generateChaptersPage {
                 <input type="checkbox" id="${i+idea}" name="${i+idea}" value="${idea}" data-condition="verifyCheckedIdeas">
             </div>
             <hr class="generated-ideas-hr">`;
-          }else {
-              stringHMTL+=`<div class="generated-idea" data-id="${i}">
+            }else {
+                stringHMTL+=`<div class="generated-idea" data-id="${i}">
                 <div class="idea-container">
                   <span class="alt-title-span">${i}.</span>
                   <label for="${i}" class="alt-title-label">${idea}</label>
@@ -32,7 +32,7 @@ export class generateChaptersPage {
                 <input type="checkbox" id="${i}" name="${idea}" value="${idea}">
             </div>
             <hr class="generated-ideas-hr">`;
-          }
+            }
         }
         this.chaptersIdeas = stringHMTL;
     }
@@ -79,7 +79,7 @@ export class generateChaptersPage {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateEmptyChapters");
             let result = await webSkel.getService("LlmsService").callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `documents/${this._document.id}/manage-chapters-page`);
+                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
             }
         }
     }
@@ -87,8 +87,8 @@ export class generateChaptersPage {
     verifyCheckedIdeas(element, formData) {
         let checkedIdeas = [];
         for (const [key, value] of Object.entries(formData.elements)) {
-        if(value.element.checked) {
-            checkedIdeas.push(value.element.value);
+            if(value.element.checked) {
+                checkedIdeas.push(value.element.value);
             }
         }
         if(element.checked){
@@ -109,15 +109,15 @@ export class generateChaptersPage {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateChapters");
             let result = await webSkel.getService("LlmsService").callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `documents/${this._document.id}/manage-chapters-page`);
+                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
             }
         }
     }
 
     async openMangeChaptersPage() {
-        await webSkel.changeToDynamicPage("manage-chapters-page", `documents/${this._document.id}/manage-chapters-page`);
+        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
     }
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 }
