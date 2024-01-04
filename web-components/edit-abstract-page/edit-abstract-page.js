@@ -1,4 +1,4 @@
-import {getBasePath} from "../../utils/index.js";
+import {parseURL,getBasePath} from "../../utils/index.js";
 export class editAbstractPage {
     constructor(element, invalidate) {
         this.element=element;
