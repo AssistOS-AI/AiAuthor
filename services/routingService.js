@@ -11,6 +11,6 @@ export class routingService{
             webSkel.currentUser.space.currentChapterId = chapterIdURL;
             webSkel.currentUser.space.currentParagraphId = paragraphIdURL;
         }
-        await webSkel.changeToDynamicPage(presenterName, url.slice(1));
+        await webSkel.changeToDynamicPage(presenterName, location.slice(1));
     }
 }
