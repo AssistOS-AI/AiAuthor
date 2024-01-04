@@ -2,7 +2,7 @@ export class routingService {
     constructor() {
         this.appName = "AiAuthor";
     }
-    async navigateToApplication(locationArray) {
+    async navigateToLocation(locationArray) {
         if (locationArray[0] !== "documents" && locationArray[0] !== "documents-page") {
             console.error("Invalid URL structure.");
             return;
