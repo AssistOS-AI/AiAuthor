@@ -14,5 +14,5 @@ export function getAppName(){
     return 'AiAuthor';
 }
 export function getBasePath(){
-    return `${webSkel.currentUser.space.id}`+`/`+`${this.getAppName()}`;
+    return `${webSkel.currentUser.space.id}`+`/`+`${getAppName()}`;
 }
