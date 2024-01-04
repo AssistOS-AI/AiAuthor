@@ -9,7 +9,7 @@ export function parseURL() {
         return documentId;
     }
 }
-/* TBD with baseURL from ASSISTOS, manager or find a better solution */
+/* TBD with baseURL from ASSISTOS, app manager with metadata or find a better solution */
 export function getAppName(){
     return 'AiAuthor';
 }

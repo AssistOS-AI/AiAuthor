@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class abstractProofreadPage {
     constructor(element, invalidate) {
         this.element=element;
@@ -32,7 +32,7 @@ export class abstractProofreadPage {
     }
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async executeProofRead() {
@@ -107,10 +107,10 @@ export class abstractProofreadPage {
         }
     }
     async openEditAbstractPage() {
-        await webSkel.changeToDynamicPage("edit-abstract-page", `documents/${this._document.id}/edit-abstract-page`);
+        await webSkel.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/documents/${this._document.id}/edit-abstract-page`);
     }
     async proofreadAbstract(){
-        await webSkel.changeToDynamicPage("abstract-proofread-page", `documents/${this._document.id}/abstract-proofread-page`);
+        await webSkel.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/documents/${this._document.id}/abstract-proofread-page`);
     }
 
 }

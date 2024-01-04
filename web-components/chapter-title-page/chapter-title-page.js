@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class chapterTitlePage {
     constructor(element, invalidate) {
         this.element = element;
@@ -63,7 +63,7 @@ export class chapterTitlePage {
     }
     async openChapterTitlePage() {
         await webSkel.changeToDynamicPage("chapter-title-page",
-            `documents/${this.docId}/chapter-title-page/${this._chapter.id}`);
+            `${getBasePath()}/documents/${this.docId}/chapters/${this._chapter.id}/chapter-title-page`);
 
     }
     async edit(_target) {
@@ -113,7 +113,7 @@ export class chapterTitlePage {
         this.invalidate();
     }
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     closeModal(_target) {
