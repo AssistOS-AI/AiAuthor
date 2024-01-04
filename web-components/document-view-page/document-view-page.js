@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class documentViewPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -393,51 +393,51 @@ export class documentViewPage {
     }
 
     async openEditTitlePage() {
-        await webSkel.changeToDynamicPage("edit-title-page", `documents/${this._document.id}/edit-title-page`);
+        await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/documents/${this._document.id}/edit-title-page`);
     }
 
     async openEditAbstractPage() {
-        await webSkel.changeToDynamicPage("edit-abstract-page", `documents/${this._document.id}/edit-abstract-page`);
+        await webSkel.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/documents/${this._document.id}/edit-abstract-page`);
     }
 
     async openDocumentSettingsPage() {
-        await webSkel.changeToDynamicPage("document-settings-page", `documents/${this._document.id}/document-settings-page`);
+        await webSkel.changeToDynamicPage("document-settings-page", `${getBasePath()}/documents/${this._document.id}/document-settings-page`);
     }
 
     async openManageChaptersPage() {
-        await webSkel.changeToDynamicPage("manage-chapters-page", `documents/${this._document.id}/manage-chapters-page`);
+        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
     }
 
     async openChapterBrainstormingPage() {
         await webSkel.changeToDynamicPage("chapter-brainstorming-page",
-            `documents/${this._document.id}/chapter-brainstorming-page/${webSkel.currentUser.space.currentChapterId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/chapter-brainstorming-page`);
 
     }
 
     async openManageParagraphsPage() {
         await webSkel.changeToDynamicPage("manage-paragraphs-page",
-            `documents/${this._document.id}/manage-paragraphs-page/${webSkel.currentUser.space.currentChapterId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/manage-paragraphs-page`);
     }
 
     async openParagraphProofreadPage() {
-        await webSkel.changeToDynamicPage("paragraph-proofread-page", `documents/${this._document.id}/paragraph-proofread-page/${webSkel.currentUser.space.currentChapterId}/${webSkel.currentUser.space.currentParagraphId}`);
+        await webSkel.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/paragraphs/${webSkel.currentUser.space.currentParagraphId}/paragraph-proofread-page`);
     }
 
     async openParagraphBrainstormingPage() {
         await webSkel.changeToDynamicPage("paragraph-brainstorming-page",
-            `documents/${this._document.id}/paragraph-brainstorming-page/${webSkel.currentUser.space.currentChapterId}/${webSkel.currentUser.space.currentParagraphId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/paragraphs/${webSkel.currentUser.space.currentParagraphId}/paragraph-brainstorming-page`);
     }
 
     async openEditChapterTitlePage() {
         await webSkel.changeToDynamicPage("chapter-title-page",
-            `documents/${this._document.id}/chapter-title-page/${webSkel.currentUser.space.currentChapterId}`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/chapter-title-page`);
     }
 
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async openChapterEditor() {
-        await webSkel.changeToDynamicPage("chapter-editor-page", `documents/${this._document.id}/chapter-editor-page/${webSkel.currentUser.space.currentChapterId}`);
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/chapter-editor-page`);
     }
 }

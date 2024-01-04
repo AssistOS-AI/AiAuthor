@@ -9,3 +9,10 @@ export function parseURL() {
         return documentId;
     }
 }
+/* TBD with baseURL from ASSISTOS, manager or find a better solution */
+export function getAppName(){
+    return 'AiAuthor';
+}
+export function getBasePath(){
+    return `${webSkel.currentUser.space.id}`+`/`+`${this.getAppName()}`;
+}

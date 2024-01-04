@@ -1,3 +1,4 @@
+import {getBasePath} from "../../utils/index.js";
 export class editAbstractPage {
     constructor(element, invalidate) {
         this.element=element;
@@ -21,11 +22,11 @@ export class editAbstractPage {
 
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async proofreadAbstract(){
-        await webSkel.changeToDynamicPage("abstract-proofread-page", `documents/${this._document.id}/abstract-proofread-page`);
+        await webSkel.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/documents/${this._document.id}/abstract-proofread-page`);
     }
 
     async editAbstract(_target) {
@@ -116,7 +117,7 @@ export class editAbstractPage {
         this.invalidate();
     }
     async openEditAbstractPage() {
-        await webSkel.changeToDynamicPage("edit-abstract-page", `documents/${this._document.id}/edit-abstract-page`);
+        await webSkel.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/documents/${this._document.id}/edit-abstract-page`);
     }
 }
 
