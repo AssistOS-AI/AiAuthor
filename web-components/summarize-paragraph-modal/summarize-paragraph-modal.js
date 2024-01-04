@@ -1,6 +1,7 @@
+import {parseURL} from "../../utils/index.js"
 export class summarizeParagraphModal{
     constructor(element,invalidate){
-        [this.documentId,this.chapterId,this.paragraphId]=webSkel.getService("UtilsService").parseURL();
+        [this.documentId,this.chapterId,this.paragraphId]=parseURL();
         this._document = webSkel.currentUser.space.getDocument(this.documentId);
         this._chapter=this._document.getChapter(this.chapterId);
         this._paragraph=this._chapter.getParagraph(this.paragraphId);

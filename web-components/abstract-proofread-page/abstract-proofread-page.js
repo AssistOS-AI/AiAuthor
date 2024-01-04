@@ -1,7 +1,8 @@
+import {parseURL} from "../../utils/index.js"
 export class abstractProofreadPage {
     constructor(element, invalidate) {
         this.element=element;
-        this._document = webSkel.currentUser.space.getDocument(webSkel.getService("UtilsService").parseURL());
+        this._document = webSkel.currentUser.space.getDocument(parseURL());
         this.invalidate = invalidate;
         this.invalidate();
     }

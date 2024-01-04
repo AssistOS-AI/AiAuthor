@@ -1,7 +1,7 @@
 export class editAbstractPage {
     constructor(element, invalidate) {
         this.element=element;
-        this._document = webSkel.currentUser.space.getDocument(webSkel.getService("UtilsService").parseURL());
+        this._document = webSkel.currentUser.space.getDocument(parseURL());
         this._document.observeChange(this._document.getNotificationId()+ ":edit-abstract-page", invalidate);
         this.invalidate = invalidate;
         this.invalidate();

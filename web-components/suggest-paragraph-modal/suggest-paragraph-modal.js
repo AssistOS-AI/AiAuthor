@@ -1,7 +1,8 @@
+import {parseURL} from "../../utils/index.js"
 export class suggestParagraphModal {
     constructor(element, invalidate) {
         let documentId, chapterId, paragraphId;
-        [documentId, chapterId, paragraphId] = webSkel.getService("UtilsService").parseURL();
+        [documentId, chapterId, paragraphId] = parseURL();
         this._document = webSkel.currentUser.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._paragraph = this._chapter.getParagraph(paragraphId);

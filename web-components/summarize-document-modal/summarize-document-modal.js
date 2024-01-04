@@ -1,6 +1,6 @@
 export class summarizeDocumentModal{
     constructor(element,invalidate){
-        let documentId = webSkel.getService("UtilsService").parseURL();
+        let documentId = parseURL();
         this._document = webSkel.currentUser.space.getDocument(documentId);
         this.invalidate = invalidate;
         this.element = element;

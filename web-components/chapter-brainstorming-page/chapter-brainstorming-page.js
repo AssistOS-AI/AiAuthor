@@ -1,10 +1,9 @@
-//import {Chapter} from "../../../imports.js";
-
+import {parseURL} from "../../utils/index.js"
 export class chapterBrainstormingPage {
     constructor(element, invalidate) {
         this.element = element;
         let documentId, chapterId;
-        [documentId,chapterId] = webSkel.getService("UtilsService").parseURL();
+        [documentId,chapterId] = parseURL();
         this._document = webSkel.currentUser.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + ":chapter-brainstorming-page", invalidate);

@@ -1,8 +1,9 @@
+import {parseURL} from "../../utils/index.js"
 export class chapterEditorPage{
     constructor(element, invalidate) {
         this.element = element;
         let documentId, chapterId;
-        [documentId, chapterId] = webSkel.getService("UtilsService").parseURL();
+        [documentId, chapterId] = parseURL();
         webSkel.currentUser.space.currentDocumentId = documentId;
         webSkel.currentUser.space.currentChapterId = chapterId;
         this._document = webSkel.currentUser.space.getDocument(documentId);

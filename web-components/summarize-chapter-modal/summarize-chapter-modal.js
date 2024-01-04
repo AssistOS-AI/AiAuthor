@@ -1,6 +1,6 @@
 export class summarizeChapterModal{
     constructor(element,invalidate){
-        [this.documentId,this.chapterId,this.paragraphId]=webSkel.getService("UtilsService").parseURL();
+        [this.documentId,this.chapterId,this.paragraphId]=parseURL();
         this._document = webSkel.currentUser.space.getDocument(this.documentId);
         this._chapter=this._document.getChapter(this.chapterId);
         this._document.observeChange(this._document.getNotificationId(), invalidate);

@@ -1,7 +1,8 @@
+import {parseURL} from "../../utils/index.js"
 export class chapterUnit {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = webSkel.currentUser.space.getDocument(webSkel.getService("UtilsService").parseURL());
+        this._document = webSkel.currentUser.space.getDocument(parseURL());
         let chapterId = this.element.getAttribute("data-chapter-id");
         this.chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${chapterId}`, invalidate);
