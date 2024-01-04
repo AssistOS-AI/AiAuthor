@@ -1,3 +1,5 @@
+import {getBasePath} from "../../utils/index.js";
+
 export class documentsPage {
     constructor(element, invalidate) {
         this.notificationId = "docs"
@@ -31,7 +33,7 @@ export class documentsPage {
     }
     async editAction(_target) {
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
-        await webSkel.changeToDynamicPage("document-view-page",`documents/${webSkel.currentUser.space.currentDocumentId}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page",`${getBasePath}/documents/${webSkel.currentUser.space.currentDocumentId}/document-view-page`);
     }
     async cloneAction(_target){
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
