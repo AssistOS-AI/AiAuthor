@@ -1,4 +1,4 @@
-export class RoutingService {
+export class routingService {
     constructor() {
         this.appName = "AiAuthor";
     }
