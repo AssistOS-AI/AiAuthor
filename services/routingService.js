@@ -1,16 +1,22 @@
-export class routingService{
-    constructor(){}
-    async navigateToApplication(location){
-        const locationFragments=location.split('/');
-        let documentIdURL = locationFragments[0];
-        let presenterName = locationFragments[1];
-        let chapterIdURL = locationFragments[2];
-        let paragraphIdURL = locationFragments[3];
-        if (await storageManager.loadObject(webSkel.currentUser.space.id, "documents", documentIdURL) !== null) {
-            webSkel.currentUser.space.currentDocumentId = documentIdURL;
-            webSkel.currentUser.space.currentChapterId = chapterIdURL;
-            webSkel.currentUser.space.currentParagraphId = paragraphIdURL;
+export class RoutingService {
+    constructor() {
+        this.appName = "AiAuthor";
+    }
+    async navigateToApplication(locationArray) {
+        if (locationArray[0] !== "documents" && locationArray[0] !== "documents-page") {
+            console.error("Invalid URL structure.");
+            return;
         }
-        await webSkel.changeToDynamicPage(presenterName, location.slice(1));
+
+        if (locationArray[0] === "documents-page") {
+            const pageComponent = "documents-page";
+            const pageUrl = `${webSkel.currentUser.space.id}/${this.appName}/documents-page`;
+            await webSkel.changeToDynamicPage(pageComponent, pageUrl);
+            return;
+        }
+
+        const webComponentName = locationArray[locationArray.length - 1];
+        const pageUrl = `${webSkel.currentUser.space.id}/${this.appName}/${locationArray.join("/")}`;
+        await webSkel.changeToDynamicPage(webComponentName, pageUrl);
     }
 }
