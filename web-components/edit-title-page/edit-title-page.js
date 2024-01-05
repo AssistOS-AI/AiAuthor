@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class editTitlePage {
     constructor(element, invalidate) {
         this.element = element;
@@ -45,7 +45,7 @@ export class editTitlePage {
     }
 
     async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     closeModal(_target) {
@@ -109,6 +109,6 @@ export class editTitlePage {
         this.actionBox = await webSkel.UtilsService.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
     async openEditTitlePage() {
-        await webSkel.changeToDynamicPage("edit-title-page", `documents/${this._document.id}/edit-title-page`);
+        await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/documents/${this._document.id}/edit-title-page`);
     }
 }
