@@ -1,6 +1,8 @@
+import {getBasePath,parseURL} from "../../utils/index.js";
+
 export class suggestAbstractModal {
     constructor(element, invalidate) {
-        this.id = window.location.hash.split('/')[1];
+        this.id = parseURL();
         this._document = webSkel.currentUser.space.getDocument(this.id);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
@@ -8,9 +10,7 @@ export class suggestAbstractModal {
         this.invalidate();
     }
 
-    beforeRender() {
-
-    }
+    beforeRender() {}
     afterRender(){
         this.suggestedAbstractForm = this.element.querySelector(".suggested-abstract-form");
         if(!this.suggestedAbstract){

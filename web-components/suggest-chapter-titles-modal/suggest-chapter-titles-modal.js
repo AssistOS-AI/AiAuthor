@@ -1,9 +1,11 @@
+import {parseURL} from "../../utils/index.js";
+
 export class suggestChapterTitlesModal {
     constructor(element, invalidate) {
         this.element = element;
         this.documentId = webSkel.currentUser.space.currentDocumentId
         this._document = webSkel.currentUser.space.getDocument(this.documentId);
-        this._chapter = this._document.getChapter(window.location.hash.split("/")[3]);
+        this._chapter = this._document.getChapter(parseURL()[1]);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
         this.suggestedTitles = "";
