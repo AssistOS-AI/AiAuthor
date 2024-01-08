@@ -2,6 +2,7 @@ export class routingService {
     constructor() {}
     async navigateToLocation(locationArray,appName) {
         if(locationArray === undefined){
+            const pageComponent = "documents-page";
             const pageUrl = `${webSkel.currentUser.space.id}/${appName}/documents-page`;
             await webSkel.changeToDynamicPage(pageComponent, pageUrl);
             return;
