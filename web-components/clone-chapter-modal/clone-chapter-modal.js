@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+
 export class cloneChapterModal {
     constructor(element, invalidate) {
         [this.documentId,this.chapterId]=parseURL();

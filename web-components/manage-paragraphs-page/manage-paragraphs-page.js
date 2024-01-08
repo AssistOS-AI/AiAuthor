@@ -1,4 +1,4 @@
-import {getBasePath,parseURL} from "../../utils/index.js";
+
 
 export class manageParagraphsPage {
     constructor(element, invalidate) {

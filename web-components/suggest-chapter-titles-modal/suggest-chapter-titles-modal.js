@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js";
+;
 
 export class suggestChapterTitlesModal {
     constructor(element, invalidate) {

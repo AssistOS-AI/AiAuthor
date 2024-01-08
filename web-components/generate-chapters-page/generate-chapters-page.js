@@ -1,4 +1,4 @@
-import {parseURL,getBasePath} from "../../utils/index.js";
+;
 
 export class generateChaptersPage {
     constructor(element, invalidate) {

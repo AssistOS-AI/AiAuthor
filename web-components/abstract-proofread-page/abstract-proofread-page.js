@@ -1,6 +1,6 @@
-import {parseURL,getBasePath} from "../../utils/index.js"
 export class abstractProofreadPage {
     constructor(element, invalidate) {
+        debugger;
         this.element=element;
         this._document = webSkel.currentUser.space.getDocument(parseURL());
         this.invalidate = invalidate;

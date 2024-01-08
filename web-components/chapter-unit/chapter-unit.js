@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+
 export class chapterUnit {
     constructor(element, invalidate) {
         this.element = element;
