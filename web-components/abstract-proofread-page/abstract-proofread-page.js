@@ -1,3 +1,4 @@
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class abstractProofreadPage {
     constructor(element, invalidate) {
         debugger;

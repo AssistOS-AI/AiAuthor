@@ -1,4 +1,4 @@
-
+import {parseURL} from "../../utils/index.js"
 export class summarizeParagraphModal{
     constructor(element,invalidate){
         [this.documentId,this.chapterId,this.paragraphId]=parseURL();

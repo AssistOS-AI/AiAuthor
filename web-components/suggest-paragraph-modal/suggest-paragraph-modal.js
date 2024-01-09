@@ -1,4 +1,4 @@
-
+import {parseURL} from "../../utils/index.js"
 export class suggestParagraphModal {
     constructor(element, invalidate) {
         let documentId, chapterId, paragraphId;

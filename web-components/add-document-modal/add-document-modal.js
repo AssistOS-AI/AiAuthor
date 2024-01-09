@@ -1,4 +1,4 @@
-
+import {getBasePath} from "../../utils/index.js"
 
 export class addDocumentModal {
     constructor(element,invalidate) {

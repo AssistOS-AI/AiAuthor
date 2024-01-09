@@ -1,5 +1,4 @@
-
-
+import {parseURL} from "../../utils/index.js"
 export class generateParagraphsPage {
     constructor(element, invalidate) {
         this.element = element;

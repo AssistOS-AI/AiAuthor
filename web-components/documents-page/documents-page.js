@@ -1,5 +1,4 @@
-
-
+import {getBasePath} from "../../utils/index.js"
 export class documentsPage {
     constructor(element, invalidate) {
         this.notificationId = "docs"

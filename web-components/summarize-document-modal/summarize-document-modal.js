@@ -1,5 +1,4 @@
-;
-
+import {parseURL} from "../../utils/index.js"
 export class summarizeDocumentModal{
     constructor(element,invalidate){
         let documentId = parseURL();

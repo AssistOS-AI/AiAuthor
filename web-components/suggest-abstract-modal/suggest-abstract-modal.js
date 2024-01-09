@@ -1,5 +1,5 @@
 
-
+import {parseURL} from "../../utils/index.js"
 export class suggestAbstractModal {
     constructor(element, invalidate) {
         this.id = parseURL();

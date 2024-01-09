@@ -1,4 +1,4 @@
-
+import {parseURL,getBasePath} from "../../utils/index.js"
 export class chapterTitlePage {
     constructor(element, invalidate) {
         this.element = element;
