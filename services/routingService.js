@@ -1,22 +1,19 @@
 export class routingService {
     constructor() {}
-    async navigateToLocation(locationArray,appName) {
-        if(locationArray === undefined){
-            const pageComponent = "documents-page";
-            const pageUrl = `${webSkel.currentUser.space.id}/${appName}/documents-page`;
-            await webSkel.changeToDynamicPage(pageComponent, pageUrl);
+    async navigateToLocation(locationArray = [], appName) {
+        const DOCUMENTS_PAGE = "documents-page";
+
+        if (locationArray.length === 0 || locationArray[0] === DOCUMENTS_PAGE) {
+            const pageUrl = `${webSkel.currentUser.space.id}/${appName}/${DOCUMENTS_PAGE}`;
+            await webSkel.changeToDynamicPage(DOCUMENTS_PAGE, pageUrl);
             return;
         }
-        if (locationArray[0] === "documents-page") {
-            const pageComponent = "documents-page";
-            const pageUrl = `${webSkel.currentUser.space.id}/${appName}/documents-page`;
-            await webSkel.changeToDynamicPage(pageComponent, pageUrl);
+
+        if (locationArray[0] !== "documents") {
+            console.error("Invalid URL: URL must start with 'documents' or 'documents-page'");
             return;
         }
-        if (locationArray[0] !== "documents" && locationArray[0] !== "documents-page") {
-            console.error("Invalid URL");
-            return;
-        }
+        
         const webComponentName = locationArray[locationArray.length - 1];
         const pageUrl = `${webSkel.currentUser.space.id}/${appName}/${locationArray.join("/")}`;
         await webSkel.changeToDynamicPage(webComponentName, pageUrl);

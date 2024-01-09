@@ -3,10 +3,10 @@ import {routingService} from "./services/routingService.js";
 export class Manager {
     constructor() {
         this.appName = "AiAuthor";
-        this.services = new Set();
-        this.services.routingService = new routingService();
+        this.services = new Map();
+        this.services.set('routingService', new routingService());
     }
     async navigateToLocation(location) {
-        this.services.routingService.navigateToLocation(location, this.appName);
+        this.services.get('routingService').navigateToLocation(location, this.appName);
     }
 }
