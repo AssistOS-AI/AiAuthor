@@ -7,7 +7,6 @@ export class Manager {
         this.services = new Set();
         this.services.routingService = new routingService();
         this.services.utilsService =  new utilsService();
-        debugger;
     }
 
     async navigateToLocation(location) {
