@@ -104,7 +104,7 @@ export class abstractProofreadPage {
             this.invalidate();
         }
     }
-    async proofreadAbstract(){
+    async openAbstractProofreadPage(){
         await webSkel.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/documents/${this._document.id}/abstract-proofread-page`);
     }
     async openDocumentsPage() {
@@ -112,6 +112,10 @@ export class abstractProofreadPage {
     }
     async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+    }
+    async openAbstractEditorPage(){
+        await webSkel.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/documents/${this._document.id}/edit-abstract-page`);
+
     }
 }
 
