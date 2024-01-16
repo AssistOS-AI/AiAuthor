@@ -10,6 +10,7 @@ export class manageChaptersPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         if(this.mainIdeas.length === 0) {
             this.summarizeButtonName = "Summarize";
         } else {
@@ -87,7 +88,10 @@ export class manageChaptersPage {
     }
 
 
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
     async addChapter(){
