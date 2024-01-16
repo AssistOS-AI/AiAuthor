@@ -10,6 +10,7 @@ export class abstractProofreadPage {
 
     beforeRender() {
         this.abstractText = this._document.abstract;
+        this.docTitle=this._document.title;
         if(!this.personality){
             this.selectedPersonality = `<option value="" disabled selected hidden>Select personality</option>`;
         }else {
@@ -30,10 +31,6 @@ export class abstractProofreadPage {
         if(this.details){
             detailsElement.value = this.details;
         }
-    }
-
-    async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async executeProofRead() {
@@ -113,6 +110,11 @@ export class abstractProofreadPage {
     async proofreadAbstract(){
         await webSkel.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/documents/${this._document.id}/abstract-proofread-page`);
     }
-
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+    }
 }
 
