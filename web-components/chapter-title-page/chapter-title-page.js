@@ -13,7 +13,7 @@ export class chapterTitlePage {
 
     beforeRender() {
         this.title = this._chapter.title;
-        this.docTitle=this.document.title;
+        this.docTitle=this._document.title;
         this.chapterNr = this._document.getChapterIndex(this._chapter.id) + 1;
         this.alternativeTitles = "";
         if (this._chapter.alternativeTitles) {
