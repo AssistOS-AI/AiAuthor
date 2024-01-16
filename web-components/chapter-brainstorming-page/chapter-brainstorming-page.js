@@ -54,8 +54,20 @@ export class chapterBrainstormingPage {
         await webSkel.UtilsService.showModal(document.querySelector("body"), "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+    }
+
+    async openChapterEditorPage(){
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+
+    }
+    async openChapterBrainstormingPage(){
+        await webSkel.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-brainstorming-page`);
+
     }
     async suggestChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestChapter");
