@@ -1,4 +1,4 @@
-import {parseURL} from "../../utils/index.js"
+import {getBasePath, parseURL} from "../../utils/index.js"
 export class generateParagraphsPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -12,6 +12,7 @@ export class generateParagraphsPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         this.chapterNr = this._document.chapters.findIndex(chapter => chapter.id === this._chapter.id) + 1;
         let stringHMTL = "";
         let i = 0;
@@ -99,11 +100,19 @@ export class generateParagraphsPage {
         }
     }
 
-    async openChapterBrainstormingPage() {
-        await webSkel.changeToDynamicPage("chapter-brainstorming-page", `documents/${this._document.id}/chapter-brainstorming-page/${this._chapter.id}`);
+
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
-    async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `documents/${this._document.id}/document-view-page`);
+    async openDocumentViewPage() {
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+    }
+    async openChapterEditorPage(){
+        await webSkel.changeToDynamicPage("chapter-editor-page", `documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+    }
+    async openGenerateParagraphsPage(){
+        await webSkel.changeToDynamicPage("generate-paragraphs-page", `documents/${this._document.id}/chapters/${this._chapter.id}/generate-paragraphs-page`);
+
     }
 
 }
