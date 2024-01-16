@@ -12,6 +12,7 @@ export class chapterBrainstormingPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         this.chapterNr=this._document.getChapterIndex(this._chapter.id)+1;
         this.chapterTitle=this._chapter.title;
         this.chapterContent="";
