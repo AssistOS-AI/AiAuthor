@@ -117,7 +117,7 @@ export class chapterTitlePage {
     }
     async openChapterTitlePage() {
         await webSkel.changeToDynamicPage("chapter-title-page",
-            `${getBasePath()}/documents/${this.docId}/chapters/${this._chapter.id}/chapter-title-page`);
+            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-title-page`);
 
     }
     closeModal(_target) {
