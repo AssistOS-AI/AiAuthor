@@ -70,6 +70,8 @@ export class chapterBrainstormingPage {
         await webSkel.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-brainstorming-page`);
 
     }
+    async openChapterProofreadPage(){
+    }
     async suggestChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestChapter");
         let result = await webSkel.getService("LlmsService").callFlow(flowId, JSON.stringify(this._chapter.mainIdeas));

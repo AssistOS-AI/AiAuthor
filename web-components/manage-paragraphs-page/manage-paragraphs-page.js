@@ -13,6 +13,7 @@ export class manageParagraphsPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         this.chapterNr = this._document.chapters.findIndex(chapter => chapter.id === this._chapter.id) + 1;
         this.chapterMainIdeas = "";
         this.mainIdeas = this._chapter.getMainIdeas();
@@ -88,12 +89,18 @@ export class manageParagraphsPage {
         }
     }
 
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
     async openChapterEditPage(){
         await webSkel.changeToDynamicPage("chapter-edit-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-edit-page`);
+    }
+    async openManageParagraphsPage(){
+        await webSkel.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/manage-paragraphs-page`);
     }
     async addParagraph(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
