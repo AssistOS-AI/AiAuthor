@@ -44,9 +44,7 @@ export class editTitlePage {
         }
     }
 
-    async openViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
-    }
+
 
     closeModal(_target) {
         webSkel.UtilsService.closeModal(_target);
@@ -110,5 +108,11 @@ export class editTitlePage {
     }
     async openEditTitlePage() {
         await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/documents/${this._document.id}/edit-title-page`);
+    }
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 }
