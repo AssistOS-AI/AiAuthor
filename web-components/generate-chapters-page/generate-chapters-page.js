@@ -123,4 +123,7 @@ export class generateChaptersPage {
     async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
+    async openGenerateChaptersPage(){
+        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/documents/${this._document.id}/generate-chapters-page`);
+    }
 }

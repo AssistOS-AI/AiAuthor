@@ -17,6 +17,7 @@ export class chapterEditorPage{
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         this.chapterTitle= this._chapter.title;
         this.chapterNr = this._document.chapters.findIndex(chapter => chapter.id === this._chapter.id) + 1;
         this.chapterId= this._chapter.id;
@@ -195,7 +196,10 @@ export class chapterEditorPage{
         await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
         this.invalidate();
     }
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
