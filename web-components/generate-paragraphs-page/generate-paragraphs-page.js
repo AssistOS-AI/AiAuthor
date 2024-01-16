@@ -108,10 +108,10 @@ export class generateParagraphsPage {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
     async openChapterEditorPage(){
-        await webSkel.changeToDynamicPage("chapter-editor-page", `documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
     }
     async openGenerateParagraphsPage(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `documents/${this._document.id}/chapters/${this._chapter.id}/generate-paragraphs-page`);
+        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/generate-paragraphs-page`);
 
     }
 
