@@ -437,7 +437,7 @@ export class documentViewPage {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("aiauthor-documents-page", `${getBasePath()}/aiauthor-documents-page`);
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openChapterEditor() {
         await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${webSkel.currentUser.space.currentChapterId}/chapter-editor-page`);
