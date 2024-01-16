@@ -120,6 +120,11 @@ export class chapterTitlePage {
             `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-title-page`);
 
     }
+    async openChapterEditorPage(){
+        await webSkel.changeToDynamicPage("chapter-editor-page",
+            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+    }
+    
     closeModal(_target) {
         webSkel.UtilsService.closeModal(_target);
     }
