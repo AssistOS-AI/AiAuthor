@@ -9,6 +9,7 @@ export class generateChaptersPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         let stringHMTL = "";
         let i = 0;
         for(let idea of this.ideas){
@@ -116,7 +117,10 @@ export class generateChaptersPage {
     async openMangeChaptersPage() {
         await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
     }
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 }

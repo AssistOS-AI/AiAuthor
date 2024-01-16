@@ -94,6 +94,9 @@ export class manageChaptersPage {
     async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
+    async openManageChaptersPage(){
+        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
+    }
     async addChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddChapter");
         await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, "");
