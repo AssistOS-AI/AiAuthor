@@ -13,6 +13,7 @@ export class paragraphBrainstormingPage {
     }
 
     beforeRender() {
+        this.docTitle=this._document.title;
         this.chapterNr = this._document.chapters.findIndex(chapter => chapter.id === this._chapter.id) + 1;
         this.paragraphNr = this._chapter.paragraphs.findIndex(paragraph => paragraph.id === this._paragraph.id) + 1;
         this.paragraphText = this._paragraph.text;
@@ -90,7 +91,10 @@ export class paragraphBrainstormingPage {
         await webSkel.UtilsService.showModal(document.querySelector("body"), "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
 
@@ -100,6 +104,9 @@ export class paragraphBrainstormingPage {
 
     async openParagraphProofreadPage(){
         await webSkel.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}/paragraph-proofread-page`);
+    }
+    async openChapterEditorPage() {
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
     }
 
     async summarize(){
