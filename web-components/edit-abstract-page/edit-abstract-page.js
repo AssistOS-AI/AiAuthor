@@ -11,6 +11,7 @@ export class editAbstractPage {
 
     beforeRender() {
         this.abstractText=this._document.abstract;
+        this.docTitle=this._document.title;
         this.alternativeAbstracts = "";
         let i = 1;
         this._document.alternativeAbstracts.forEach((abstract)=>{
