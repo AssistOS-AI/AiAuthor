@@ -97,7 +97,7 @@ export class manageParagraphsPage {
     }
 
     async openChapterEditPage(){
-        await webSkel.changeToDynamicPage("chapter-edit-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-edit-page`);
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
     }
     async openManageParagraphsPage(){
         await webSkel.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/manage-paragraphs-page`);
