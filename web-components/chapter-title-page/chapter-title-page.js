@@ -13,6 +13,7 @@ export class chapterTitlePage {
 
     beforeRender() {
         this.title = this._chapter.title;
+        this.docTitle=this.document.title;
         this.chapterNr = this._document.getChapterIndex(this._chapter.id) + 1;
         this.alternativeTitles = "";
         if (this._chapter.alternativeTitles) {
@@ -61,11 +62,7 @@ export class chapterTitlePage {
             title.addEventListener("keydown", resetTimer);
         }
     }
-    async openChapterTitlePage() {
-        await webSkel.changeToDynamicPage("chapter-title-page",
-            `${getBasePath()}/documents/${this.docId}/chapters/${this._chapter.id}/chapter-title-page`);
 
-    }
     async edit(_target) {
         let component = webSkel.UtilsService.reverseQuerySelector(_target, "alternative-title");
         let newTitle = component.querySelector(".suggested-title");
@@ -112,10 +109,17 @@ export class chapterTitlePage {
         await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, suggestedTitleId);
         this.invalidate();
     }
-    async openViewPage() {
+    async openDocumentsPage() {
+        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+    }
+    async openDocumentViewPage() {
         await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
     }
+    async openChapterTitlePage() {
+        await webSkel.changeToDynamicPage("chapter-title-page",
+            `${getBasePath()}/documents/${this.docId}/chapters/${this._chapter.id}/chapter-title-page`);
 
+    }
     closeModal(_target) {
         webSkel.UtilsService.closeModal(_target);
     }
