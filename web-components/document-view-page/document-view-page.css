@@ -19,16 +19,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-
-}
-.path-button{
-    font-family: Poppins;
-    font-size: 26px;
-    font-weight: 600;
-    line-height: 39px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: var(--general-button-background);
 }
 .abstract-content-text{
     display:inline-block;
