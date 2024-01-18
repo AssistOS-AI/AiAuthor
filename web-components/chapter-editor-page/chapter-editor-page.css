@@ -12,13 +12,6 @@ chapter-editor-page {
     margin: 10px 40px;
 }
 
-.path-button {
-    color: var(--button-purple);
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-}
-
 .document-path svg {
     margin: 5px 10px;
 }
