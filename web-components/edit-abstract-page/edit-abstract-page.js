@@ -59,7 +59,7 @@ export class editAbstractPage {
     }
 
     async suggestAbstract(_target){
-        await  webSkel.showModal(document.querySelector("body"), "suggest-abstract-modal", { presenter: "suggest-abstract-modal"});
+        await  webSkel.showModal("suggest-abstract-modal", { presenter: "suggest-abstract-modal"});
     }
 
     async select(_target){

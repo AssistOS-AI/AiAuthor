@@ -88,7 +88,7 @@ export class paragraphBrainstormingPage {
     }
 
     async suggestParagraph(){
-        await webSkel.showModal(document.querySelector("body"), "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
+        await webSkel.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
     async openDocumentsPage() {
@@ -110,7 +110,7 @@ export class paragraphBrainstormingPage {
     }
 
     async summarize(){
-        await webSkel.showModal(document.querySelector("body"), "summarize-paragraph-modal", { presenter: "summarize-paragraph-modal"});
+        await webSkel.showModal( "summarize-paragraph-modal", { presenter: "summarize-paragraph-modal"});
     }
 
     async showActionBox(_target, primaryKey, componentName, insertionMode) {

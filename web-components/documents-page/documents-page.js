@@ -25,10 +25,10 @@ export class documentsPage {
         return webSkel.reverseQuerySelector(_target, "document-unit").getAttribute("data-id");
     }
     async showAddDocumentModal() {
-        await webSkel.showModal(document.querySelector("body"), "add-document-modal", { presenter: "add-document-modal"});
+        await webSkel.showModal( "add-document-modal", { presenter: "add-document-modal"});
     }
     async showGenerateDocumentModal() {
-        await webSkel.showModal(document.querySelector("body"), "generate-document-modal", { presenter: "generate-document-modal"});
+        await webSkel.showModal( "generate-document-modal", { presenter: "generate-document-modal"});
     }
     async editAction(_target) {
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
@@ -36,7 +36,7 @@ export class documentsPage {
     }
     async cloneAction(_target){
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
-        await webSkel.showModal(document.querySelector("body"), "clone-document-modal", { presenter: "clone-document-modal"});
+        await webSkel.showModal( "clone-document-modal", { presenter: "clone-document-modal"});
     }
     async deleteAction(_target){
         let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteDocument");

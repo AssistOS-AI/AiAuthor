@@ -52,7 +52,7 @@ export class chapterBrainstormingPage {
     }
 
     async suggestParagraph(){
-        await webSkel.showModal(document.querySelector("body"), "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
+        await webSkel.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
     async openDocumentsPage() {
@@ -85,7 +85,7 @@ export class chapterBrainstormingPage {
         this.invalidate();
     }
     async openCloneChapterModal(){
-        await webSkel.showModal(document.querySelector("body"), "clone-chapter-modal", { presenter: "clone-chapter-modal"});
+        await webSkel.showModal( "clone-chapter-modal", { presenter: "clone-chapter-modal"});
 
     }
     async openParagraphBrainstormingPage(_target) {

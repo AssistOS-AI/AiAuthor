@@ -51,7 +51,7 @@ export class editTitlePage {
     }
 
     async showSuggestTitlesModal() {
-        await webSkel.showModal(document.querySelector("body"), "suggest-titles-modal", { presenter: "suggest-titles-modal"});
+        await webSkel.showModal( "suggest-titles-modal", { presenter: "suggest-titles-modal"});
     }
 
     async edit(_target) {

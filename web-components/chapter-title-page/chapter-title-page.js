@@ -130,7 +130,7 @@ export class chapterTitlePage {
     }
 
     async showSuggestChapterTitlesModal() {
-        await webSkel.showModal(document.querySelector("body"), "suggest-chapter-titles-modal", { presenter: "suggest-chapter-titles-modal"});
+        await webSkel.showModal( "suggest-chapter-titles-modal", { presenter: "suggest-chapter-titles-modal"});
     }
 
     async showActionBox(_target, primaryKey, componentName, insertionMode) {

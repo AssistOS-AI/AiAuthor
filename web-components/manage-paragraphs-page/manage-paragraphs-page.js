@@ -108,7 +108,7 @@ export class manageParagraphsPage {
         this.invalidate();
     }
     async summarize(){
-        await webSkel.showModal(document.querySelector("body"), "summarize-chapter-modal", { presenter: "summarize-chapter-modal"});
+        await webSkel.showModal( "summarize-chapter-modal", { presenter: "summarize-chapter-modal"});
     }
 
     async generateParagraphs(){
