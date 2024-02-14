@@ -13,12 +13,6 @@ abstract-proofread-page{
 .document-path svg{
     margin: 5px 10px;
 }
-.path-button {
-    color:  var(--button-purple);
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-}
 .current-abstract-separator{
     border: 1px solid var(--gray-border);
     margin: 0;

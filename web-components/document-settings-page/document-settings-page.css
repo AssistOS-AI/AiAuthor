@@ -11,16 +11,6 @@
     align-items: center;
     margin: 10px 0;
 }
-
-.path-button {
-    color: var(--path-button);
-    font-size: 14px;
-    margin: 0 5px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
 .document-path,
 .alternative {
     margin-left: 15px;

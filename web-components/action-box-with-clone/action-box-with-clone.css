@@ -27,6 +27,6 @@ action-box-with-clone{
 }
 
 .action:hover {
-   background-color: var(--button-purple);
+   background-color: var(--medium-blue);
     color: var(--white-text)
 }
