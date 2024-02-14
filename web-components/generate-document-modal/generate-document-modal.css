@@ -15,7 +15,7 @@ dialog[class="modal"] {
     font-size: 22px;
     font-weight: 500;
     color: var(--white-text);
-    background: var(--general-button-background);
+    background: var(--medium-blue);
     height: 15%;
 }
 
