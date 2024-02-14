@@ -56,10 +56,10 @@ export class generateChaptersPage {
 
     async generateIdeas(){
         let form = this.element.querySelector(".generate-ideas-form");
-        let formInfo = await webSkel.UtilsService.extractFormInformation(form);
+        let formInfo = await webSkel.extractFormInformation(form);
         if(formInfo.isValid) {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateIdeas");
-            let result = await webSkel.getService("LlmsService").callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
+            let result = await webSkel.appServices.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
             this.ideas= result.responseJson;
             this.invalidate();
         }
@@ -68,7 +68,7 @@ export class generateChaptersPage {
 
     async generateEmptyChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target, conditions);
+        let formInfo = await webSkel.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -77,7 +77,7 @@ export class generateChaptersPage {
                 }
             }
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateEmptyChapters");
-            let result = await webSkel.getService("LlmsService").callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
                 await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
             }
@@ -98,7 +98,7 @@ export class generateChaptersPage {
     }
     async generateChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target, conditions);
+        let formInfo = await webSkel.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -107,7 +107,7 @@ export class generateChaptersPage {
                 }
             }
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateChapters");
-            let result = await webSkel.getService("LlmsService").callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
                 await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
             }

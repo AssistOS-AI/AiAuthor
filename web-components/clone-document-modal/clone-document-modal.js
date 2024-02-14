@@ -14,23 +14,23 @@ export class cloneDocumentModal {
     }
 
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async generateDocument(_target) {
         let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateDocument");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId,
+        let result = await webSkel.appServices.callFlow(flowId,
             formData.data.documentTitle, formData.data.documentTopic, formData.data.chaptersCount);
         let docData = result.responseJson;
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async cloneDocument(_target) {
-        let formData = await webSkel.UtilsService.extractFormInformation(_target);
+        let formData = await webSkel.extractFormInformation(_target);
         let proofread = formData.data.proofread === "on";
         let flowId = webSkel.currentUser.space.getFlowIdByName("CloneDocument");
-        await webSkel.getService("LlmsService").callFlow(flowId, webSkel.currentUser.space.currentDocumentId, formData.data.documentPersonality, formData.data.documentTitle, proofread);
+        await webSkel.appServices.callFlow(flowId, webSkel.currentUser.space.currentDocumentId, formData.data.documentPersonality, formData.data.documentTitle, proofread);
         await documentFactory.notifyObservers("docs");
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

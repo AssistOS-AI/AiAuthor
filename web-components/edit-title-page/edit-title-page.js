@@ -12,7 +12,7 @@ export class editTitlePage {
         this.alternativeTitles = "";
         let i = 1;
         this._document.alternativeTitles.forEach((alternativeTitle) => {
-            this.alternativeTitles += `<alternative-title data-nr="${i}" data-title="${webSkel.UtilsService.sanitize(alternativeTitle.title)}" 
+            this.alternativeTitles += `<alternative-title data-nr="${i}" data-title="${webSkel.sanitize(alternativeTitle.title)}" 
             data-id="${alternativeTitle.id}" ></alternative-title>`;
             i++;
         });
@@ -23,11 +23,11 @@ export class editTitlePage {
             title.setAttribute("contenteditable", "true");
             title.focus();
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = webSkel.UtilsService.sanitize(title.innerText);
+                let sanitizedText = webSkel.sanitize(title.innerText);
                 if (sanitizedText !== this._document.title && !confirmationPopup) {
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, sanitizedText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, sanitizedText);
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -47,32 +47,32 @@ export class editTitlePage {
 
 
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async showSuggestTitlesModal() {
-        await webSkel.UtilsService.showModal(document.querySelector("body"), "suggest-titles-modal", { presenter: "suggest-titles-modal"});
+        await webSkel.showModal(document.querySelector("body"), "suggest-titles-modal", { presenter: "suggest-titles-modal"});
     }
 
     async edit(_target) {
 
-        let component = webSkel.UtilsService.reverseQuerySelector(_target, "alternative-title");
+        let component = webSkel.reverseQuerySelector(_target, "alternative-title");
         let newTitle = component.querySelector(".suggested-title");
 
         if(this.actionBox){
-            webSkel.UtilsService.removeActionBox(this.actionBox, this);
+            webSkel.removeActionBox(this.actionBox, this);
         }
         if (newTitle.getAttribute("contenteditable") === "false") {
 
             let altTitleObj = this._document.getAlternativeTitle(component.getAttribute("data-id"));
             newTitle.setAttribute("contenteditable", "true");
             newTitle.focus();
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = webSkel.UtilsService.sanitize(newTitle.innerText);
+                let sanitizedText = webSkel.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
                     let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAlternativeDocumentTitle");
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, altTitleObj.id, sanitizedText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, altTitleObj.id, sanitizedText);
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -90,21 +90,21 @@ export class editTitlePage {
     }
 
     async delete(_target) {
-        let alternativeTitle = webSkel.UtilsService.reverseQuerySelector(_target, "alternative-title");
+        let alternativeTitle = webSkel.reverseQuerySelector(_target, "alternative-title");
         let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteAlternativeDocumentTitle");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, alternativeTitle.getAttribute("data-id"));
+        await webSkel.appServices.callFlow(flowId, this._document.id, alternativeTitle.getAttribute("data-id"));
         this.invalidate();
     }
     async select(_target){
-        let suggestedTitle = webSkel.UtilsService.reverseQuerySelector(_target, "alternative-title");
+        let suggestedTitle = webSkel.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
         let flowId = webSkel.currentUser.space.getFlowIdByName("SelectAlternativeDocumentTitle");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, suggestedTitleId);
-        webSkel.UtilsService.removeActionBox(this.actionBox, this);
+        await webSkel.appServices.callFlow(flowId, this._document.id, suggestedTitleId);
+        webSkel.removeActionBox(this.actionBox, this);
         this.invalidate();
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        this.actionBox = await webSkel.UtilsService.showActionBox(_target, primaryKey, componentName, insertionMode);
+        this.actionBox = await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
     async openEditTitlePage() {
         await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/documents/${this._document.id}/edit-title-page`);

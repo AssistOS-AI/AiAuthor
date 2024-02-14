@@ -65,7 +65,7 @@ export class documentViewPage {
     editParagraph(paragraph) {
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
-            let paragraphUnit = webSkel.UtilsService.reverseQuerySelector(paragraph, ".paragraph-unit");
+            let paragraphUnit = webSkel.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
             this.previouslySelectedParagraph={};
             this.previouslySelectedParagraph["paragraph"] = paragraph;
@@ -74,15 +74,15 @@ export class documentViewPage {
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
 
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
                 }
-                let paragraphText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(paragraph.innerText));
+                let paragraphText = webSkel.sanitize(webSkel.customTrim(paragraph.innerText));
                 if (paragraphText !== currentParagraph.text) {
                     let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateParagraphText");
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapter.id, currentParagraph.id, paragraphText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, this.chapter.id, currentParagraph.id, paragraphText);
                 }
             }, 1000);
             this.previouslySelectedParagraph["timer"]=timer;
@@ -91,7 +91,7 @@ export class documentViewPage {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
                         let curentParagraphIndex = this.chapter.getParagraphIndex(currentParagraphId);
-                        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapter.id, currentParagraphId);
+                        await webSkel.appServices.callFlow(flowId, this._document.id, this.chapter.id, currentParagraphId);
                         if (this.chapter.paragraphs.length > 0) {
                             if (curentParagraphIndex === 0) {
                                 webSkel.currentUser.space.currentParagraphId = this.chapter.paragraphs[0].id;
@@ -113,8 +113,8 @@ export class documentViewPage {
     }
 
     async highlightElement(controller, event) {
-        this.chapterUnit = webSkel.UtilsService.getClosestParentElement(event.target, ".chapter-unit");
-        this.paragraphUnit = webSkel.UtilsService.getClosestParentElement(event.target, ".paragraph-text");
+        this.chapterUnit = webSkel.getClosestParentElement(event.target, ".chapter-unit");
+        this.paragraphUnit = webSkel.getClosestParentElement(event.target, ".paragraph-text");
         if (this.paragraphUnit) {
             /* clickul e pe un paragraf */
             if (this.chapterUnit.getAttribute("data-id") !== (this.previouslySelectedChapter?.getAttribute("data-id") || "")) {
@@ -153,23 +153,23 @@ export class documentViewPage {
                 }
             } else {
                 /* clickul e pe acelasi capitol dar nu pe un paragraf*/
-                if (webSkel.UtilsService.getClosestParentElement(event.target, ".paragraph-arrows")) {
+                if (webSkel.getClosestParentElement(event.target, ".paragraph-arrows")) {
                     /* clickul e pe un buton de swap */
                     if (this.previouslySelectedParagraph) {
                         this.saveParagraph(this.previouslySelectedParagraph, "swap");
                     }
-                    if (webSkel.UtilsService.getClosestParentElement(event.target, ".arrow-up") || webSkel.UtilsService.getClosestParentElement(event.target, ".arrow-up-space")) {
+                    if (webSkel.getClosestParentElement(event.target, ".arrow-up") || webSkel.getClosestParentElement(event.target, ".arrow-up-space")) {
                         await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "up")
                     } else {
                         await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "down")
                     }
                 } else {
-                    if (webSkel.UtilsService.getClosestParentElement(event.target, ".chapter-arrows")) {
+                    if (webSkel.getClosestParentElement(event.target, ".chapter-arrows")) {
                         /* clickul e pe un buton de swap al capitolului */
                         if(this.previouslySelectedParagraph){
                             this.saveParagraph(this.previouslySelectedParagraph);
                         }
-                        if (webSkel.UtilsService.getClosestParentElement(event.target, ".arrow-up")) {
+                        if (webSkel.getClosestParentElement(event.target, ".arrow-up")) {
                             await this.moveChapter(event.target, "up");
                         }else{
                             await this.moveChapter(event.target, "down");
@@ -193,8 +193,8 @@ export class documentViewPage {
             }
             this.deselectPreviousParagraph();
             this.deselectPreviousChapter();
-            let rightSideBarItem = webSkel.UtilsService.getClosestParentElement(event.target, ".sidebar-item");
-            let leftSideBarItem = webSkel.UtilsService.getClosestParentElement(event.target, ".feature");
+            let rightSideBarItem = webSkel.getClosestParentElement(event.target, ".sidebar-item");
+            let leftSideBarItem = webSkel.getClosestParentElement(event.target, ".feature");
             /* data-keep-page inseamna ca nu schimbam pagina ci doar dam refresh(#Add chapter) -> */
             if (rightSideBarItem) {
                 if (!rightSideBarItem.getAttribute("data-keep-page")) {
@@ -278,7 +278,7 @@ export class documentViewPage {
     }
 
     async moveChapter(_target, direction) {
-        const currentChapter = webSkel.UtilsService.reverseQuerySelector(_target, "chapter-unit");
+        const currentChapter = webSkel.reverseQuerySelector(_target, "chapter-unit");
         const currentChapterId = currentChapter.getAttribute('data-chapter-id');
         const currentChapterIndex = this._document.getChapterIndex(currentChapterId);
 
@@ -292,13 +292,13 @@ export class documentViewPage {
         const adjacentChapterId = getAdjacentChapterId(currentChapterIndex, this._document.chapters);
 
         let flowId = webSkel.currentUser.space.getFlowIdByName("SwapChapters");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, currentChapterId, adjacentChapterId);
+        await webSkel.appServices.callFlow(flowId, this._document.id, currentChapterId, adjacentChapterId);
         this.invalidate();
     }
 
     async moveParagraph(_target, direction) {
         let chapter = this._document.getChapter(webSkel.currentUser.space.currentChapterId);
-        const currentParagraph = webSkel.UtilsService.reverseQuerySelector(_target, "paragraph-unit");
+        const currentParagraph = webSkel.reverseQuerySelector(_target, "paragraph-unit");
         const currentParagraphId = currentParagraph.getAttribute('data-paragraph-id');
         const currentParagraphIndex = chapter.getParagraphIndex(currentParagraphId);
 
@@ -309,11 +309,11 @@ export class documentViewPage {
             return index === paragraphs.length - 1 ? paragraphs[0].id : paragraphs[index + 1].id;
         };
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, chapter.paragraphs);
-        const chapterId = webSkel.UtilsService.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
+        const chapterId = webSkel.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
         if (chapter.swapParagraphs(currentParagraphId, adjacentParagraphId)) {
             await documentFactory.updateDocument(webSkel.currentUser.space.id, this._document);
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
-            webSkel.UtilsService.refreshElement(webSkel.UtilsService.getClosestParentWithPresenter(_target, "chapter-unit"));
+            webSkel.refreshElement(webSkel.getClosestParentWithPresenter(_target, "chapter-unit"));
         } else {
             console.error(`Unable to swap paragraphs. ${currentParagraphId}, ${adjacentParagraphId}, Chapter: ${chapterId}`);
         }
@@ -331,14 +331,14 @@ export class documentViewPage {
             title.focus();
             title.parentElement.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
-                let titleText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(title.innerText));
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
+                let titleText = webSkel.sanitize(webSkel.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, titleText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, titleText);
                 }
             }, 1000);
             title.addEventListener("blur", async () => {
-                title.innerText = webSkel.UtilsService.customTrim(title.innerText) || webSkel.UtilsService.unsanitize(this._document.title);
+                title.innerText = webSkel.customTrim(title.innerText) || webSkel.unsanitize(this._document.title);
                 await timer.stop(true);
                 title.setAttribute("contenteditable", "false");
                 title.removeEventListener('keydown', titleEnterHandler);
@@ -354,20 +354,20 @@ export class documentViewPage {
 
     async editAbstract(abstract) {
         if (abstract.getAttribute("contenteditable") === "false") {
-            let abstractSection = webSkel.UtilsService.reverseQuerySelector(abstract, ".abstract-section");
+            let abstractSection = webSkel.reverseQuerySelector(abstract, ".abstract-section");
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
             abstractSection.setAttribute("id", "highlighted-chapter");
             let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
-            let timer =  webSkel.getService("UtilsService").SaveElementTimer(async () => {
-                let abstractText = webSkel.UtilsService.sanitize(webSkel.UtilsService.customTrim(abstract.innerText));
+            let timer =  webSkel.appServices.SaveElementTimer(async () => {
+                let abstractText = webSkel.sanitize(webSkel.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, abstractText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, abstractText);
                 }
             }, 1000);
 
             abstract.addEventListener("blur", async () => {
-                abstract.innerText = webSkel.UtilsService.customTrim(abstract.innerText) || webSkel.UtilsService.unsanitize(this._document.abstract);
+                abstract.innerText = webSkel.customTrim(abstract.innerText) || webSkel.unsanitize(this._document.abstract);
                 abstract.removeEventListener("keydown", resetTimer);
                 await timer.stop(true);
                 abstract.setAttribute("contenteditable", "false");
@@ -382,13 +382,13 @@ export class documentViewPage {
 
     async addChapter() {
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddChapter");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, "");
+        await webSkel.appServices.callFlow(flowId, this._document.id, "");
         this.invalidate();
     }
 
     async addParagraph(_target) {
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, webSkel.currentUser.space.currentChapterId);
+        await webSkel.appServices.callFlow(flowId, this._document.id, webSkel.currentUser.space.currentChapterId);
         this._document.notifyObservers(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${webSkel.currentUser.space.currentChapterId}`);
     }
 

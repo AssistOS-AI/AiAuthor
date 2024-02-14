@@ -22,21 +22,21 @@ export class suggestAbstractModal {
         }
     }
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async generate(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestAbstract");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.prompt, "");
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.prompt, "");
         this.suggestedAbstract = result.responseString;
         this.invalidate();
     }
     async addSelectedAbstract(_target) {
         let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptSuggestedAbstract");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.suggestedAbstract);
+        await webSkel.appServices.callFlow(flowId, this._document.id, this.suggestedAbstract);
         this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

@@ -11,7 +11,7 @@ export class summarizeDocumentModal{
     beforeRender(){
         let string = "";
         for(let idea of this.documentMainIdeas){
-            string += `<li>${webSkel.UtilsService.sanitize(idea)}</li>`;
+            string += `<li>${webSkel.sanitize(idea)}</li>`;
         }
         this.mainIdeas = string;
     }
@@ -26,20 +26,20 @@ export class summarizeDocumentModal{
         }
     }
     async generate(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeDocument");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.prompt, "");
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.prompt, "");
         this.documentMainIdeas = result.responseJson;
         this.invalidate();
     }
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
     async addSelectedIdeas(_target) {
         let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptDocumentIdeas");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.documentMainIdeas);
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.documentMainIdeas);
         this._document.notifyObservers(this._document.getNotificationId() + ":manage-chapters-page");
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

@@ -16,15 +16,15 @@ export class cloneChapterModal {
     }
 
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async cloneChapter(_target) {
-        let formData = await webSkel.UtilsService.extractFormInformation(_target);
+        let formData = await webSkel.extractFormInformation(_target);
         let proofread = formData.data.proofread === "on";
         let flowId = webSkel.currentUser.space.getFlowIdByName("CloneChapter");
-        await webSkel.getService("LlmsService").callFlow(flowId, this.documentId, this.chapterId, formData.data.chapterPersonality, formData.data.chapterTitle, proofread);
+        await webSkel.appServices.callFlow(flowId, this.documentId, this.chapterId, formData.data.chapterPersonality, formData.data.chapterTitle, proofread);
         webSkel.currentUser.space.getDocument(this.documentId).notifyObservers("doc:chapter-brainstorming-page");
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

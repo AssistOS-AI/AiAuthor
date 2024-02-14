@@ -11,16 +11,16 @@ export class suggestTitlesModal {
     }
 
     async generate(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestDocumentTitles");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.prompt, this.titlesNr, "");
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.prompt, this.titlesNr, "");
         if(result.responseJson){
             this.suggestedTitles = result.responseJson;
             this.invalidate();
         }else {
-            webSkel.UtilsService.closeModal(this.element);
+            webSkel.closeModal(this.element);
             await showApplicationError("Titles invalid format", "", "");
         }
     }
@@ -29,8 +29,8 @@ export class suggestTitlesModal {
         let i = 0;
         for(let altTitle of this.suggestedTitles) {
             i++;
-            altTitle = webSkel.UtilsService.sanitize(altTitle);
-            let id = webSkel.getService("UtilsService").generateId();
+            altTitle = webSkel.sanitize(altTitle);
+            let id = webSkel.appServices.generateId();
             stringHTML += `
             <div class="alt-title-row">
                 <span class="alt-title-span">${i}.</span>
@@ -58,20 +58,20 @@ export class suggestTitlesModal {
     }
 
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async addAlternativeTitles(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         let selectedTitles = [];
         for (const [key, value] of Object.entries(formInfo.elements)) {
             if(value.element.checked) {
-                selectedTitles.push({title:webSkel.UtilsService.sanitize(value.element.value)});
+                selectedTitles.push({title:webSkel.sanitize(value.element.value)});
             }
         }
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddAlternativeDocumentTitles");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, selectedTitles);
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, selectedTitles);
         this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

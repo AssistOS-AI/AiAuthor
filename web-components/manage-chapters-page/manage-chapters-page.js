@@ -24,7 +24,7 @@ export class manageChaptersPage {
         let number = 0;
         this._document.chapters.forEach((item) => {
             number++;
-            this.chaptersDiv += `<reduced-chapter-unit nr="${number}." title="${webSkel.UtilsService.sanitize(item.title)}" 
+            this.chaptersDiv += `<reduced-chapter-unit nr="${number}." title="${webSkel.sanitize(item.title)}" 
             data-id="${item.id}" data-local-action="editAction"></reduced-chapter-unit>`;
         });
     }
@@ -63,14 +63,14 @@ export class manageChaptersPage {
         if (mainIdeas.getAttribute("contenteditable") === "false") {
             mainIdeas.setAttribute("contenteditable", "true");
             mainIdeas.focus();
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let ideas = mainIdeas.innerText.split("\n");
                 let ideasString = ideas.join("");
                 let currentIdeas = this._document.mainIdeas.join("");
                 let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateDocumentMainIdeas");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, ideas);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, ideas);
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -99,31 +99,31 @@ export class manageChaptersPage {
     }
     async addChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddChapter");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, "");
+        await webSkel.appServices.callFlow(flowId, this._document.id, "");
         this.invalidate();
     }
     async summarize(){
-        await webSkel.UtilsService.showModal(document.querySelector("body"), "summarize-document-modal", { presenter: "summarize-document-modal"});
+        await webSkel.showModal(document.querySelector("body"), "summarize-document-modal", { presenter: "summarize-document-modal"});
     }
 
     async generateChapters(){
         await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/documents/${this._document.id}/generate-chapters-page`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        await webSkel.UtilsService.showActionBox(_target, primaryKey, componentName, insertionMode);
+        await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 
     async editAction(_target){
-        let chapter = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-chapter-unit");
+        let chapter = webSkel.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
         await webSkel.changeToDynamicPage("chapter-brainstorming-page",
             `${getBasePath()}/documents/${this._document.id}/chapters/${chapterId}/chapter-brainstorming-page`);
     }
     async deleteAction(_target){
-        let chapter = webSkel.UtilsService.reverseQuerySelector(_target, "reduced-chapter-unit");
+        let chapter = webSkel.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
         let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteChapter");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, chapterId);
+        await webSkel.appServices.callFlow(flowId, this._document.id, chapterId);
         this.invalidate();
     }
 }

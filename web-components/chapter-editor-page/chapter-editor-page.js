@@ -32,7 +32,7 @@ export class chapterEditorPage{
         let selectedParagraphs = this.element.querySelectorAll(".paragraph-text");
         let currentParagraph = null;
         selectedParagraphs.forEach(paragraph => {
-            if (webSkel.UtilsService.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === webSkel.currentUser.space.currentParagraphId) {
+            if (webSkel.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === webSkel.currentUser.space.currentParagraphId) {
                 this.currentParagraph = paragraph;
             }
         });
@@ -44,10 +44,10 @@ export class chapterEditorPage{
     async editChapterTitle(title){
         title.setAttribute("contenteditable", "true");
         title.focus();
-        let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+        let timer = webSkel.appServices.SaveElementTimer(async () => {
             if (title.innerText !== this._chapter.title) {
                 let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateChapterTitle");
-                await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
+                await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
             }
         }, 1000);
         title.addEventListener("blur", async () => {
@@ -62,7 +62,7 @@ export class chapterEditorPage{
 
     }
     checkParagraphClick(controller,event){
-        this.paragraphUnit = webSkel.UtilsService.getClosestParentElement(event.target, "paragraph-unit");
+        this.paragraphUnit = webSkel.getClosestParentElement(event.target, "paragraph-unit");
         if(this.paragraphUnit){
             if(this.currentParagraph!==this.paragraphUnit) {
                 this.deselectPreviousParagraph();
@@ -71,8 +71,8 @@ export class chapterEditorPage{
                 this.switchParagraphArrowsDisplay(this.paragraphUnit, "on");
             }
         } else {
-            let rightSideBarItem = webSkel.UtilsService.getClosestParentElement(event.target, ".sidebar-item");
-            let leftSideBarItem = webSkel.UtilsService.getClosestParentElement(event.target, ".feature");
+            let rightSideBarItem = webSkel.getClosestParentElement(event.target, ".sidebar-item");
+            let leftSideBarItem = webSkel.getClosestParentElement(event.target, ".feature");
             if(rightSideBarItem || leftSideBarItem){
                   controller.abort();
               }
@@ -86,8 +86,8 @@ export class chapterEditorPage{
             return;
         }
         debugger;
-        const fromParagraph = webSkel.UtilsService.reverseQuerySelector(event.target, '[data-paragraph-id]', 'chapter-unit');
-        const fromChapter = webSkel.UtilsService.reverseQuerySelector(event.target, 'chapter-editor-page');
+        const fromParagraph = webSkel.reverseQuerySelector(event.target, '[data-paragraph-id]', 'chapter-unit');
+        const fromChapter = webSkel.reverseQuerySelector(event.target, 'chapter-editor-page');
 
         if (!fromParagraph && !fromChapter) {
             return;
@@ -96,7 +96,7 @@ export class chapterEditorPage{
     }
     async addParagraph(_target){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this.chapterId);
+        await webSkel.appServices.callFlow(flowId, this._document.id, this.chapterId);
         let controller = new AbortController();
         document.addEventListener("click",this.checkParagraphClick.bind(this, controller), {signal:controller.signal});
         this.invalidate();
@@ -133,13 +133,13 @@ export class chapterEditorPage{
         this.switchParagraphArrowsDisplay(paragraph,"on");
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
-            let paragraphUnit = webSkel.UtilsService.reverseQuerySelector(paragraph, ".paragraph-unit");
+            let paragraphUnit = webSkel.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
             this.currentParagraph=paragraph;
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
             webSkel.currentUser.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this._chapter.getParagraph(currentParagraphId);
-            let timer = webSkel.getService("UtilsService").SaveElementTimer(async () => {
+            let timer = webSkel.appServices.SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
@@ -147,7 +147,7 @@ export class chapterEditorPage{
                 let updatedText = paragraph.innerText;
                 if (updatedText !== currentParagraph.text) {
                     let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateParagraphText");
-                    await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, currentParagraph.id, updatedText);
+                    await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraph.id, updatedText);
                 }
             }, 1000);
             paragraph.addEventListener("blur", async () => {
@@ -159,7 +159,7 @@ export class chapterEditorPage{
             const resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
-                        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId);
+                        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId);
                         this.invalidate();
                     }
                     await timer.stop();
@@ -179,7 +179,7 @@ export class chapterEditorPage{
     }
     async moveParagraph(_target, direction) {
         this.switchParagraphArrowsDisplay(this.currentParagraph,"off");
-        const currentParagraph = webSkel.UtilsService.reverseQuerySelector(_target, "paragraph-unit");
+        const currentParagraph = webSkel.reverseQuerySelector(_target, "paragraph-unit");
         const currentParagraphId = currentParagraph.getAttribute('data-paragraph-id');
         const currentParagraphIndex = this._chapter.getParagraphIndex(currentParagraphId);
 
@@ -193,7 +193,7 @@ export class chapterEditorPage{
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, this._chapter.paragraphs);
 
         let flowId = webSkel.currentUser.space.getFlowIdByName("SwapParagraphs");
-        await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
+        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
         this.invalidate();
     }
     async openDocumentsPage() {

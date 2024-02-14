@@ -11,16 +11,16 @@ export class generateDocumentModal{
         this.personalitiesOptions = stringHTML;
     }
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
     async generateDocument(_target) {
-        let formData = await webSkel.UtilsService.extractFormInformation(_target);
+        let formData = await webSkel.extractFormInformation(_target);
         if(formData.isValid) {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateDocument");
-            webSkel.UtilsService.closeModal(_target);
-            let result = await  webSkel.getService("LlmsService").callFlow(flowId, formData.data.documentTitle,
+            webSkel.closeModal(_target);
+            let result = await  webSkel.appServices.callFlow(flowId, formData.data.documentTitle,
                 formData.data.documentTopic, formData.data.chaptersCount, formData.data.documentPersonality, "");
         }
-        webSkel.UtilsService.refreshElement(webSkel.UtilsService.getClosestParentWithPresenter(_target,"documents-page"));
+        webSkel.refreshElement(webSkel.getClosestParentWithPresenter(_target,"documents-page"));
     }
 }

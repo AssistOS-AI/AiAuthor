@@ -40,7 +40,7 @@ export class documentSettingsPage {
     }
 
     async saveSettings(_target) {
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         if(formInfo.isValid) {
             for (const [key, value] of Object.entries(formInfo.data)) {
                 this._document.settings[key] = value;

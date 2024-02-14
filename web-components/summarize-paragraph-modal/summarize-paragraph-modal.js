@@ -21,20 +21,20 @@ export class summarizeParagraphModal{
         }
     }
     async generate(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeParagraph");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt, "");
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt, "");
         this.paragraphMainIdea = result.responseString;
         this.invalidate();
     }
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
     async addSelectedMainIdea(_target) {
         let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptParagraphIdea");
-        let result = await webSkel.getService("LlmsService").callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.paragraphMainIdea);
+        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.paragraphMainIdea);
         this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 }

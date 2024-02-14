@@ -9,16 +9,16 @@ export class addDocumentModal {
     beforeRender() {}
 
     closeModal(_target) {
-        webSkel.UtilsService.closeModal(_target);
+        webSkel.closeModal(_target);
     }
 
     async addDocument(_target) {
-        let formData = await webSkel.UtilsService.extractFormInformation(_target);
+        let formData = await webSkel.extractFormInformation(_target);
         if(formData.isValid) {
             let flowId = webSkel.currentUser.space.getFlowIdByName("AddDocument");
-            let docId = await webSkel.getService("LlmsService").callFlow(flowId, formData.data.documentTitle, formData.data.documentTopic);
+            let docId = await webSkel.appServices.callFlow(flowId, formData.data.documentTitle, formData.data.documentTopic);
             docId.responseString? docId = docId.responseString : docId = docId.responseJson;
-            webSkel.UtilsService.closeModal(_target);
+            webSkel.closeModal(_target);
             await webSkel.changeToDynamicPage(`document-view-page`, `${getBasePath()}/documents/${docId}/document-view-page`);
         }
     }
