@@ -64,7 +64,10 @@
     width: fit-content;
     height: 36px;
     padding: 6px 11px 6px 11px;
-    border: 10px none var(--medium-blue);
+    border:1px;
+    border-style:solid;
+    border-radius:10px;
+    border-color:var(--medium-blue);
     gap: 5px;
     cursor: pointer;
 }
