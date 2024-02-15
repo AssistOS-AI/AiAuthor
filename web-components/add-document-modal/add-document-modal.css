@@ -1,9 +1,12 @@
 dialog[class="modal"]{
     font-family: Poppins, serif;
     width: 35%;
-    height: 25%;
+    height:350px;
     min-height: 350px;
     min-width: 300px;
+}
+add-document-modal{
+height:350px;
 }
 .modal-header{
     display:flex;
