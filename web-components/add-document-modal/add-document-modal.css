@@ -8,7 +8,8 @@ dialog[class="modal"]{
 add-document-modal{
     display: flex;
     flex-direction:column;
-height:350px;
+    height:400px;
+    width:350px;
 }
 .modal-header{
     display:flex;
