@@ -44,6 +44,7 @@ manage-chapters-page {
 .main-ideas-list{
     position: relative;
     padding-left: 15px;
+    outline:none;
 }
 .main-ideas-list:focus{
     background-color: var(--harsh-gray);
