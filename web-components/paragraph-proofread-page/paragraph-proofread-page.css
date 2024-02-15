@@ -14,7 +14,7 @@ paragraph-proofread-page{
     margin: 5px 10px;
 }
 .path-button {
-    color: var(--button-purple);
+    color: var(--left-sidebar);
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -118,7 +118,7 @@ paragraph-proofread-page{
     padding: 8px 10px;
     border-radius: 10px;
     border: 0.5px solid var(--pink-white);
-    background: var(--button-purple);
+    background: var(--left-sidebar);
     color: var(--white-text);
     font-feature-settings: 'clig' off, 'liga' off;
     font-size: 13px;

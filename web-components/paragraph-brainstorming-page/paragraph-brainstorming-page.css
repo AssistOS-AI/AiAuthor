@@ -21,7 +21,7 @@ paragraph-brainstorming-page {
     margin: 5px 10px;
 }
 .path-button {
-    color: var(--button-purple);
+    color: var(--left-sidebar);
     font-size: 14px;
     font-style: normal;
     font-weight: 500;

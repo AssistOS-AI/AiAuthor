@@ -14,7 +14,7 @@ dialog[class="modal"]{
     line-height: 33px;
     letter-spacing: 0;
     color:  var(--white-text);
-    background: var(--button-purple);
+    background: var(--left-sidebar);
     height:63px;
 }
 .generate-modal-form-wrapper{
@@ -91,7 +91,7 @@ dialog[class="modal"]{
     width:117px;
     height:39px;
     border-radius: 17px;
-    background:  var(--button-purple);
+    background:  var(--left-sidebar);
     color: var(--white-text);
     min-width: fit-content;
     cursor: pointer;

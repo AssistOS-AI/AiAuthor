@@ -13,7 +13,7 @@ manage-chapters-page {
 }
 
 .path-button {
-    color: var(--button-purple);
+    color: var(--left-sidebar);
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -76,7 +76,7 @@ manage-chapters-page {
     line-height: 24px;
     text-align: center;
     color: var(--white-text);
-    background: var(--button-purple);
+    background: var(--left-sidebar);
     width: fit-content;
     height: 22px;
     padding: 6px 9px;
