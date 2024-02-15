@@ -6,6 +6,8 @@ dialog[class="modal"]{
     min-width: 300px;
 }
 add-document-modal{
+    display: flex;
+    flex-direction:column;
 height:350px;
 }
 .modal-header{
