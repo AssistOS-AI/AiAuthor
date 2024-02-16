@@ -7,7 +7,7 @@ export class editTitlePage {
     }
     beforeRender() {
         this._document = webSkel.currentUser.space.getDocument(parseURL());
-        this._document.observeChange(this._document.getNotificationId() + ":edit-title-page", invalidate);
+        this._document.observeChange(this._document.getNotificationId() + ":edit-title-page", this.invalidate);
         this.title = this._document.title;
         this.alternativeTitles = "";
         let i = 1;
