@@ -2,12 +2,12 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class editTitlePage {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = webSkel.currentUser.space.getDocument(parseURL());
-        this._document.observeChange(this._document.getNotificationId() + ":edit-title-page", invalidate);
         this.invalidate = invalidate;
         this.invalidate();
     }
     beforeRender() {
+        this._document = webSkel.currentUser.space.getDocument(parseURL());
+        this._document.observeChange(this._document.getNotificationId() + ":edit-title-page", invalidate);
         this.title = this._document.title;
         this.alternativeTitles = "";
         let i = 1;
