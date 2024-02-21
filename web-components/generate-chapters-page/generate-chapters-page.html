@@ -37,7 +37,7 @@
                     <input type="number" name="nr" data-id="nr" id="nr" min="1" max="9" value="3">
                 </div>
                 <div class="form-footer">
-                    <button type="button" class="wide-btn generate-ideas-btn" data-local-action="generateIdeas">
+                    <button type="button" class="general-button generate-ideas-btn" data-local-action="generateIdeas">
                         Generate Ideas
                     </button>
                 </div>
@@ -56,12 +56,14 @@
                     <textarea name="prompt" data-id="prompt" id="prompt" maxlength="150"
                               placeholder="Please generate chapters/chapter titles based on the following array of ideas:"></textarea>
                 </div>
-                <button type="button" class="wide-btn generate-chapters-btn" data-local-action="generateEmptyChapters">
-                    Generate Chapters (partial)
-                </button>
-                <button type="button" class="wide-btn generate-chapters-btn" data-local-action="generateChapters">
-                    Generate Chapters (whole content)
-                </button>
+                <div class="form-footer">
+                    <button type="button" class="general-button generate-chapters-btn" data-local-action="generateEmptyChapters">
+                        Generate Chapters (partial)
+                    </button>
+                    <button type="button" class="general-button generate-chapters-btn" data-local-action="generateChapters">
+                        Generate Chapters (whole content)
+                    </button>
+                </div>
             </form>
         </div>
 

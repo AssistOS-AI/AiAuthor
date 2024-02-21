@@ -95,6 +95,9 @@ manage-chapters-page {
     display: flex;
     align-items: center;
 }
+.section-title-right{
+    cursor: pointer;
+}
 .main-ideas-section-title-right {
     display:flex;
     align-items:center;

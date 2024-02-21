@@ -117,19 +117,6 @@ abstract-proofread-page{
     color: #252525;
     font-weight: 450;
 }
-.wide-btn{
-    cursor: pointer;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 0.5px solid var(--pink-white);
-    background: var(--left-sidebar);
-    color: var(--white-text);
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
 .current-abstract-left, .current-abstract-right{
     display:flex;
     align-items:center;

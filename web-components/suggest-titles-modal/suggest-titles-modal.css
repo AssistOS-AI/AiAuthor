@@ -1,4 +1,4 @@
-dialog[class="modal"] {
+dialog{
     padding: 0;
     border: none;
     width: 70%;
@@ -36,22 +36,6 @@ dialog[class="modal"] {
     --full-highlight-height: none;
     --inset-highlight-height: none;
 }
-
-.wide-btn {
-    cursor: pointer;
-    padding: 8px 40px;
-    border-radius: 16px;
-    margin: 16px 0;
-    border: 0.5px solid var(--pink-white);
-    background: var(--left-sidebar);
-    color: var(--white-text);
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
-
 .suggested-titles-form {
     display: flex;
     flex-direction: column;
@@ -63,6 +47,7 @@ dialog[class="modal"] {
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 12px;
 }
 
 form .alternative-titles div {
@@ -96,6 +81,7 @@ input[type="checkbox"] {
 .form-footer{
     display: flex;
     justify-content: center;
+    margin-bottom: 12px;
 }
 input[type="checkbox"]:checked {
     background-color: var(--black);

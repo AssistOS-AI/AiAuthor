@@ -93,9 +93,9 @@ export class generateParagraphsPage {
                 }
             }
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateParagraphs");
-            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, this._chapter.id,formInfo.data.prompt, selectedIdeas.length);
+            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, this._chapter.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-paragraphs-page",`documents/${this._document.id}/manage-paragraphs-page/${this._chapter.id}`);
+                await webSkel.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/manage-paragraphs-page`);
             }
         }
     }

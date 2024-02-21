@@ -1,8 +1,7 @@
-dialog[class="modal"] {
+dialog{
     font-family: Poppins, serif;
-    width: 35%;
-    height:350px;
-    min-height: 350px;
+    height:400px;
+    min-height: 400px;
     min-width: 300px;
 }
 
@@ -79,6 +78,7 @@ generate-document-modal{
 #documentTopic {
     height: 100px;
     min-height: 100px;
+    resize: none;
 }
 
 .inner-container {
