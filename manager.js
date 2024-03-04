@@ -1,12 +1,12 @@
-import {routingService} from "./services/routingService.js";
+import {RoutingService} from "./services/RoutingService.js";
 
 export class Manager {
     constructor() {
         this.appName = "AiAuthor";
         this.services = new Map();
-        this.services.set('routingService', new routingService());
+        this.services.set('RoutingService', new RoutingService());
     }
     async navigateToLocation(location) {
-        this.services.get('routingService').navigateToLocation(location, this.appName);
+        this.services.get('RoutingService').navigateToLocation(location, this.appName);
     }
 }
