@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class editTitlePage {
+export class EditTitlePage {
     constructor(element, invalidate) {
         this.element = element;
         this.invalidate = invalidate;

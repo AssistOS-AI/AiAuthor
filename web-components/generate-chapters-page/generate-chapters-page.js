@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class generateChaptersPage {
+export class GenerateChaptersPage {
     constructor(element, invalidate) {
         this.element = element;
         this._document = webSkel.currentUser.space.getDocument(parseURL());

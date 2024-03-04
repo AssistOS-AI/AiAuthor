@@ -1,5 +1,6 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class chapterBrainstormingPage {
+import {Chapter} from "../../../../../../wallet/imports.js";
+export class ChapterBrainstormingPage {
     constructor(element, invalidate) {
         this.element = element;
         let documentId, chapterId;
@@ -76,9 +77,9 @@ export class chapterBrainstormingPage {
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestChapter");
         let result = await webSkel.appServices.callFlow(flowId, JSON.stringify(this._chapter.mainIdeas));
         let chapterObj=result.responseJson;
-        chapterObj.id=webSkel.servicesRegistry.UtilsService.generateId();
+        chapterObj.id=webSkel.appServices.generateId();
         for(let paragraph of chapterObj.paragraphs){
-            paragraph.id=webSkel.servicesRegistry.UtilsService.generateId();
+            paragraph.id=webSkel.appServices.generateId();
         }
         this._chapter.alternativeChapters.push(new Chapter(chapterObj));
         await documentFactory.updateDocument(webSkel.currentUser.space.id, this._document);

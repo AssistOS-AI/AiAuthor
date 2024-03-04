@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class chapterTitlePage {
+export class ChapterTitlePage {
     constructor(element, invalidate) {
         this.element = element;
         let documentId, chapterId;

@@ -1,4 +1,4 @@
-export class generateDocumentModal{
+export class GenerateDocumentModal{
     constructor(element, invalidate) {
         this.invalidate = invalidate;
         this.invalidate();

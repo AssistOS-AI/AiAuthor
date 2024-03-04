@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class paragraphProofreadPage {
+export class ParagraphProofreadPage {
     constructor(element, invalidate) {
         this.element=element;
         let documentId, chapterId, paragraphId;

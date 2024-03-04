@@ -1,5 +1,5 @@
 import {getBasePath, parseURL} from "../../utils/index.js"
-export class generateParagraphsPage {
+export class GenerateParagraphsPage {
     constructor(element, invalidate) {
         this.element = element;
         let documentId, chapterId;

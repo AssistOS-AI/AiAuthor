@@ -1,5 +1,5 @@
 import {getBasePath} from "../../utils/index.js"
-export class documentsPage {
+export class DocumentsPage {
     constructor(element, invalidate) {
         this.notificationId = "docs"
         documentFactory.observeChange(this.notificationId, invalidate);
