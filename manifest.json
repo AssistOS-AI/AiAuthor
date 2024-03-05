@@ -6,395 +6,179 @@
   "applicationStylesPath": "index.css",
   "components": [
     {
-      "componentName": "documents-page",
-      "componentPath": "web-components/documents-page/documents-page.html",
-      "cssPaths": [
-        "web-components/documents-page/documents-page.css"
-      ]
+      "name": "documents-page",
+      "presenterClassName": "documentsPage",
+      "type": "pages"
+
     },
     {
-      "componentName": "document-unit",
-      "componentPath": "web-components/document-unit/document-unit.html",
-      "cssPaths": [
-        "web-components/document-unit/document-unit.css"
-      ]
+      "name": "document-unit",
+      "type": "components"
     },
     {
-      "componentName": "action-box-with-clone",
-      "componentPath": "web-components/action-box-with-clone/action-box-with-clone.html",
-      "cssPaths": [
-        "web-components/action-box-with-clone/action-box-with-clone.css"
-      ]
+      "name": "action-box-with-clone",
+      "type": "components"
     },
     {
-      "componentName": "add-document-modal",
-      "componentPath": "web-components/add-document-modal/add-document-modal.html",
-      "cssPaths": [
-        "web-components/add-document-modal/add-document-modal.css"
-      ]
+      "name": "add-document-modal",
+      "presenterClassName": "addDocumentModal",
+      "type": "modal"
     },
     {
-      "componentName": "generate-document-modal",
-      "componentPath": "web-components/generate-document-modal/generate-document-modal.html",
-      "cssPaths": [
-        "web-components/generate-document-modal/generate-document-modal.css"
-      ]
+      "name": "generate-document-modal",
+      "presenterClassName": "generateDocumentModal",
+      "type": "modal"
     },
     {
-      "componentName": "document-view-page",
-      "componentPath": "web-components/document-view-page/document-view-page.html",
-      "cssPaths": [
-        "web-components/document-view-page/document-view-page.css"
-      ]
+      "name": "document-view-page",
+      "presenterClassName": "documentViewPage",
+      "type": "pages"
     },
     {
-      "componentName": "chapter-unit",
-      "componentPath": "web-components/chapter-unit/chapter-unit.html",
-      "cssPaths": [
-        "web-components/chapter-unit/chapter-unit.css"
-      ]
+      "name": "chapter-unit",
+      "presenterClassName": "chapterUnit",
+      "type": "components"
     },
     {
-      "componentName": "paragraph-unit",
-      "componentPath": "web-components/paragraph-unit/paragraph-unit.html",
-      "cssPaths": [
-        "web-components/paragraph-unit/paragraph-unit.css"
-      ]
+      "name": "paragraph-unit",
+      "type": "components"
     },
     {
-      "componentName": "abstract-proofread-page",
-      "componentPath": "web-components/abstract-proofread-page/abstract-proofread-page.html",
-      "cssPaths": [
-        "web-components/abstract-proofread-page/abstract-proofread-page.css"
-      ]
+      "name": "abstract-proofread-page",
+      "presenterClassName": "abstractProofreadPage",
+      "type": "pages"
     },
     {
-      "componentName": "alternative-abstract",
-      "componentPath": "web-components/alternative-abstract/alternative-abstract.html",
-      "cssPaths": [
-        "web-components/alternative-abstract/alternative-abstract.css"
-      ]
+      "name": "alternative-abstract",
+      "type": "components"
     },
     {
-      "componentName": "alternative-chapter",
-      "componentPath": "web-components/alternative-chapter/alternative-chapter.html",
-      "cssPaths": [
-        "web-components/alternative-chapter/alternative-chapter.css"
-      ]
+      "name": "alternative-chapter",
+      "type": "components"
     },
     {
-      "componentName": "alternative-paragraph",
-      "componentPath": "web-components/alternative-paragraph/alternative-paragraph.html",
-      "cssPaths": [
-        "web-components/alternative-paragraph/alternative-paragraph.css"
-      ]
+      "name": "alternative-paragraph",
+      "type": "components"
     },
     {
-      "componentName": "alternative-title",
-      "componentPath": "web-components/alternative-title/alternative-title.html",
-      "cssPaths": [
-        "web-components/alternative-title/alternative-title.css"
-      ]
+      "name": "alternative-title",
+      "type": "components"
     },
     {
-      "componentName": "chapter-brainstorming-page",
-      "componentPath": "web-components/chapter-brainstorming-page/chapter-brainstorming-page.html",
-      "cssPaths": [
-        "web-components/chapter-brainstorming-page/chapter-brainstorming-page.css"
-      ]
+      "name": "chapter-brainstorming-page",
+      "presenterClassName": "chapterBrainstormingPage",
+      "type": "pages"
     },
     {
-      "componentName": "chapter-editor-page",
-      "componentPath": "web-components/chapter-editor-page/chapter-editor-page.html",
-      "cssPaths": [
-        "web-components/chapter-editor-page/chapter-editor-page.css"
-      ]
+      "name": "chapter-editor-page",
+      "presenterClassName": "chapterEditorPage",
+      "type": "pages"
     },
     {
-      "componentName": "chapter-title-page",
-      "componentPath": "web-components/chapter-title-page/chapter-title-page.html",
-      "cssPaths": [
-        "web-components/chapter-title-page/chapter-title-page.css"
-      ]
+      "name": "chapter-title-page",
+      "presenterClassName": "chapterTitlePage",
+      "type": "pages"
     },
     {
-      "componentName": "clone-chapter-modal",
-      "componentPath": "web-components/clone-chapter-modal/clone-chapter-modal.html",
-      "cssPaths": [
-        "web-components/clone-chapter-modal/clone-chapter-modal.css"
-      ]
+      "name": "clone-chapter-modal",
+      "presenterClassName": "cloneChapterModal",
+      "type": "modal"
     },
     {
-      "componentName": "clone-document-modal",
-      "componentPath": "web-components/clone-document-modal/clone-document-modal.html",
-      "cssPaths": [
-        "web-components/clone-document-modal/clone-document-modal.css"
-      ]
+      "name": "clone-document-modal",
+      "presenterClassName": "cloneDocumentModal",
+      "type": "modal"
     },
     {
-      "componentName": "document-settings-page",
-      "componentPath": "web-components/document-settings-page/document-settings-page.html",
-      "cssPaths": [
-        "web-components/document-settings-page/document-settings-page.css"
-      ]
+      "name": "document-settings-page",
+      "presenterClassName": "documentSettingsPage",
+      "type": "pages"
     },
     {
-      "componentName": "edit-abstract-page",
-      "componentPath": "web-components/edit-abstract-page/edit-abstract-page.html",
-      "cssPaths": [
-        "web-components/edit-abstract-page/edit-abstract-page.css"
-      ]
+      "name": "edit-abstract-page",
+      "presenterClassName": "editAbstractPage",
+      "type": "pages"
     },
     {
-      "componentName": "edit-title-page",
-      "componentPath": "web-components/edit-title-page/edit-title-page.html",
-      "cssPaths": [
-        "web-components/edit-title-page/edit-title-page.css"
-      ]
+      "name": "edit-title-page",
+      "presenterClassName": "editTitlePage",
+      "type": "pages"
     },
     {
-      "componentName": "generate-chapters-page",
-      "componentPath": "web-components/generate-chapters-page/generate-chapters-page.html",
-      "cssPaths": [
-        "web-components/generate-chapters-page/generate-chapters-page.css"
-      ]
+      "name": "generate-chapters-page",
+      "presenterClassName": "generateChaptersPage",
+      "type": "pages"
     },
     {
-      "componentName": "generate-paragraphs-page",
-      "componentPath": "web-components/generate-paragraphs-page/generate-paragraphs-page.html",
-      "cssPaths": [
-        "web-components/generate-paragraphs-page/generate-paragraphs-page.css"
-      ]
+      "name": "generate-paragraphs-page",
+      "presenterClassName": "generateParagraphsPage",
+      "type": "pages"
     },
     {
-      "componentName": "manage-chapters-page",
-      "componentPath": "web-components/manage-chapters-page/manage-chapters-page.html",
-      "cssPaths": [
-        "web-components/manage-chapters-page/manage-chapters-page.css"
-      ]
+      "name": "manage-chapters-page",
+      "presenterClassName": "manageChaptersPage",
+      "type": "pages"
     },
     {
-      "componentName": "manage-paragraphs-page",
-      "componentPath": "web-components/manage-paragraphs-page/manage-paragraphs-page.html",
-      "cssPaths": [
-        "web-components/manage-paragraphs-page/manage-paragraphs-page.css"
-      ]
+      "name": "manage-paragraphs-page",
+      "presenterClassName": "manageParagraphsPage",
+      "type": "pages"
     },
     {
-      "componentName": "paragraph-brainstorming-page",
-      "componentPath": "web-components/paragraph-brainstorming-page/paragraph-brainstorming-page.html",
-      "cssPaths": [
-        "web-components/paragraph-brainstorming-page/paragraph-brainstorming-page.css"
-      ]
+      "name": "paragraph-brainstorming-page",
+      "presenterClassName": "paragraphBrainstormingPage",
+      "type": "pages"
     },
     {
-      "componentName": "paragraph-proofread-page",
-      "componentPath": "web-components/paragraph-proofread-page/paragraph-proofread-page.html",
-      "cssPaths": [
-        "web-components/paragraph-proofread-page/paragraph-proofread-page.css"
-      ]
+      "name": "paragraph-proofread-page",
+      "presenterClassName": "paragraphProofreadPage",
+      "type": "pages"
     },
     {
-      "componentName": "reduced-chapter-unit",
-      "componentPath": "web-components/reduced-chapter-unit/reduced-chapter-unit.html",
-      "cssPaths": [
-        "web-components/reduced-chapter-unit/reduced-chapter-unit.css"
-      ]
+      "name": "reduced-chapter-unit",
+      "type": "components"
     },
     {
-      "componentName": "reduced-paragraph-unit",
-      "componentPath": "web-components/reduced-paragraph-unit/reduced-paragraph-unit.html",
-      "cssPaths": [
-        "web-components/reduced-paragraph-unit/reduced-paragraph-unit.css"
-      ]
+      "name": "reduced-paragraph-unit",
+      "type": "components"
     },
     {
-      "componentName": "suggest-abstract-modal",
-      "componentPath": "web-components/suggest-abstract-modal/suggest-abstract-modal.html",
-      "cssPaths": [
-        "web-components/suggest-abstract-modal/suggest-abstract-modal.css"
-      ]
+      "name": "suggest-abstract-modal",
+      "presenterClassName": "suggestAbstractModal",
+      "type": "modal"
     },
     {
-      "componentName": "suggest-chapter-titles-modal",
-      "componentPath": "web-components/suggest-chapter-titles-modal/suggest-chapter-titles-modal.html",
-      "cssPaths": [
-        "web-components/suggest-chapter-titles-modal/suggest-chapter-titles-modal.css"
-      ]
+      "name": "suggest-chapter-titles-modal",
+      "presenterClassName": "suggestChapterTitlesModal",
+      "type": "modal"
     },
     {
-      "componentName": "suggest-paragraph-modal",
-      "componentPath": "web-components/suggest-paragraph-modal/suggest-paragraph-modal.html",
-      "cssPaths": [
-        "web-components/suggest-paragraph-modal/suggest-paragraph-modal.css"
-      ]
+      "name": "suggest-paragraph-modal",
+      "presenterClassName": "suggestParagraphModal",
+      "type": "modal"
     },
     {
-      "componentName": "suggest-titles-modal",
-      "componentPath": "web-components/suggest-titles-modal/suggest-titles-modal.html",
-      "cssPaths": [
-        "web-components/suggest-titles-modal/suggest-titles-modal.css"
-      ]
+      "name": "suggest-titles-modal",
+      "presenterClassName": "suggestTitlesModal",
+      "type": "modal"
     },
     {
-      "componentName": "summarize-chapter-modal",
-      "componentPath": "web-components/summarize-chapter-modal/summarize-chapter-modal.html",
-      "cssPaths": [
-        "web-components/summarize-chapter-modal/summarize-chapter-modal.css"
-      ]
+      "name": "summarize-chapter-modal",
+      "presenterClassName": "summarizeChapterModal",
+      "type": "modal"
     },
     {
-      "componentName": "summarize-paragraph-modal",
-      "componentPath": "web-components/summarize-paragraph-modal/summarize-paragraph-modal.html",
-      "cssPaths": [
-        "web-components/summarize-paragraph-modal/summarize-paragraph-modal.css"
-      ]
+      "name": "summarize-paragraph-modal",
+      "presenterClassName": "summarizeParagraphModal",
+      "type": "modal"
     },
     {
-      "componentName": "summarize-document-modal",
-      "componentPath": "web-components/summarize-document-modal/summarize-document-modal.html",
-      "cssPaths": [
-        "web-components/summarize-document-modal/summarize-document-modal.css"
-      ]
+      "name": "summarize-document-modal",
+      "presenterClassName": "summarizeDocumentModal",
+      "type": "modal"
     }
   ],
-  "presenters": [
-    {
-      "presenterPath": "web-components/documents-page/documents-page.js",
-      "presenterName": "documentsPage",
-      "forComponent": "documents-page"
-    },
-    {
-      "presenterPath": "web-components/add-document-modal/add-document-modal.js",
-      "presenterName": "addDocumentModal",
-      "forComponent": "add-document-modal"
-    },
-    {
-      "presenterPath": "web-components/generate-document-modal/generate-document-modal.js",
-      "presenterName": "generateDocumentModal",
-      "forComponent": "generate-document-modal"
-    },
-    {
-      "presenterPath": "web-components/document-view-page/document-view-page.js",
-      "presenterName": "documentViewPage",
-      "forComponent": "document-view-page"
-    },
-    {
-      "presenterPath": "web-components/chapter-unit/chapter-unit.js",
-      "presenterName": "chapterUnit",
-      "forComponent": "chapter-unit"
-    },
-    {
-      "presenterPath": "web-components/abstract-proofread-page/abstract-proofread-page.js",
-      "presenterName": "abstractProofreadPage",
-      "forComponent": "abstract-proofread-page"
-    },
-    {
-      "presenterPath": "web-components/chapter-brainstorming-page/chapter-brainstorming-page.js",
-      "presenterName": "chapterBrainstormingPage",
-      "forComponent": "chapter-brainstorming-page"
-    },
-    {
-      "presenterPath": "web-components/chapter-editor-page/chapter-editor-page.js",
-      "presenterName": "chapterEditorPage",
-      "forComponent": "chapter-editor-page"
-    },
-    {
-      "presenterPath": "web-components/chapter-title-page/chapter-title-page.js",
-      "presenterName": "chapterTitlePage",
-      "forComponent": "chapter-title-page"
-    },
-    {
-      "presenterPath": "web-components/clone-chapter-modal/clone-chapter-modal.js",
-      "presenterName": "cloneChapterModal",
-      "forComponent": "clone-chapter-modal"
-    },
-    {
-      "presenterPath": "web-components/clone-document-modal/clone-document-modal.js",
-      "presenterName": "cloneDocumentModal",
-      "forComponent": "clone-document-modal"
-    },
-    {
-      "presenterPath": "web-components/document-settings-page/document-settings-page.js",
-      "presenterName": "documentSettingsPage",
-      "forComponent": "document-settings-page"
-    },
-    {
-      "presenterPath": "web-components/edit-abstract-page/edit-abstract-page.js",
-      "presenterName": "editAbstractPage",
-      "forComponent": "edit-abstract-page"
-    },
-    {
-      "presenterPath": "web-components/edit-title-page/edit-title-page.js",
-      "presenterName": "editTitlePage",
-      "forComponent": "edit-title-page"
-    },
-    {
-      "presenterPath": "web-components/generate-chapters-page/generate-chapters-page.js",
-      "presenterName": "generateChaptersPage",
-      "forComponent": "generate-chapters-page"
-    },
-    {
-      "presenterPath": "web-components/generate-paragraphs-page/generate-paragraphs-page.js",
-      "presenterName": "generateParagraphsPage",
-      "forComponent": "generate-paragraphs-page"
-    },
-    {
-      "presenterPath": "web-components/manage-chapters-page/manage-chapters-page.js",
-      "presenterName": "manageChaptersPage",
-      "forComponent": "manage-chapters-page"
-    },
-    {
-      "presenterPath": "web-components/manage-paragraphs-page/manage-paragraphs-page.js",
-      "presenterName": "manageParagraphsPage",
-      "forComponent": "manage-paragraphs-page"
-    },
-    {
-      "presenterPath": "web-components/paragraph-brainstorming-page/paragraph-brainstorming-page.js",
-      "presenterName": "paragraphBrainstormingPage",
-      "forComponent": "paragraph-brainstorming-page"
-    },
-    {
-      "presenterPath": "web-components/paragraph-proofread-page/paragraph-proofread-page.js",
-      "presenterName": "paragraphProofreadPage",
-      "forComponent": "paragraph-proofread-page"
-    },
-    {
-      "presenterPath": "web-components/suggest-abstract-modal/suggest-abstract-modal.js",
-      "presenterName": "suggestAbstractModal",
-      "forComponent": "suggest-abstract-modal"
-    },
-    {
-      "presenterPath": "web-components/suggest-chapter-titles-modal/suggest-chapter-titles-modal.js",
-      "presenterName": "suggestChapterTitlesModal",
-      "forComponent": "suggest-chapter-titles-modal"
-    },
-    {
-      "presenterPath": "web-components/suggest-paragraph-modal/suggest-paragraph-modal.js",
-      "presenterName": "suggestParagraphModal",
-      "forComponent": "suggest-paragraph-modal"
-    },
-    {
-      "presenterPath": "web-components/suggest-titles-modal/suggest-titles-modal.js",
-      "presenterName": "suggestTitlesModal",
-      "forComponent": "suggest-titles-modal"
-    },
-    {
-      "presenterPath": "web-components/summarize-chapter-modal/summarize-chapter-modal.js",
-      "presenterName": "summarizeChapterModal",
-      "forComponent": "summarize-chapter-modal"
-    },
-    {
-      "presenterPath": "web-components/summarize-document-modal/summarize-document-modal.js",
-      "presenterName": "summarizeDocumentModal",
-      "forComponent": "summarize-document-modal"
-    },
-    {
-      "presenterPath": "web-components/summarize-paragraph-modal/summarize-paragraph-modal.js",
-      "presenterName": "summarizeParagraphModal",
-      "forComponent": "summarize-paragraph-modal"
-    }
-  ],
+
   "manager": {
     "path": "manager.js",
     "name": "Manager"
