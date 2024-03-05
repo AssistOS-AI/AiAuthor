@@ -7,9 +7,8 @@
   "components": [
     {
       "name": "documents-page",
-      "presenterClassName": "documentsPage",
+      "presenterClassName": "DocumentsPage",
       "type": "pages"
-
     },
     {
       "name": "document-unit",
@@ -21,22 +20,22 @@
     },
     {
       "name": "add-document-modal",
-      "presenterClassName": "addDocumentModal",
+      "presenterClassName": "AddDocumentModal",
       "type": "modal"
     },
     {
       "name": "generate-document-modal",
-      "presenterClassName": "generateDocumentModal",
+      "presenterClassName": "GenerateDocumentModal",
       "type": "modal"
     },
     {
       "name": "document-view-page",
-      "presenterClassName": "documentViewPage",
+      "presenterClassName": "DocumentViewPage",
       "type": "pages"
     },
     {
       "name": "chapter-unit",
-      "presenterClassName": "chapterUnit",
+      "presenterClassName": "ChapterUnit",
       "type": "components"
     },
     {
@@ -45,7 +44,7 @@
     },
     {
       "name": "abstract-proofread-page",
-      "presenterClassName": "abstractProofreadPage",
+      "presenterClassName": "AbstractProofreadPage",
       "type": "pages"
     },
     {
@@ -66,72 +65,72 @@
     },
     {
       "name": "chapter-brainstorming-page",
-      "presenterClassName": "chapterBrainstormingPage",
+      "presenterClassName": "ChapterBrainstormingPage",
       "type": "pages"
     },
     {
       "name": "chapter-editor-page",
-      "presenterClassName": "chapterEditorPage",
+      "presenterClassName": "ChapterEditorPage",
       "type": "pages"
     },
     {
       "name": "chapter-title-page",
-      "presenterClassName": "chapterTitlePage",
+      "presenterClassName": "ChapterTitlePage",
       "type": "pages"
     },
     {
       "name": "clone-chapter-modal",
-      "presenterClassName": "cloneChapterModal",
+      "presenterClassName": "CloneChapterModal",
       "type": "modal"
     },
     {
       "name": "clone-document-modal",
-      "presenterClassName": "cloneDocumentModal",
+      "presenterClassName": "CloneDocumentModal",
       "type": "modal"
     },
     {
       "name": "document-settings-page",
-      "presenterClassName": "documentSettingsPage",
+      "presenterClassName": "DocumentSettingsPage",
       "type": "pages"
     },
     {
       "name": "edit-abstract-page",
-      "presenterClassName": "editAbstractPage",
+      "presenterClassName": "EditAbstractPage",
       "type": "pages"
     },
     {
       "name": "edit-title-page",
-      "presenterClassName": "editTitlePage",
+      "presenterClassName": "EditTitlePage",
       "type": "pages"
     },
     {
       "name": "generate-chapters-page",
-      "presenterClassName": "generateChaptersPage",
+      "presenterClassName": "GenerateChaptersPage",
       "type": "pages"
     },
     {
       "name": "generate-paragraphs-page",
-      "presenterClassName": "generateParagraphsPage",
+      "presenterClassName": "GenerateParagraphsPage",
       "type": "pages"
     },
     {
       "name": "manage-chapters-page",
-      "presenterClassName": "manageChaptersPage",
+      "presenterClassName": "ManageChaptersPage",
       "type": "pages"
     },
     {
       "name": "manage-paragraphs-page",
-      "presenterClassName": "manageParagraphsPage",
+      "presenterClassName": "ManageParagraphsPage",
       "type": "pages"
     },
     {
       "name": "paragraph-brainstorming-page",
-      "presenterClassName": "paragraphBrainstormingPage",
+      "presenterClassName": "ParagraphBrainstormingPage",
       "type": "pages"
     },
     {
       "name": "paragraph-proofread-page",
-      "presenterClassName": "paragraphProofreadPage",
+      "presenterClassName": "ParagraphProofreadPage",
       "type": "pages"
     },
     {
@@ -144,38 +143,44 @@
     },
     {
       "name": "suggest-abstract-modal",
-      "presenterClassName": "suggestAbstractModal",
+      "presenterClassName": "SuggestAbstractModal",
       "type": "modal"
     },
     {
       "name": "suggest-chapter-titles-modal",
-      "presenterClassName": "suggestChapterTitlesModal",
+      "presenterClassName": "SuggestChapterTitlesModal",
       "type": "modal"
     },
     {
       "name": "suggest-paragraph-modal",
-      "presenterClassName": "suggestParagraphModal",
+      "presenterClassName": "SuggestParagraphModal",
       "type": "modal"
     },
     {
       "name": "suggest-titles-modal",
-      "presenterClassName": "suggestTitlesModal",
+      "presenterClassName": "SuggestTitlesModal",
       "type": "modal"
     },
     {
       "name": "summarize-chapter-modal",
-      "presenterClassName": "summarizeChapterModal",
+      "presenterClassName": "SummarizeChapterModal",
       "type": "modal"
     },
     {
       "name": "summarize-paragraph-modal",
-      "presenterClassName": "summarizeParagraphModal",
+      "presenterClassName": "SummarizeParagraphModal",
       "type": "modal"
     },
     {
       "name": "summarize-document-modal",
-      "presenterClassName": "summarizeDocumentModal",
+      "presenterClassName": "SummarizeDocumentModal",
       "type": "modal"
+    }
+  ],
+  "services": [
+    {
+      "serviceName": "RoutingService",
+      "servicePath": "services/RoutingService.js"
     }
   ],
   "manager": {
