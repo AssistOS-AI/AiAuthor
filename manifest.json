@@ -384,6 +384,12 @@
       "forComponent": "summarize-paragraph-modal"
     }
   ],
+  "services": [
+    {
+      "serviceName": "RoutingService",
+      "servicePath": "services/RoutingService.js"
+    }
+  ],
   "manager": {
     "path": "manager.js",
     "name": "Manager"
