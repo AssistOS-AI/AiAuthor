@@ -1,4 +1,4 @@
-export class cloneDocumentModal {
+export class CloneDocumentModal {
     constructor(element, invalidate) {
         this.invalidate = invalidate;
         this.invalidate();

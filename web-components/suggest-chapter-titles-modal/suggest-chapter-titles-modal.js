@@ -1,5 +1,5 @@
 import {parseURL} from "../../utils/index.js"
-export class suggestChapterTitlesModal {
+export class SuggestChapterTitlesModal {
     constructor(element, invalidate) {
         this.element = element;
         [this.documentId,this.chapterId] = parseURL();

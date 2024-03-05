@@ -1,5 +1,5 @@
 import {parseURL} from "../../utils/index.js"
-export class chapterUnit {
+export class ChapterUnit {
     constructor(element, invalidate) {
         this.element = element;
         this._document = webSkel.currentUser.space.getDocument(parseURL());

@@ -1,6 +1,6 @@
 import {getBasePath} from "../../utils/index.js"
 
-export class addDocumentModal {
+export class AddDocumentModal {
     constructor(element,invalidate) {
        this.invalidate=invalidate;
        this.invalidate();

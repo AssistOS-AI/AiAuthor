@@ -1,5 +1,5 @@
 import {parseURL} from "../../utils/index.js"
-export class suggestTitlesModal {
+export class SuggestTitlesModal {
     constructor(element, invalidate) {
         this.id = parseURL();
         this._document = webSkel.currentUser.space.getDocument(this.id);

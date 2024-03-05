@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-export class documentViewPage {
+export class DocumentViewPage {
     constructor(element, invalidate) {
         this.element = element;
         this._document = webSkel.currentUser.space.getDocument(parseURL());

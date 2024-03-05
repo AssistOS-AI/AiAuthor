@@ -1,5 +1,5 @@
 import {parseURL} from "../../utils/index.js"
-export class cloneChapterModal {
+export class CloneChapterModal {
     constructor(element, invalidate) {
         [this.documentId,this.chapterId]=parseURL();
         this.invalidate = invalidate;

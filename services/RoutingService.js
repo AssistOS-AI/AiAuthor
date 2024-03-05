@@ -1,4 +1,4 @@
-export class routingService {
+export class RoutingService {
     constructor() {}
     async navigateToLocation(locationArray = [], appName) {
         const DOCUMENTS_PAGE = "documents-page";

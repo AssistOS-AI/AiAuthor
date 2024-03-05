@@ -1,5 +1,5 @@
 import {parseURL} from "../../utils/index.js"
-export class summarizeDocumentModal{
+export class SummarizeDocumentModal{
     constructor(element,invalidate){
         let documentId = parseURL();
         this._document = webSkel.currentUser.space.getDocument(documentId);
