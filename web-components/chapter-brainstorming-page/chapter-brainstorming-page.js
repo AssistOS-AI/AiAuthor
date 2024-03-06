@@ -1,5 +1,5 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
-import {Chapter} from "../../../../../../wallet/imports.js";
+//import {Chapter} from "../../../../../../wallet/imports.js";
 export class ChapterBrainstormingPage {
     constructor(element, invalidate) {
         this.element = element;
@@ -77,12 +77,8 @@ export class ChapterBrainstormingPage {
         let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestChapter");
         let result = await webSkel.appServices.callFlow(flowId, JSON.stringify(this._chapter.mainIdeas));
         let chapterObj=result.responseJson;
-        chapterObj.id=webSkel.appServices.generateId();
-        for(let paragraph of chapterObj.paragraphs){
-            paragraph.id=webSkel.appServices.generateId();
-        }
-        this._chapter.alternativeChapters.push(new Chapter(chapterObj));
-        await documentFactory.updateDocument(webSkel.currentUser.space.id, this._document);
+        let flowId2 = webSkel.currentUser.space.getFlowIdByName("AddAlternativeChapter");
+        await webSkel.appServices.callFlow(flowId2, this._document.id, this._chapter.id, chapterObj);
         this.invalidate();
     }
     async openCloneChapterModal(){
