@@ -123,3 +123,6 @@
 #highlighted-abstract{
     background-color:var(--medium-white);
 }
+.sidebar-item{
+    font-weight: 600;
+}
