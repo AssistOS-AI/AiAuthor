@@ -1,15 +1,14 @@
 dialog{
     font-family: Poppins, serif;
-    width: 35%;
-    height:350px;
-    min-height: 350px;
-    min-width: 300px;
+    height: 400px;
+    width: 400px;
+    min-height: 400px;
+    min-width: 400px;
 }
 add-document-modal{
     display: flex;
     flex-direction:column;
     height:400px;
-    width:350px;
 }
 .modal-header{
     display:flex;
