@@ -1,7 +1,17 @@
 .documents-page {
     font-family: Poppins;
 }
-
+.app-title{
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 42px;
+    text-align: left;
+    color: var(--left-sidebar);
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .documents-page-header {
     display: flex;
     justify-content: space-between;
@@ -31,13 +41,10 @@
 
 .documents-header-wrapper {
     width: 100%;
-    padding-left: 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    padding-right: 54px;
+    padding: 20px 54px 20px 40px;
 }
 
 .documents-titles {
@@ -61,31 +68,14 @@
     text-align: center;
     color: var(--medium-blue);
     background: var(--white-text);
-    width: fit-content;
+    width: max-content;
     height: 36px;
     padding: 6px 11px 6px 11px;
-    border:1px;
-    border-style:solid;
+    border:1px solid var(--medium-blue);
     border-radius:10px;
-    border-color:var(--medium-blue);
     gap: 5px;
     cursor: pointer;
 }
-
-.general-button {
-    border: none;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    text-align: center;
-    color: var(--white-text);
-    background: var(--medium-blue);
-    width: fit-content;
-    height: 36px;
-    padding: 6px 11px 6px 11px;
-    border-radius: 10px;
-    gap: 5px;
-    cursor: pointer;
+.right-margin{
+ margin-right: 10px;
 }
