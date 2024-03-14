@@ -21,6 +21,6 @@ export class GenerateDocumentModal{
             let result = await  webSkel.appServices.callFlow(flowId, formData.data.documentTitle,
                 formData.data.documentTopic, formData.data.chaptersCount, formData.data.documentPersonality, "");
         }
-        webSkel.refreshElement(webSkel.getClosestParentWithPresenter(_target,"documents-page"));
+        documentFactory.notifyObservers("docs");
     }
 }
