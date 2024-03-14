@@ -6,7 +6,7 @@ export class Manager {
         this.services = new Map();
         this.services.set('RoutingService', new RoutingService());
     }
-    async navigateToLocation(location) {
-        this.services.get('RoutingService').navigateToLocation(location, this.appName);
+    async navigateToLocation(location, isReadOnly) {
+        this.services.get('RoutingService').navigateToLocation(location, this.appName, isReadOnly);
     }
 }

@@ -1,3 +1,13 @@
+*[data-userrights="readonly"]{
+    pointer-events: none !important;
+    opacity: 0.9 !important;
+}
+*[data-hide="readonly"]{
+   display: none !important;
+}
+documents-page{
+    overflow: scroll;
+}
 .documents-page {
     font-family: Poppins;
 }
