@@ -8,13 +8,8 @@ export class RoutingService {
             await webSkel.changeToDynamicPage(DOCUMENTS_PAGE, pageUrl);
             return;
         }
-
-        if (locationArray[0] !== "documents") {
-            console.error("Invalid URL: URL must start with 'documents' or 'documents-page'");
-            return;
-        }
         
-        const webComponentName = locationArray[locationArray.length - 1];
+        const webComponentName = locationArray[0];
         const pageUrl = `${webSkel.currentUser.space.id}/${appName}/${locationArray.join("/")}`;
         await webSkel.changeToDynamicPage(webComponentName, pageUrl);
     }

@@ -34,9 +34,9 @@ export class DocumentsPage {
     async editAction(_target) {
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
         if(this.userRights === "readonly"){
-            await webSkel.changeToDynamicPage("space-configs-page", `${webSkel.currentUser.space.id}/SpaceConfiguration/documents/${webSkel.currentUser.space.currentDocumentId}/document-view-page`);
+            await webSkel.changeToDynamicPage("space-configs-page", `${webSkel.currentUser.space.id}/SpaceConfiguration/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
         }else {
-            await webSkel.changeToDynamicPage("document-view-page",`${getBasePath()}/documents/${webSkel.currentUser.space.currentDocumentId}/document-view-page`);
+            await webSkel.changeToDynamicPage("document-view-page",`${getBasePath()}/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
         }
     }
     async cloneAction(_target){
