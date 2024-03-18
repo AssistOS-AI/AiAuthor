@@ -107,12 +107,12 @@ export class EditTitlePage {
         this.actionBox = await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
     async openEditTitlePage() {
-        await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/documents/${this._document.id}/edit-title-page`);
+        await webSkel.changeToDynamicPage("edit-title-page", `${getBasePath()}/edit-title-page/${this._document.id}`);
     }
     async openDocumentsPage() {
         await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 }

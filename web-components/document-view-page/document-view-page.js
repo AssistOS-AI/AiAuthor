@@ -1,7 +1,6 @@
 import {parseURL,getBasePath} from "../../utils/index.js"
 export class DocumentViewPage {
     constructor(element, invalidate) {
-        this.userRights = window.location.hash.split("/")[3];
         this.element = element;
         this._document = webSkel.currentUser.space.getDocument(parseURL());
         this._document.observeChange(this._document.getNotificationId() + ":document-view-page", invalidate);

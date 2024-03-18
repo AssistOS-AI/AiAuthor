@@ -92,10 +92,10 @@ export class ManageChaptersPage {
         await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openManageChaptersPage(){
-        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
+        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
     async addChapter(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddChapter");
@@ -107,7 +107,7 @@ export class ManageChaptersPage {
     }
 
     async generateChapters(){
-        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/documents/${this._document.id}/generate-chapters-page`);
+        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
         await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
@@ -117,7 +117,7 @@ export class ManageChaptersPage {
         let chapter = webSkel.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
         await webSkel.changeToDynamicPage("chapter-brainstorming-page",
-            `${getBasePath()}/documents/${this._document.id}/chapters/${chapterId}/chapter-brainstorming-page`);
+            `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${chapterId}`);
     }
     async deleteAction(_target){
         let chapter = webSkel.reverseQuerySelector(_target, "reduced-chapter-unit");

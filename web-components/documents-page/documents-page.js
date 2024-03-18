@@ -1,7 +1,6 @@
 import {getBasePath} from "../../utils/index.js"
 export class DocumentsPage {
     constructor(element, invalidate) {
-        this.userRights = window.location.hash.split("/")[3];
         this.notificationId = "docs"
         documentFactory.observeChange(this.notificationId, invalidate);
         this.invalidate = invalidate;
@@ -12,7 +11,7 @@ export class DocumentsPage {
         if(webSkel.currentUser.space.documents.length > 0) {
             webSkel.currentUser.space.documents.forEach((document) => {
                 this.tableRows += `<document-unit data-name="${webSkel.sanitize(document.title)}" 
-                data-id="${document.id}" data-local-action="editAction" data-hide-actions="${this.userRights}"></document-unit>`;
+                data-id="${document.id}" data-local-action="editAction"></document-unit>`;
             });
         }
         else {
@@ -33,11 +32,7 @@ export class DocumentsPage {
     }
     async editAction(_target) {
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
-        if(this.userRights === "readonly"){
-            await webSkel.changeToDynamicPage("space-configs-page", `${webSkel.currentUser.space.id}/SpaceConfiguration/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
-        }else {
-            await webSkel.changeToDynamicPage("document-view-page",`${getBasePath()}/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
-        }
+        await webSkel.changeToDynamicPage("document-view-page",`${getBasePath()}/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
     }
     async cloneAction(_target){
         webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);

@@ -93,14 +93,14 @@ export class ManageParagraphsPage {
         await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 
     async openChapterEditPage(){
-        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openManageParagraphsPage(){
-        await webSkel.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/manage-paragraphs-page`);
+        await webSkel.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async addParagraph(){
         let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
@@ -112,7 +112,7 @@ export class ManageParagraphsPage {
     }
 
     async generateParagraphs(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/generate-paragraphs-page`);
+        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
         await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
@@ -122,7 +122,7 @@ export class ManageParagraphsPage {
         let paragraph = webSkel.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
         await webSkel.changeToDynamicPage("paragraph-brainstorming-page",
-            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${paragraphId}/paragraph-brainstorming-page`);
+            `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${paragraphId}`);
     }
     async deleteAction(_target){
         let paragraph = webSkel.reverseQuerySelector(_target, "reduced-paragraph-unit");

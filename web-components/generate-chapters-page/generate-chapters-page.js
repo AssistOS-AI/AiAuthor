@@ -79,7 +79,7 @@ export class GenerateChaptersPage {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateEmptyChapters");
             let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
+                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
@@ -109,21 +109,21 @@ export class GenerateChaptersPage {
             let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateChapters");
             let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
+                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
 
     async openMangeChaptersPage() {
-        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/documents/${this._document.id}/manage-chapters-page`);
+        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
     async openDocumentsPage() {
         await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openGenerateChaptersPage(){
-        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/documents/${this._document.id}/generate-chapters-page`);
+        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
     }
 }

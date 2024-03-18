@@ -113,16 +113,16 @@ export class ChapterTitlePage {
         await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/documents/${this._document.id}/document-view-page`);
+        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openChapterTitlePage() {
         await webSkel.changeToDynamicPage("chapter-title-page",
-            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-title-page`);
+            `${getBasePath()}/chapter-title-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
     async openChapterEditorPage(){
         await webSkel.changeToDynamicPage("chapter-editor-page",
-            `${getBasePath()}/documents/${this._document.id}/chapters/${this._chapter.id}/chapter-editor-page`);
+            `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     
     closeModal(_target) {

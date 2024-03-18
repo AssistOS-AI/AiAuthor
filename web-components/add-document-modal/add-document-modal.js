@@ -19,7 +19,7 @@ export class AddDocumentModal {
             let docId = await webSkel.appServices.callFlow(flowId, formData.data.documentTitle, formData.data.documentTopic);
             docId.responseString? docId = docId.responseString : docId = docId.responseJson;
             webSkel.closeModal(_target);
-            await webSkel.changeToDynamicPage(`document-view-page`, `${getBasePath()}/documents/${docId}/document-view-page`);
+            await webSkel.changeToDynamicPage(`document-view-page`, `${getBasePath()}/document-view-page/${docId}`);
         }
     }
 }
