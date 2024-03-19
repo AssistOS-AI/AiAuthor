@@ -2,7 +2,7 @@ import {parseURL} from "../../utils/index.js"
 export class SummarizeChapterModal{
     constructor(element,invalidate){
         [this.documentId,this.chapterId,this.paragraphId]=parseURL();
-        this._document = webSkel.currentUser.space.getDocument(this.documentId);
+        this._document = system.space.getDocument(this.documentId);
         this._chapter=this._document.getChapter(this.chapterId);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
@@ -13,7 +13,7 @@ export class SummarizeChapterModal{
     beforeRender(){
         let string = "";
         for(let idea of this.chapterMainIdeas){
-            string += `<li>${webSkel.sanitize(idea)}</li>`;
+            string += `<li>${system.UI.sanitize(idea)}</li>`;
         }
         this.mainIdeas = string;
     }
@@ -28,21 +28,21 @@ export class SummarizeChapterModal{
         }
     }
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 
     async generate(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeChapter");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, "");
+        let flowId = system.space.getFlowIdByName("SummarizeChapter");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, "");
         this.chapterMainIdeas = result.responseJson;
         this.invalidate();
     }
     async addSelectedIdeas(_target) {
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptChapterIdeas");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this.chapterMainIdeas);
+        let flowId = system.space.getFlowIdByName("AcceptChapterIdeas");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.chapterMainIdeas);
         this._document.notifyObservers(this._document.getNotificationId()+":manage-paragraphs-page");
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 }

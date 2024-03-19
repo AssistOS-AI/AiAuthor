@@ -4,7 +4,7 @@ export class ManageParagraphsPage {
         this.element = element;
         let documentId, chapterId;
         [documentId, chapterId] = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(documentId);
+        this._document = system.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + ":manage-paragraphs-page", invalidate);
         this.invalidate = invalidate;
@@ -65,14 +65,14 @@ export class ManageParagraphsPage {
         if (mainIdeas.getAttribute("contenteditable") === "false") {
             mainIdeas.setAttribute("contenteditable", "true");
             mainIdeas.focus();
-            let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateChapterMainIdeas");
-            let timer = webSkel.appServices.SaveElementTimer(async () => {
+            let flowId = system.space.getFlowIdByName("UpdateChapterMainIdeas");
+            let timer = system.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let ideas = mainIdeas.innerText.split("\n");
                 let ideasString = ideas.join("");
                 let currentIdeas = this._chapter.mainIdeas.join("");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, ideas);
+                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, ideas);
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -90,45 +90,45 @@ export class ManageParagraphsPage {
     }
 
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 
     async openChapterEditPage(){
-        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openManageParagraphsPage(){
-        await webSkel.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async addParagraph(){
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id);
+        let flowId = system.space.getFlowIdByName("AddParagraph");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id);
         this.invalidate();
     }
     async summarize(){
-        await webSkel.showModal( "summarize-chapter-modal", { presenter: "summarize-chapter-modal"});
+        await system.UI.showModal( "summarize-chapter-modal", { presenter: "summarize-chapter-modal"});
     }
 
     async generateParagraphs(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
+        await system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 
     async editAction(_target){
-        let paragraph = webSkel.reverseQuerySelector(_target, "reduced-paragraph-unit");
+        let paragraph = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
-        await webSkel.changeToDynamicPage("paragraph-brainstorming-page",
+        await system.UI.changeToDynamicPage("paragraph-brainstorming-page",
             `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${paragraphId}`);
     }
     async deleteAction(_target){
-        let paragraph = webSkel.reverseQuerySelector(_target, "reduced-paragraph-unit");
+        let paragraph = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteParagraph");
-        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, paragraphId);
+        let flowId = system.space.getFlowIdByName("DeleteParagraph");
+        await system.services.callFlow(flowId, this._document.id, this._chapter.id, paragraphId);
         this.invalidate();
     }
 }

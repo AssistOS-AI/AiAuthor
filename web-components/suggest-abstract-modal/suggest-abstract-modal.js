@@ -3,7 +3,7 @@ import {parseURL} from "../../utils/index.js"
 export class SuggestAbstractModal {
     constructor(element, invalidate) {
         this.id = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(this.id);
+        this._document = system.space.getDocument(this.id);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
         this.element = element;
@@ -22,21 +22,21 @@ export class SuggestAbstractModal {
         }
     }
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 
     async generate(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestAbstract");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.prompt, "");
+        let flowId = system.space.getFlowIdByName("SuggestAbstract");
+        let result = await system.services.callFlow(flowId, this._document.id, this.prompt, "");
         this.suggestedAbstract = result.responseString;
         this.invalidate();
     }
     async addSelectedAbstract(_target) {
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptSuggestedAbstract");
-        await webSkel.appServices.callFlow(flowId, this._document.id, this.suggestedAbstract);
+        let flowId = system.space.getFlowIdByName("AcceptSuggestedAbstract");
+        await system.services.callFlow(flowId, this._document.id, this.suggestedAbstract);
         this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 }

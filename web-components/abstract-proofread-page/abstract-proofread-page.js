@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class AbstractProofreadPage {
     constructor(element, invalidate) {
         this.element=element;
-        this._document = webSkel.currentUser.space.getDocument(parseURL());
+        this._document = system.space.getDocument(parseURL());
         this.invalidate = invalidate;
         this.invalidate();
     }
@@ -16,7 +16,7 @@ export class AbstractProofreadPage {
             this.selectedPersonality = `<option value="${this.personality.id}" selected>${this.personality.name}</option>`
         }
         let stringHTML = "";
-        for(let personality of webSkel.currentUser.space.personalities){
+        for(let personality of system.space.personalities){
             stringHTML+=`<option value=${personality.id}>${personality.name}</option>`;
         }
         this.personalitiesOptions = stringHTML;
@@ -34,17 +34,17 @@ export class AbstractProofreadPage {
 
     async executeProofRead() {
         let form = this.element.querySelector(".proofread-form");
-        const formData = await webSkel.extractFormInformation(form);
+        const formData = await system.UI.extractFormInformation(form);
 
         this.text = formData.data.text;
         if(formData.data.personality){
-            this.personality = webSkel.currentUser.space.getPersonality(formData.data.personality);
+            this.personality = system.space.getPersonality(formData.data.personality);
         }
         this.details = formData.data.details;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("Proofread");
-        let result = await webSkel.appServices.callFlow(flowId, webSkel.unsanitize(this.abstractText), formData.data.personality, this.details);
-        this.observations = webSkel.sanitize(result.responseJson.observations);
-        this.improvedAbstract = webSkel.sanitize(result.responseJson.improvedText);
+        let flowId = system.space.getFlowIdByName("Proofread");
+        let result = await system.services.callFlow(flowId, system.UI.unsanitize(this.abstractText), formData.data.personality, this.details);
+        this.observations = system.UI.sanitize(result.responseJson.observations);
+        this.improvedAbstract = system.UI.sanitize(result.responseJson.improvedText);
         this.invalidate();
     }
 
@@ -53,12 +53,12 @@ export class AbstractProofreadPage {
         if (abstract.getAttribute("contenteditable") === "false") {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
-            let timer = webSkel.appServices.SaveElementTimer(async () => {
+            let timer = system.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = webSkel.sanitize(abstract.innerText);
-                let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
+                let sanitizedText = system.UI.sanitize(abstract.innerText);
+                let flowId = system.space.getFlowIdByName("UpdateAbstract");
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
-                    await webSkel.appServices.callFlow(flowId, this._document.id, sanitizedText);
+                    await system.services.callFlow(flowId, this._document.id, sanitizedText);
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -98,22 +98,22 @@ export class AbstractProofreadPage {
     async acceptImprovements(_target) {
         let abstract = this.element.querySelector(".improved-abstract").innerText;
         if(abstract !== this._document.abstract) {
-            let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateAbstract");
-            await webSkel.appServices.callFlow(flowId, this._document.id, abstract);
+            let flowId = system.space.getFlowIdByName("UpdateAbstract");
+            await system.services.callFlow(flowId, this._document.id, abstract);
             this.invalidate();
         }
     }
     async openAbstractProofreadPage(){
-        await webSkel.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openAbstractEditorPage(){
-        await webSkel.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
 
     }
 }

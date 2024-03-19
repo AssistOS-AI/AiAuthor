@@ -5,22 +5,22 @@ export class GenerateDocumentModal{
     }
     beforeRender(){
         let stringHTML = "";
-        for(let personality of webSkel.currentUser.space.personalities){
+        for(let personality of system.space.personalities){
             stringHTML+=`<option value=${personality.id}>${personality.name}</option>`;
         }
         this.personalitiesOptions = stringHTML;
     }
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
     async generateDocument(_target) {
-        let formData = await webSkel.extractFormInformation(_target);
+        let formData = await system.UI.extractFormInformation(_target);
         if(formData.isValid) {
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateDocument");
-            webSkel.closeModal(_target);
-            let result = await  webSkel.appServices.callFlow(flowId, formData.data.documentTitle,
+            let flowId = system.space.getFlowIdByName("GenerateDocument");
+            system.UI.closeModal(_target);
+            let result = await  system.services.callFlow(flowId, formData.data.documentTitle,
                 formData.data.documentTopic, formData.data.chaptersCount, formData.data.documentPersonality, "");
         }
-        documentFactory.notifyObservers("docs");
+        system.factories.notifyObservers("docs");
     }
 }

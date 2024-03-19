@@ -2,15 +2,15 @@ import {getBasePath} from "../../utils/index.js"
 export class DocumentsPage {
     constructor(element, invalidate) {
         this.notificationId = "docs"
-        documentFactory.observeChange(this.notificationId, invalidate);
+        system.factories.observeChange(this.notificationId, invalidate);
         this.invalidate = invalidate;
         this.invalidate();
     }
     beforeRender() {
         this.tableRows = "";
-        if(webSkel.currentUser.space.documents.length > 0) {
-            webSkel.currentUser.space.documents.forEach((document) => {
-                this.tableRows += `<document-unit data-name="${webSkel.sanitize(document.title)}" 
+        if(system.space.documents.length > 0) {
+            system.space.documents.forEach((document) => {
+                this.tableRows += `<document-unit data-name="${system.UI.sanitize(document.title)}" 
                 data-id="${document.id}" data-local-action="editAction"></document-unit>`;
             });
         }
@@ -19,28 +19,28 @@ export class DocumentsPage {
         }
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        await webSkel.showActionBox(_target, primaryKey, componentName, insertionMode);
+        await system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
     getDocumentId(_target){
-        return webSkel.reverseQuerySelector(_target, "document-unit").getAttribute("data-id");
+        return system.UI.reverseQuerySelector(_target, "document-unit").getAttribute("data-id");
     }
     async showAddDocumentModal() {
-        await webSkel.showModal( "add-document-modal", { presenter: "add-document-modal"});
+        await system.UI.showModal( "add-document-modal", { presenter: "add-document-modal"});
     }
     async showGenerateDocumentModal() {
-        await webSkel.showModal( "generate-document-modal", { presenter: "generate-document-modal"});
+        await system.UI.showModal( "generate-document-modal", { presenter: "generate-document-modal"});
     }
     async editAction(_target) {
-        webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
-        await webSkel.changeToDynamicPage("document-view-page",`${getBasePath()}/document-view-page/${webSkel.currentUser.space.currentDocumentId}`);
+        system.space.currentDocumentId = this.getDocumentId(_target);
+        await system.UI.changeToDynamicPage("document-view-page",`${getBasePath()}/document-view-page/${system.space.currentDocumentId}`);
     }
     async cloneAction(_target){
-        webSkel.currentUser.space.currentDocumentId = this.getDocumentId(_target);
-        await webSkel.showModal( "clone-document-modal", { presenter: "clone-document-modal"});
+        system.space.currentDocumentId = this.getDocumentId(_target);
+        await system.UI.showModal( "clone-document-modal", { presenter: "clone-document-modal"});
     }
     async deleteAction(_target){
-        let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteDocument");
-        await webSkel.appServices.callFlow(flowId, this.getDocumentId(_target));
-        documentFactory.notifyObservers("docs");
+        let flowId = system.space.getFlowIdByName("DeleteDocument");
+        await system.services.callFlow(flowId, this.getDocumentId(_target));
+        system.factories.notifyObservers("docs");
     }
 }

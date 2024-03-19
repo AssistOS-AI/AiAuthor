@@ -4,7 +4,7 @@ export class GenerateParagraphsPage {
         this.element = element;
         let documentId, chapterId;
         [documentId, chapterId] = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(documentId);
+        this._document = system.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this.invalidate = invalidate;
         this.invalidate();
@@ -61,10 +61,10 @@ export class GenerateParagraphsPage {
 
     async generateIdeas(){
         let form = this.element.querySelector(".generate-ideas-form");
-        let formInfo = await webSkel.extractFormInformation(form);
+        let formInfo = await system.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateIdeas");
-            let result = await webSkel.appServices.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
+            let flowId = system.space.getFlowIdByName("GenerateIdeas");
+            let result = await system.services.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
             this.ideas= result.responseJson;
             this.invalidate();
         }
@@ -84,7 +84,7 @@ export class GenerateParagraphsPage {
     }
     async generateParagraphs(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await webSkel.extractFormInformation(_target, conditions);
+        let formInfo = await system.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -92,26 +92,26 @@ export class GenerateParagraphsPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateParagraphs");
-            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, this._chapter.id, formInfo.data.prompt, selectedIdeas.length);
+            let flowId = system.space.getFlowIdByName("GenerateParagraphs");
+            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, this._chapter.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+                await system.UI.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
             }
         }
     }
 
 
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openChapterEditorPage(){
-        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openGenerateParagraphsPage(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
 

@@ -2,7 +2,7 @@ import {parseURL} from "../../utils/index.js"
 export class SummarizeDocumentModal{
     constructor(element,invalidate){
         let documentId = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(documentId);
+        this._document = system.space.getDocument(documentId);
         this.invalidate = invalidate;
         this.element = element;
         this.invalidate();
@@ -11,7 +11,7 @@ export class SummarizeDocumentModal{
     beforeRender(){
         let string = "";
         for(let idea of this.documentMainIdeas){
-            string += `<li>${webSkel.sanitize(idea)}</li>`;
+            string += `<li>${system.UI.sanitize(idea)}</li>`;
         }
         this.mainIdeas = string;
     }
@@ -26,20 +26,20 @@ export class SummarizeDocumentModal{
         }
     }
     async generate(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeDocument");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.prompt, "");
+        let flowId = system.space.getFlowIdByName("SummarizeDocument");
+        let result = await system.services.callFlow(flowId, this._document.id, this.prompt, "");
         this.documentMainIdeas = result.responseJson;
         this.invalidate();
     }
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
     async addSelectedIdeas(_target) {
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptDocumentIdeas");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this.documentMainIdeas);
+        let flowId = system.space.getFlowIdByName("AcceptDocumentIdeas");
+        let result = await system.services.callFlow(flowId, this._document.id, this.documentMainIdeas);
         this._document.notifyObservers(this._document.getNotificationId() + ":manage-chapters-page");
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 }

@@ -4,9 +4,9 @@ export class ChapterEditorPage{
         this.element = element;
         let documentId, chapterId;
         [documentId, chapterId] = parseURL();
-        webSkel.currentUser.space.currentDocumentId = documentId;
-        webSkel.currentUser.space.currentChapterId = chapterId;
-        this._document = webSkel.currentUser.space.getDocument(documentId);
+        system.space.currentDocumentId = documentId;
+        system.space.currentChapterId = chapterId;
+        this._document = system.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this.element.addEventListener('keydown', (event) => this.addParagraphOnCtrlEnter(event));
         let controller = new AbortController();
@@ -32,7 +32,7 @@ export class ChapterEditorPage{
         let selectedParagraphs = this.element.querySelectorAll(".paragraph-text");
         let currentParagraph = null;
         selectedParagraphs.forEach(paragraph => {
-            if (webSkel.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === webSkel.currentUser.space.currentParagraphId) {
+            if (system.UI.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === system.space.currentParagraphId) {
                 this.currentParagraph = paragraph;
             }
         });
@@ -44,10 +44,10 @@ export class ChapterEditorPage{
     async editChapterTitle(title){
         title.setAttribute("contenteditable", "true");
         title.focus();
-        let timer = webSkel.appServices.SaveElementTimer(async () => {
+        let timer = system.services.SaveElementTimer(async () => {
             if (title.innerText !== this._chapter.title) {
-                let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateChapterTitle");
-                await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
+                let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
+                await system.services.callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
             }
         }, 1000);
         title.addEventListener("blur", async () => {
@@ -62,17 +62,17 @@ export class ChapterEditorPage{
 
     }
     checkParagraphClick(controller,event){
-        this.paragraphUnit = webSkel.getClosestParentElement(event.target, "paragraph-unit");
+        this.paragraphUnit = system.UI.getClosestParentElement(event.target, "paragraph-unit");
         if(this.paragraphUnit){
             if(this.currentParagraph!==this.paragraphUnit) {
                 this.deselectPreviousParagraph();
                 this.currentParagraph = this.paragraphUnit;
-                webSkel.currentUser.space.currentParagraphId = this.paragraphUnit.getAttribute("data-paragraph-id");
+                system.space.currentParagraphId = this.paragraphUnit.getAttribute("data-paragraph-id");
                 this.switchParagraphArrowsDisplay(this.paragraphUnit, "on");
             }
         } else {
-            let rightSideBarItem = webSkel.getClosestParentElement(event.target, ".sidebar-item");
-            let leftSideBarItem = webSkel.getClosestParentElement(event.target, ".feature");
+            let rightSideBarItem = system.UI.getClosestParentElement(event.target, ".sidebar-item");
+            let leftSideBarItem = system.UI.getClosestParentElement(event.target, ".feature");
             if(rightSideBarItem || leftSideBarItem){
                   controller.abort();
               }
@@ -86,8 +86,8 @@ export class ChapterEditorPage{
             return;
         }
         debugger;
-        const fromParagraph = webSkel.reverseQuerySelector(event.target, '[data-paragraph-id]', 'chapter-unit');
-        const fromChapter = webSkel.reverseQuerySelector(event.target, 'chapter-editor-page');
+        const fromParagraph = system.UI.reverseQuerySelector(event.target, '[data-paragraph-id]', 'chapter-unit');
+        const fromChapter = system.UI.reverseQuerySelector(event.target, 'chapter-editor-page');
 
         if (!fromParagraph && !fromChapter) {
             return;
@@ -95,8 +95,8 @@ export class ChapterEditorPage{
         await this.addParagraph(event.target);
     }
     async addParagraph(_target){
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AddParagraph");
-        await webSkel.appServices.callFlow(flowId, this._document.id, this.chapterId);
+        let flowId = system.space.getFlowIdByName("AddParagraph");
+        await system.services.callFlow(flowId, this._document.id, this.chapterId);
         let controller = new AbortController();
         document.addEventListener("click",this.checkParagraphClick.bind(this, controller), {signal:controller.signal});
         this.invalidate();
@@ -133,21 +133,21 @@ export class ChapterEditorPage{
         this.switchParagraphArrowsDisplay(paragraph,"on");
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
-            let paragraphUnit = webSkel.reverseQuerySelector(paragraph, ".paragraph-unit");
+            let paragraphUnit = system.UI.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
             this.currentParagraph=paragraph;
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
-            webSkel.currentUser.space.currentParagraphId = currentParagraphId;
+            system.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this._chapter.getParagraph(currentParagraphId);
-            let timer = webSkel.appServices.SaveElementTimer(async () => {
+            let timer = system.services.SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
                 }
                 let updatedText = paragraph.innerText;
                 if (updatedText !== currentParagraph.text) {
-                    let flowId = webSkel.currentUser.space.getFlowIdByName("UpdateParagraphText");
-                    await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraph.id, updatedText);
+                    let flowId = system.space.getFlowIdByName("UpdateParagraphText");
+                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraph.id, updatedText);
                 }
             }, 1000);
             paragraph.addEventListener("blur", async () => {
@@ -155,11 +155,11 @@ export class ChapterEditorPage{
                 await timer.stop(true);
                 paragraph.setAttribute("contenteditable", "false");
             }, {once: true});
-            let flowId = webSkel.currentUser.space.getFlowIdByName("DeleteParagraph");
+            let flowId = system.space.getFlowIdByName("DeleteParagraph");
             const resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
-                        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId);
+                        await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId);
                         this.invalidate();
                     }
                     await timer.stop();
@@ -172,14 +172,14 @@ export class ChapterEditorPage{
     }
     deselectPreviousParagraph(){
         if(this.currentParagraph){
-            webSkel.currentUser.space.currentParagraphId = null;
+            system.space.currentParagraphId = null;
             this.switchParagraphArrowsDisplay(this.currentParagraph, "off");
             delete this.currentParagraph;
         }
     }
     async moveParagraph(_target, direction) {
         this.switchParagraphArrowsDisplay(this.currentParagraph,"off");
-        const currentParagraph = webSkel.reverseQuerySelector(_target, "paragraph-unit");
+        const currentParagraph = system.UI.reverseQuerySelector(_target, "paragraph-unit");
         const currentParagraphId = currentParagraph.getAttribute('data-paragraph-id');
         const currentParagraphIndex = this._chapter.getParagraphIndex(currentParagraphId);
 
@@ -192,37 +192,37 @@ export class ChapterEditorPage{
 
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, this._chapter.paragraphs);
 
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SwapParagraphs");
-        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
+        let flowId = system.space.getFlowIdByName("SwapParagraphs");
+        await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
         this.invalidate();
     }
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 
     async openChapterEditPage(){
-        await webSkel.changeToDynamicPage("chapter-edit-page", `${getBasePath()}/chapter-edit-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("chapter-edit-page", `${getBasePath()}/chapter-edit-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openChapterEditor(){
-        await webSkel.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this.chapterId}`);
+        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this.chapterId}`);
     }
     async openEditChapterTitlePage() {
-        await webSkel.changeToDynamicPage("chapter-title-page",
+        await system.UI.changeToDynamicPage("chapter-title-page",
             `${getBasePath()}/chapter-title-page/${this._document.id}/chapters/${this.chapterId}`);
     }
     async openChapterBrainstormingPage() {
-        await webSkel.changeToDynamicPage("chapter-brainstorming-page",
+        await system.UI.changeToDynamicPage("chapter-brainstorming-page",
             `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${this.chapterId}`);
 
     }
     async openManageParagraphsPage() {
-        await webSkel.changeToDynamicPage("manage-paragraphs-page",
+        await system.UI.changeToDynamicPage("manage-paragraphs-page",
             `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this.chapterId}`);
     }
     async generateParagraphs(){
-        await webSkel.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await system.UI.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
 }

@@ -3,7 +3,7 @@ export class SuggestChapterTitlesModal {
     constructor(element, invalidate) {
         this.element = element;
         [this.documentId,this.chapterId] = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(this.documentId);
+        this._document = system.space.getDocument(this.documentId);
         this._chapter = this._document.getChapter(this.chapterId);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
@@ -15,8 +15,8 @@ export class SuggestChapterTitlesModal {
         let i = 0;
         for(let altTitle of this.suggestedTitles) {
             i++;
-            altTitle = webSkel.sanitize(altTitle);
-            let id = webSkel.appServices.generateId();
+            altTitle = system.UI.sanitize(altTitle);
+            let id = system.services.generateId();
             stringHTML += `
             <div class="alt-title-row">
                 <span class="alt-title-span">${i}.</span>
@@ -44,34 +44,34 @@ export class SuggestChapterTitlesModal {
     }
 
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 
     async generate(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestChapterTitles");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, this.titlesNr, "");
+        let flowId = system.space.getFlowIdByName("SuggestChapterTitles");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, this.titlesNr, "");
         if(result.responseJson){
             this.suggestedTitles = result.responseJson;
             this.invalidate();
         }else {
-            webSkel.closeModal(this.element);
+            system.UI.closeModal(this.element);
             await showApplicationError("Titles invalid format", "", "");
         }
     }
     async addAlternativeTitles(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         let selectedTitles = [];
         for (const [key, value] of Object.entries(formInfo.elements)) {
             if(value.element.checked) {
-                selectedTitles.push({title:webSkel.sanitize(value.element.value)});
+                selectedTitles.push({title:system.UI.sanitize(value.element.value)});
             }
         }
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AddAlternativeChapterTitles");
-        await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, selectedTitles);
+        let flowId = system.space.getFlowIdByName("AddAlternativeChapterTitles");
+        await system.services.callFlow(flowId, this._document.id, this._chapter.id, selectedTitles);
         await this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 }

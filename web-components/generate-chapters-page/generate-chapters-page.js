@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class GenerateChaptersPage {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = webSkel.currentUser.space.getDocument(parseURL());
+        this._document = system.space.getDocument(parseURL());
         this.invalidate = invalidate;
         this.invalidate();
         this.ideas = [];
@@ -56,10 +56,10 @@ export class GenerateChaptersPage {
 
     async generateIdeas(){
         let form = this.element.querySelector(".generate-ideas-form");
-        let formInfo = await webSkel.extractFormInformation(form);
+        let formInfo = await system.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateIdeas");
-            let result = await webSkel.appServices.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
+            let flowId = system.space.getFlowIdByName("GenerateIdeas");
+            let result = await system.services.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
             this.ideas= result.responseJson;
             this.invalidate();
         }
@@ -68,7 +68,7 @@ export class GenerateChaptersPage {
 
     async generateEmptyChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await webSkel.extractFormInformation(_target, conditions);
+        let formInfo = await system.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -76,10 +76,10 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateEmptyChapters");
-            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let flowId = system.space.getFlowIdByName("GenerateEmptyChapters");
+            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+                await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
@@ -98,7 +98,7 @@ export class GenerateChaptersPage {
     }
     async generateChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await webSkel.extractFormInformation(_target, conditions);
+        let formInfo = await system.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -106,24 +106,24 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = webSkel.currentUser.space.getFlowIdByName("GenerateChapters");
-            let result = await webSkel.appServices.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let flowId = system.space.getFlowIdByName("GenerateChapters");
+            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
             if(result){
-                await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+                await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
 
     async openMangeChaptersPage() {
-        await webSkel.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await webSkel.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await webSkel.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openGenerateChaptersPage(){
-        await webSkel.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
+        await system.UI.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
     }
 }

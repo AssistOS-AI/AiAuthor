@@ -3,7 +3,7 @@ export class SuggestParagraphModal {
     constructor(element, invalidate) {
         let documentId, chapterId, paragraphId;
         [documentId, chapterId, paragraphId] = parseURL();
-        this._document = webSkel.currentUser.space.getDocument(documentId);
+        this._document = system.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._paragraph = this._chapter.getParagraph(paragraphId);
         this.invalidate = invalidate;
@@ -26,25 +26,25 @@ export class SuggestParagraphModal {
     }
 
     async generate(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = webSkel.currentUser.space.getFlowIdByName("SuggestParagraph");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt);
+        let flowId = system.space.getFlowIdByName("SuggestParagraph");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt);
         this.suggestedParagraph = result.responseJson.text;
         this.suggestedParagraphIdea = result.responseJson.mainIdea;
         this.invalidate();
     }
 
     closeModal(_target) {
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 
     async addSelectedParagraph(_target) {
-        let altParagraphData = {text:webSkel.sanitize(this.suggestedParagraph),
-            id:webSkel.appServices.generateId(), mainIdea:webSkel.sanitize(this.suggestedParagraphIdea) };
-        let flowId = webSkel.currentUser.space.getFlowIdByName("AcceptSuggestedParagraph");
-        let result = await webSkel.appServices.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, altParagraphData);
+        let altParagraphData = {text:system.UI.sanitize(this.suggestedParagraph),
+            id:system.services.generateId(), mainIdea:system.UI.sanitize(this.suggestedParagraphIdea) };
+        let flowId = system.space.getFlowIdByName("AcceptSuggestedParagraph");
+        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, altParagraphData);
         this._document.notifyObservers(this._document.getNotificationId());
-        webSkel.closeModal(_target);
+        system.UI.closeModal(_target);
     }
 }
