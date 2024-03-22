@@ -81,7 +81,13 @@ export class ParagraphProofreadPage {
                 let sanitizedText = system.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== this._paragraph.text && !confirmationPopup) {
                     let flowId = system.space.getFlowIdByName("UpdateParagraphText");
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        paragraphId: this._paragraph.id,
+                        text: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -122,7 +128,14 @@ export class ParagraphProofreadPage {
         let paragraph = this.element.querySelector(".improved-paragraph").innerText;
         if(paragraph !== this._paragraph.text) {
             let flowId = system.space.getFlowIdByName("UpdateParagraphText");
-            await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, paragraph);
+            let context = {
+                documentId: this._document.id,
+                chapterId: this._chapter.id,
+                paragraphId: this._paragraph.id,
+                text: paragraph
+
+            }
+            await system.services.callFlow(flowId, context);
             this.invalidate();
         }
     }

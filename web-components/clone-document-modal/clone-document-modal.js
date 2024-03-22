@@ -29,7 +29,13 @@ export class CloneDocumentModal {
         let formData = await system.UI.extractFormInformation(_target);
         let proofread = formData.data.proofread === "on";
         let flowId = system.space.getFlowIdByName("CloneDocument");
-        await system.services.callFlow(flowId, system.space.currentDocumentId, formData.data.documentPersonality, formData.data.documentTitle, proofread);
+        let context = {
+            documentId: system.space.currentDocumentId,
+            personalityId: formData.data.documentPersonality,
+            title: formData.data.documentTitle,
+            proofread: proofread
+        };
+        await system.services.callFlow(flowId, context);
         await system.factories.notifyObservers("docs");
         system.UI.closeModal(_target);
     }

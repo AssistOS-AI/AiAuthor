@@ -41,7 +41,12 @@ export class SummarizeChapterModal{
     }
     async addSelectedIdeas(_target) {
         let flowId = system.space.getFlowIdByName("AcceptChapterIdeas");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.chapterMainIdeas);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            ideas: this.chapterMainIdeas
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId()+":manage-paragraphs-page");
         system.UI.closeModal(_target);
     }

@@ -45,7 +45,12 @@ export class ChapterBrainstormingPage {
         if (title.getAttribute("contenteditable") === "true" && title !== event.target && !title.contains(event.target)) {
             title.setAttribute("contenteditable", "false");
             let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
-            await system.services.callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
+            let context = {
+                documentId: this._document.id,
+                chapterId: this._chapter.id,
+                title: title.innerText
+            }
+            await system.services.callFlow(flowId, context);
             title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
             data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
             controller.abort();
@@ -78,7 +83,12 @@ export class ChapterBrainstormingPage {
         let result = await system.services.callFlow(flowId, JSON.stringify(this._chapter.mainIdeas));
         let chapterObj=result.responseJson;
         let flowId2 = system.space.getFlowIdByName("AddAlternativeChapter");
-        await system.services.callFlow(flowId2, this._document.id, this._chapter.id, chapterObj);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            alternativeChapter: chapterObj
+        }
+        await system.services.callFlow(flowId2, context);
         this.invalidate();
     }
     async openCloneChapterModal(){
@@ -101,7 +111,12 @@ export class ChapterBrainstormingPage {
         let paragraph = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("DeleteParagraph");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, paragraphId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: paragraphId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async delete(_target){

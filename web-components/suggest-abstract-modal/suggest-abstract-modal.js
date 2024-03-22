@@ -35,7 +35,11 @@ export class SuggestAbstractModal {
     }
     async addSelectedAbstract(_target) {
         let flowId = system.space.getFlowIdByName("AcceptSuggestedAbstract");
-        await system.services.callFlow(flowId, this._document.id, this.suggestedAbstract);
+        let context = {
+            documentId: this._document.id,
+            abstract: this.suggestedAbstract
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
         system.UI.closeModal(_target);
     }

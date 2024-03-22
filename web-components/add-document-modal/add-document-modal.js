@@ -16,7 +16,11 @@ export class AddDocumentModal {
         let formData = await system.UI.extractFormInformation(_target);
         if(formData.isValid) {
             let flowId = system.space.getFlowIdByName("AddDocument");
-            let docId = await system.services.callFlow(flowId, formData.data.documentTitle, formData.data.documentTopic);
+            let context = {
+                title: formData.data.documentTitle,
+                topic: formData.data.documentTopic
+            }
+            let docId = await system.services.callFlow(flowId, context);
             docId.responseString? docId = docId.responseString : docId = docId.responseJson;
             system.UI.closeModal(_target);
             await system.UI.changeToDynamicPage(`document-view-page`, `${getBasePath()}/document-view-page/${docId}`);

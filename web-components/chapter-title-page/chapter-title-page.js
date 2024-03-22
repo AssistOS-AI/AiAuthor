@@ -31,7 +31,12 @@ export class ChapterTitlePage {
             const chapterIndex = this._document.getChapterIndex(this.chapterId);
             if (documentIndex !== -1 && chapterIndex !== -1 && formInfo.data.title !== this._document.getChapterTitle(this.chapterId)) {
                 let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
-                await system.services.callFlow(flowId, this._document.id, this._chapter.id, formInfo.data.title);
+                let context = {
+                    documentId: this._document.id,
+                    chapterId: this._chapter.id,
+                    title: formInfo.data.title
+                }
+                await system.services.callFlow(flowId, context);
             }
         }
     }
@@ -46,7 +51,12 @@ export class ChapterTitlePage {
                 let sanitizedText = system.UI.sanitize(title.innerText);
                 if (sanitizedText !== this._chapter.title && !confirmationPopup) {
                     let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        title: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }

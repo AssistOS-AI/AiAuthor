@@ -47,7 +47,12 @@ export class ChapterEditorPage{
         let timer = system.services.SaveElementTimer(async () => {
             if (title.innerText !== this._chapter.title) {
                 let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
-                await system.services.callFlow(flowId, this._document.id, this._chapter.id, title.innerText);
+                let context = {
+                    documentId: this._document.id,
+                    chapterId: this._chapter.id,
+                    title: title.innerText
+                }
+                await system.services.callFlow(flowId, context);
             }
         }, 1000);
         title.addEventListener("blur", async () => {
@@ -96,7 +101,11 @@ export class ChapterEditorPage{
     }
     async addParagraph(_target){
         let flowId = system.space.getFlowIdByName("AddParagraph");
-        await system.services.callFlow(flowId, this._document.id, this.chapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this.chapterId
+        }
+        await system.services.callFlow(flowId, context);
         let controller = new AbortController();
         document.addEventListener("click",this.checkParagraphClick.bind(this, controller), {signal:controller.signal});
         this.invalidate();
@@ -147,7 +156,13 @@ export class ChapterEditorPage{
                 let updatedText = paragraph.innerText;
                 if (updatedText !== currentParagraph.text) {
                     let flowId = system.space.getFlowIdByName("UpdateParagraphText");
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraph.id, updatedText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        paragraphId: currentParagraph.id,
+                        text: updatedText
+                    }
+                    await system.services.callFlow(flowId, context);
                 }
             }, 1000);
             paragraph.addEventListener("blur", async () => {
@@ -159,7 +174,12 @@ export class ChapterEditorPage{
             const resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
-                        await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId);
+                        let context = {
+                            documentId: this._document.id,
+                            chapterId: this._chapter.id,
+                            paragraphId: currentParagraph.id
+                        }
+                        await system.services.callFlow(flowId, context);
                         this.invalidate();
                     }
                     await timer.stop();

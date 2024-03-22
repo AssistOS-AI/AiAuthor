@@ -104,7 +104,11 @@ export class ManageParagraphsPage {
     }
     async addParagraph(){
         let flowId = system.space.getFlowIdByName("AddParagraph");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async summarize(){
@@ -128,7 +132,12 @@ export class ManageParagraphsPage {
         let paragraph = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("DeleteParagraph");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, paragraphId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: paragraphId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
 }

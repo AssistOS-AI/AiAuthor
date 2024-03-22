@@ -99,7 +99,10 @@ export class ManageChaptersPage {
     }
     async addChapter(){
         let flowId = system.space.getFlowIdByName("AddChapter");
-        await system.services.callFlow(flowId, this._document.id, "");
+        let context = {
+            documentId: this._document.id
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async summarize(){
@@ -123,7 +126,11 @@ export class ManageChaptersPage {
         let chapter = system.UI.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("DeleteChapter");
-        await system.services.callFlow(flowId, this._document.id, chapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: chapterId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
 }

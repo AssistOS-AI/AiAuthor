@@ -33,7 +33,13 @@ export class SummarizeParagraphModal{
     }
     async addSelectedMainIdea(_target) {
         let flowId = system.space.getFlowIdByName("AcceptParagraphIdea");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.paragraphMainIdea);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: this._paragraph.id,
+            idea: this.paragraphMainIdea
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
         system.UI.closeModal(_target);
     }

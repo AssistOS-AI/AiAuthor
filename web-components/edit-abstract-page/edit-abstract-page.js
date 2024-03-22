@@ -33,7 +33,11 @@ export class EditAbstractPage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText =  system.UI.sanitize(abstract.innerText);
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
-                    await system.services.callFlow(flowId, this._document.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        text: sanitizedText
+                    };
+                    await system.services.callFlow(flowId, context);
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -106,7 +110,11 @@ export class EditAbstractPage {
     async delete(_target) {
         let abstract = system.UI.reverseQuerySelector(_target, "alternative-abstract");
         let flowId = system.space.getFlowIdByName("DeleteAlternativeAbstract");
-        await system.services.callFlow(flowId, this._document.id, abstract.getAttribute("data-id"));
+        let context = {
+            documentId: this._document.id,
+            alternativeAbstractId: abstract.getAttribute("data-id")
+        };
+        await system.services.callFlow(flowId, context);
         await system.factories.updateDocument(system.space.id, this._document);
         this.invalidate();
     }

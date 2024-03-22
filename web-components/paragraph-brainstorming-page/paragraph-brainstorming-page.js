@@ -68,7 +68,13 @@ export class ParagraphBrainstormingPage {
                 }else {
                     if(sanitizedText !== this._paragraph.text && !confirmationPopup){
                         let flowId = system.space.getFlowIdByName("UpdateParagraphText");
-                        await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, sanitizedText);
+                        let context = {
+                            documentId: this._document.id,
+                            chapterId: this._chapter.id,
+                            paragraphId: this._paragraph.id,
+                            text: sanitizedText
+                        }
+                        await system.services.callFlow(flowId, context);
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }

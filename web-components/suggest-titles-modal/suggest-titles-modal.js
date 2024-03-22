@@ -70,7 +70,12 @@ export class SuggestTitlesModal {
             }
         }
         let flowId = system.space.getFlowIdByName("AddAlternativeDocumentTitles");
-        let result = await system.services.callFlow(flowId, this._document.id, selectedTitles);
+        let context = {
+            documentId: this._document.id,
+            selectedTitles: selectedTitles
+
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
         system.UI.closeModal(_target);
     }

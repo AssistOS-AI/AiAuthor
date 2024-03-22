@@ -82,7 +82,13 @@ export class DocumentViewPage {
                 let paragraphText = system.UI.sanitize(system.UI.customTrim(paragraph.innerText));
                 if (paragraphText !== currentParagraph.text) {
                     let flowId = system.space.getFlowIdByName("UpdateParagraphText");
-                    await system.services.callFlow(flowId, this._document.id, this.chapter.id, currentParagraph.id, paragraphText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this.chapter.id,
+                        paragraphId: currentParagraph.id,
+                        text: paragraphText
+                    }
+                    await system.services.callFlow(flowId, context);
                 }
             }, 1000);
             this.previouslySelectedParagraph["timer"]=timer;
@@ -91,7 +97,12 @@ export class DocumentViewPage {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
                         let curentParagraphIndex = this.chapter.getParagraphIndex(currentParagraphId);
-                        await system.services.callFlow(flowId, this._document.id, this.chapter.id, currentParagraphId);
+                        let context = {
+                            documentId: this._document.id,
+                            chapterId: this.chapter.id,
+                            paragraphId: currentParagraphId
+                        }
+                        await system.services.callFlow(flowId, context);
                         if (this.chapter.paragraphs.length > 0) {
                             if (curentParagraphIndex === 0) {
                                 system.space.currentParagraphId = this.chapter.paragraphs[0].id;
@@ -292,7 +303,12 @@ export class DocumentViewPage {
         const adjacentChapterId = getAdjacentChapterId(currentChapterIndex, this._document.chapters);
 
         let flowId = system.space.getFlowIdByName("SwapChapters");
-        await system.services.callFlow(flowId, this._document.id, currentChapterId, adjacentChapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId1: currentChapterId,
+            chapterId2: adjacentChapterId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
 
@@ -334,7 +350,11 @@ export class DocumentViewPage {
             let timer = system.services.SaveElementTimer(async () => {
                 let titleText = system.UI.sanitize(system.UI.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
-                    await system.services.callFlow(flowId, this._document.id, titleText);
+                    let context = {
+                        documentId: this._document.id,
+                        title: titleText
+                    }
+                    await system.services.callFlow(flowId, context);
                 }
             }, 1000);
             title.addEventListener("blur", async () => {
@@ -362,7 +382,11 @@ export class DocumentViewPage {
             let timer =  system.services.SaveElementTimer(async () => {
                 let abstractText = system.UI.sanitize(system.UI.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
-                    await system.services.callFlow(flowId, this._document.id, abstractText);
+                    let context = {
+                        documentId: this._document.id,
+                        text: abstractText
+                    }
+                    await system.services.callFlow(flowId, context);
                 }
             }, 1000);
 
@@ -382,13 +406,20 @@ export class DocumentViewPage {
 
     async addChapter() {
         let flowId = system.space.getFlowIdByName("AddChapter");
-        await system.services.callFlow(flowId, this._document.id, "");
+        let context = {
+            documentId: this._document.id
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
 
     async addParagraph(_target) {
         let flowId = system.space.getFlowIdByName("AddParagraph");
-        await system.services.callFlow(flowId, this._document.id, system.space.currentChapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: system.space.currentChapterId
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${system.space.currentChapterId}`);
     }
 

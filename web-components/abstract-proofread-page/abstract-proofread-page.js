@@ -58,7 +58,11 @@ export class AbstractProofreadPage {
                 let sanitizedText = system.UI.sanitize(abstract.innerText);
                 let flowId = system.space.getFlowIdByName("UpdateAbstract");
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
-                    await system.services.callFlow(flowId, this._document.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        text: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -99,7 +103,11 @@ export class AbstractProofreadPage {
         let abstract = this.element.querySelector(".improved-abstract").innerText;
         if(abstract !== this._document.abstract) {
             let flowId = system.space.getFlowIdByName("UpdateAbstract");
-            await system.services.callFlow(flowId, this._document.id, abstract);
+            let context = {
+                documentId: this._document.id,
+                text: abstract
+            }
+            await system.services.callFlow(flowId, context);
             this.invalidate();
         }
     }

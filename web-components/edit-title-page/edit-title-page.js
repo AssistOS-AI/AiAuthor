@@ -27,7 +27,11 @@ export class EditTitlePage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = system.UI.sanitize(title.innerText);
                 if (sanitizedText !== this._document.title && !confirmationPopup) {
-                    await system.services.callFlow(flowId, this._document.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        title: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }

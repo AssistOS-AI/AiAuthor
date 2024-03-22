@@ -23,7 +23,14 @@ export class CloneChapterModal {
         let formData = await system.UI.extractFormInformation(_target);
         let proofread = formData.data.proofread === "on";
         let flowId = system.space.getFlowIdByName("CloneChapter");
-        await system.services.callFlow(flowId, this.documentId, this.chapterId, formData.data.chapterPersonality, formData.data.chapterTitle, proofread);
+        let context = {
+            documentId: this.documentId,
+            chapterId: this.chapterId,
+            personalityId: formData.data.chapterPersonality,
+            title: formData.data.chapterTitle,
+            proofread: proofread
+        };
+        await system.services.callFlow(flowId, context);
         system.space.getDocument(this.documentId).notifyObservers("doc:chapter-brainstorming-page");
         system.UI.closeModal(_target);
     }

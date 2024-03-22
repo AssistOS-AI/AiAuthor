@@ -43,7 +43,13 @@ export class SuggestParagraphModal {
         let altParagraphData = {text:system.UI.sanitize(this.suggestedParagraph),
             id:system.services.generateId(), mainIdea:system.UI.sanitize(this.suggestedParagraphIdea) };
         let flowId = system.space.getFlowIdByName("AcceptSuggestedParagraph");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, altParagraphData);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: this._paragraph.id,
+            paragraphData: altParagraphData
+        }
+        await system.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
         system.UI.closeModal(_target);
     }

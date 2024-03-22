@@ -70,7 +70,12 @@ export class SuggestChapterTitlesModal {
             }
         }
         let flowId = system.space.getFlowIdByName("AddAlternativeChapterTitles");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, selectedTitles);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            titles: selectedTitles
+        }
+        await system.services.callFlow(flowId, context);
         await this._document.notifyObservers(this._document.getNotificationId());
         system.UI.closeModal(_target);
     }

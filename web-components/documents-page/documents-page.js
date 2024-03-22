@@ -40,7 +40,10 @@ export class DocumentsPage {
     }
     async deleteAction(_target){
         let flowId = system.space.getFlowIdByName("DeleteDocument");
-        await system.services.callFlow(flowId, this.getDocumentId(_target));
+        let context = {
+            documentId: this.getDocumentId(_target)
+        }
+        await system.services.callFlow(flowId, context);
         system.factories.notifyObservers("docs");
     }
 }
