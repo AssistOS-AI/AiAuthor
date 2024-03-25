@@ -42,7 +42,7 @@ export class SummarizeChapterModal{
             maxTokens: ""
         }
         let result = await system.services.callFlow(flowId, context);
-        this.chapterMainIdeas = result.responseJson;
+        this.chapterMainIdeas = result;
         this.invalidate();
     }
     async addSelectedIdeas(_target) {

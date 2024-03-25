@@ -65,7 +65,7 @@ export class GenerateChaptersPage {
                 maxTokens: ""
             }
             let result = await system.services.callFlow(flowId, context);
-            this.ideas= result.responseJson;
+            this.ideas= result;
             this.invalidate();
         }
 

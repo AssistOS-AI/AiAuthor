@@ -32,7 +32,7 @@ export class SummarizeParagraphModal{
             maxTokens: ""
         }
         let result = await system.services.callFlow(flowId, context);
-        this.paragraphMainIdea = result.responseString;
+        this.paragraphMainIdea = result;
         this.invalidate();
     }
     closeModal(_target) {

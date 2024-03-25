@@ -60,8 +60,8 @@ export class SuggestChapterTitlesModal {
             titlesNr: this.titlesNr
         }
         let result = await system.services.callFlow(flowId, context);
-        if(result.responseJson){
-            this.suggestedTitles = result.responseJson;
+        if(result){
+            this.suggestedTitles = result;
             this.invalidate();
         }else {
             system.UI.closeModal(this.element);

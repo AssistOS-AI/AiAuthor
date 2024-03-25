@@ -47,8 +47,8 @@ export class AbstractProofreadPage {
             prompt: formData.data.details
         }
         let result = await system.services.callFlow(flowId, context, formData.data.personality);
-        this.observations = system.UI.sanitize(result.responseJson.observations);
-        this.improvedAbstract = system.UI.sanitize(result.responseJson.improvedText);
+        this.observations = system.UI.sanitize(result.observations);
+        this.improvedAbstract = system.UI.sanitize(result.improvedText);
         this.invalidate();
     }
 

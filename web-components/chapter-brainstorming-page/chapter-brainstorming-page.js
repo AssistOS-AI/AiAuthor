@@ -84,7 +84,7 @@ export class ChapterBrainstormingPage {
             idea: JSON.stringify(this._chapter.mainIdeas)
         }
         let result = await system.services.callFlow(flowId, context1);
-        let chapterObj=result.responseJson;
+        let chapterObj=result;
         let flowId2 = system.space.getFlowIdByName("AddAlternativeChapter");
         let context = {
             documentId: this._document.id,

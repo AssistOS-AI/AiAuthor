@@ -21,7 +21,7 @@ export class AddDocumentModal {
                 topic: formData.data.documentTopic
             }
             let docId = await system.services.callFlow(flowId, context);
-            docId.responseString? docId = docId.responseString : docId = docId.responseJson;
+            docId? docId = docId : docId = docId;
             system.UI.closeModal(_target);
             await system.UI.changeToDynamicPage(`document-view-page`, `${getBasePath()}/document-view-page/${docId}`);
         }

@@ -35,7 +35,7 @@ export class SummarizeDocumentModal{
             maxTokens: ""
         }
         let result = await system.services.callFlow(flowId, context);
-        this.documentMainIdeas = result.responseJson;
+        this.documentMainIdeas = result;
         this.invalidate();
     }
     closeModal(_target) {

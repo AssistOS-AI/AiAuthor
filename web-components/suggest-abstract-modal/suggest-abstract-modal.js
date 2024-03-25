@@ -35,7 +35,7 @@ export class SuggestAbstractModal {
             maxTokens: ""
         }
         let result = await system.services.callFlow(flowId, context);
-        this.suggestedAbstract = result.responseString;
+        this.suggestedAbstract = result;
         this.invalidate();
     }
     async addSelectedAbstract(_target) {

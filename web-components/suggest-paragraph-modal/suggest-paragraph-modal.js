@@ -35,8 +35,8 @@ export class SuggestParagraphModal {
             prompt: this.prompt,
         }
         let result = await system.services.callFlow(flowId, context);
-        this.suggestedParagraph = result.responseJson.text;
-        this.suggestedParagraphIdea = result.responseJson.mainIdea;
+        this.suggestedParagraph = result.text;
+        this.suggestedParagraphIdea = result.mainIdea;
         this.invalidate();
     }
 
