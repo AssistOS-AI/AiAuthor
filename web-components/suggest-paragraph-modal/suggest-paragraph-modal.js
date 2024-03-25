@@ -29,7 +29,12 @@ export class SuggestParagraphModal {
         let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = system.space.getFlowIdByName("SuggestParagraph");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            prompt: this.prompt,
+        }
+        let result = await system.services.callFlow(flowId, context);
         this.suggestedParagraph = result.responseJson.text;
         this.suggestedParagraphIdea = result.responseJson.mainIdea;
         this.invalidate();

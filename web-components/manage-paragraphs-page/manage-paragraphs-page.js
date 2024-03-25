@@ -72,7 +72,12 @@ export class ManageParagraphsPage {
                 let ideasString = ideas.join("");
                 let currentIdeas = this._chapter.mainIdeas.join("");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, ideas);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        mainIdeas: ideas
+                    }
+                    await system.services.callFlow(flowId, context);
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }

@@ -24,7 +24,14 @@ export class SummarizeParagraphModal{
         let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = system.space.getFlowIdByName("SummarizeParagraph");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, this.prompt, "");
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: this._paragraph.id,
+            prompt: this.prompt,
+            maxTokens: ""
+        }
+        let result = await system.services.callFlow(flowId, context);
         this.paragraphMainIdea = result.responseString;
         this.invalidate();
     }

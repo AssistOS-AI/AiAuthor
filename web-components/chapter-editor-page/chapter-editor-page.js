@@ -213,7 +213,13 @@ export class ChapterEditorPage{
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, this._chapter.paragraphs);
 
         let flowId = system.space.getFlowIdByName("SwapParagraphs");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, currentParagraphId, adjacentParagraphId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId1: currentParagraphId,
+            paragraphId2: adjacentParagraphId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async openDocumentsPage() {

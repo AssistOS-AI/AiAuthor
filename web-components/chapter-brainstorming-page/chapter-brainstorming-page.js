@@ -80,7 +80,10 @@ export class ChapterBrainstormingPage {
     }
     async suggestChapter(){
         let flowId = system.space.getFlowIdByName("SuggestChapter");
-        let result = await system.services.callFlow(flowId, JSON.stringify(this._chapter.mainIdeas));
+        let context1 = {
+            idea: JSON.stringify(this._chapter.mainIdeas)
+        }
+        let result = await system.services.callFlow(flowId, context1);
         let chapterObj=result.responseJson;
         let flowId2 = system.space.getFlowIdByName("AddAlternativeChapter");
         let context = {
@@ -123,14 +126,24 @@ export class ChapterBrainstormingPage {
         let alternativeChapter = system.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("DeleteAlternativeChapter");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, alternativeChapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            alternativeChapterId: alternativeChapterId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async select(_target){
         let alternativeChapter = system.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("SelectAlternativeChapter");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, alternativeChapterId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            alternativeChapterId: alternativeChapterId
+        }
+        await system.services.callFlow(flowId, context);
         system.UI.removeActionBox(this.actionBox, this);
         system.space.currentChapterId = alternativeChapterId;
         await system.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${alternativeChapterId}`);

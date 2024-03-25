@@ -61,7 +61,13 @@ export class ParagraphBrainstormingPage {
                 let sanitizedText = system.UI.sanitize(item.innerText);
                 if(itemName === "mainIdea"){
                     if (sanitizedText !== this._paragraph.mainIdea && !confirmationPopup) {
-                        await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, sanitizedText);
+                        let context = {
+                            documentId: this._document.id,
+                            chapterId: this._chapter.id,
+                            paragraphId: this._paragraph.id,
+                            idea: sanitizedText
+                        }
+                        await system.services.callFlow(flowId, context);
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }
@@ -139,7 +145,14 @@ export class ParagraphBrainstormingPage {
                 let sanitizedText = system.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== currentAltParagraph.text && !confirmationPopup) {
                     let flowId = system.space.getFlowIdByName("UpdateAlternativeParagraph");
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, currentAltParagraph.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        paragraphId: this._paragraph.id,
+                        alternativeParagraphId: currentAltParagraph.id,
+                        text: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -159,7 +172,13 @@ export class ParagraphBrainstormingPage {
         let paragraph = system.UI.reverseQuerySelector(_target, "alternative-paragraph");
         let paragraphId = paragraph.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("DeleteAlternativeParagraph");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, paragraphId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: this._paragraph.id,
+            alternativeParagraphId: paragraphId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
 
@@ -167,7 +186,13 @@ export class ParagraphBrainstormingPage {
         let paragraphElement = system.UI.reverseQuerySelector(_target,"alternative-paragraph");
         let alternativeParagraphId = paragraphElement.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("SelectAlternativeParagraph");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, this._paragraph.id, alternativeParagraphId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            paragraphId: this._paragraph.id,
+            alternativeParagraphId: alternativeParagraphId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
         system.UI.removeActionBox(this.actionBox, this);
 

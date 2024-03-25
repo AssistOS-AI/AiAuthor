@@ -59,7 +59,12 @@ export class GenerateChaptersPage {
         let formInfo = await system.UI.extractFormInformation(form);
         if(formInfo.isValid) {
             let flowId = system.space.getFlowIdByName("GenerateIdeas");
-            let result = await system.services.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
+            let context = {
+                topic: formInfo.data.idea,
+                variants: formInfo.data.nr,
+                maxTokens: ""
+            }
+            let result = await system.services.callFlow(flowId, context);
             this.ideas= result.responseJson;
             this.invalidate();
         }
@@ -77,7 +82,13 @@ export class GenerateChaptersPage {
                 }
             }
             let flowId = system.space.getFlowIdByName("GenerateEmptyChapters");
-            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let context = {
+                documentId: this._document.id,
+                prompt: formInfo.data.prompt,
+                ideas: selectedIdeas,
+                chapterNr: selectedIdeas.length
+            }
+            let result = await system.services.callFlow(flowId, context);
             if(result){
                 await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
@@ -107,7 +118,13 @@ export class GenerateChaptersPage {
                 }
             }
             let flowId = system.space.getFlowIdByName("GenerateChapters");
-            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, formInfo.data.prompt, selectedIdeas.length);
+            let context = {
+                documentId: this._document.id,
+                prompt: formInfo.data.prompt,
+                ideas: selectedIdeas,
+                chapterNr: selectedIdeas.length
+            }
+            let result = await system.services.callFlow(flowId, context);
             if(result){
                 await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }

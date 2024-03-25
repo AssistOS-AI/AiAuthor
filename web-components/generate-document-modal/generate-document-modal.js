@@ -18,8 +18,12 @@ export class GenerateDocumentModal{
         if(formData.isValid) {
             let flowId = system.space.getFlowIdByName("GenerateDocument");
             system.UI.closeModal(_target);
-            let result = await  system.services.callFlow(flowId, formData.data.documentTitle,
-                formData.data.documentTopic, formData.data.chaptersCount, formData.data.documentPersonality, "");
+            let context = {
+                title: formData.data.documentTitle,
+                topic: formData.data.documentTopic,
+                chaptersCount: formData.data.chaptersCount,
+            }
+            await system.services.callFlow(flowId, context, formData.data.documentPersonality);
         }
         system.factories.notifyObservers("docs");
     }

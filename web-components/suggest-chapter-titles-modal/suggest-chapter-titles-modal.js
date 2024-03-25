@@ -52,7 +52,14 @@ export class SuggestChapterTitlesModal {
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
         let flowId = system.space.getFlowIdByName("SuggestChapterTitles");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, this.titlesNr, "");
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            prompt: this.prompt,
+            maxTokens: "",
+            titlesNr: this.titlesNr
+        }
+        let result = await system.services.callFlow(flowId, context);
         if(result.responseJson){
             this.suggestedTitles = result.responseJson;
             this.invalidate();

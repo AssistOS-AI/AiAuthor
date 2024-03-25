@@ -19,9 +19,12 @@ export class CloneDocumentModal {
 
     async generateDocument(_target) {
         let flowId = system.space.getFlowIdByName("GenerateDocument");
-        let result = await system.services.callFlow(flowId,
-            formData.data.documentTitle, formData.data.documentTopic, formData.data.chaptersCount);
-        let docData = result.responseJson;
+        let context = {
+            title: formData.data.documentTitle,
+            topic: formData.data.documentTopic,
+            chaptersCount: formData.data.chaptersCount
+        }
+        await system.services.callFlow(flowId, context);
         system.UI.closeModal(_target);
     }
 

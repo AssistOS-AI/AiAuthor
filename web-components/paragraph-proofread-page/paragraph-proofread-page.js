@@ -65,7 +65,11 @@ export class ParagraphProofreadPage {
         }
         this.details = formData.data.details;
         let flowId = system.space.getFlowIdByName("Proofread");
-        let result = await system.services.callFlow(flowId, this.paragraphText, formData.data.personality, this.details);
+        let context = {
+            text: system.UI.unsanitize(this.paragraphText),
+            prompt: formData.data.details
+        }
+        let result = await system.services.callFlow(flowId, context, formData.data.personality);
         this.observations = system.UI.sanitize(result.responseJson.observations);
         this.improvedParagraph = system.UI.sanitize(result.responseJson.improvedText);
         this.invalidate();

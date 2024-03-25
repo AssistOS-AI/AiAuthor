@@ -29,7 +29,12 @@ export class SummarizeDocumentModal{
         let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = system.space.getFlowIdByName("SummarizeDocument");
-        let result = await system.services.callFlow(flowId, this._document.id, this.prompt, "");
+        let context = {
+            documentId: this._document.id,
+            prompt: this.prompt,
+            maxTokens: ""
+        }
+        let result = await system.services.callFlow(flowId, context);
         this.documentMainIdeas = result.responseJson;
         this.invalidate();
     }

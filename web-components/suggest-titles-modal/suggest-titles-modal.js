@@ -15,7 +15,13 @@ export class SuggestTitlesModal {
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
         let flowId = system.space.getFlowIdByName("SuggestDocumentTitles");
-        let result = await system.services.callFlow(flowId, this._document.id, this.prompt, this.titlesNr, "");
+        let context = {
+            documentId: this._document.id,
+            prompt: this.prompt,
+            titlesNr: this.titlesNr,
+            maxTokens: ""
+        }
+        let result = await system.services.callFlow(flowId, context);
         if(result.responseJson){
             this.suggestedTitles = result.responseJson;
             this.invalidate();

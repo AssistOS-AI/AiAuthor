@@ -64,7 +64,12 @@ export class GenerateParagraphsPage {
         let formInfo = await system.UI.extractFormInformation(form);
         if(formInfo.isValid) {
             let flowId = system.space.getFlowIdByName("GenerateIdeas");
-            let result = await system.services.callFlow(flowId, formInfo.data.idea, "", formInfo.data.nr, "");
+            let context = {
+                topic: formInfo.data.idea,
+                variants: formInfo.data.nr,
+                maxTokens: ""
+            }
+            let result = await system.services.callFlow(flowId, context);
             this.ideas= result.responseJson;
             this.invalidate();
         }
@@ -93,7 +98,14 @@ export class GenerateParagraphsPage {
                 }
             }
             let flowId = system.space.getFlowIdByName("GenerateParagraphs");
-            let result = await system.services.callFlow(flowId, selectedIdeas, this._document.id, this._chapter.id, formInfo.data.prompt, selectedIdeas.length);
+            let context = {
+                documentId: this._document.id,
+                chapterId: this._chapter.id,
+                prompt: formInfo.data.prompt,
+                ideas: selectedIdeas,
+                paragraphsNr: selectedIdeas.length
+            }
+            let result = await system.services.callFlow(flowId, context);
             if(result){
                 await system.UI.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
             }

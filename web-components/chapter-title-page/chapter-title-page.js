@@ -90,7 +90,13 @@ export class ChapterTitlePage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = system.UI.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
-                    await system.services.callFlow(flowId, this._document.id, this._chapter.id, altTitleObj.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        chapterId: this._chapter.id,
+                        alternativeTitleId: altTitleObj.id,
+                        newTitle: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -109,14 +115,24 @@ export class ChapterTitlePage {
     async delete(_target) {
         let alternativeTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
         let flowId = system.space.getFlowIdByName("DeleteAlternativeChapterTitle");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, alternativeTitle.getAttribute("data-id"));
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            alternativeTitleId: alternativeTitle.getAttribute("data-id")
+        };
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async select(_target){
         let suggestedTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("SelectAlternativeChapterTitle");
-        await system.services.callFlow(flowId, this._document.id, this._chapter.id, suggestedTitleId);
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            alternativeTitleId: suggestedTitleId
+        }
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async openDocumentsPage() {

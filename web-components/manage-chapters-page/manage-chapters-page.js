@@ -70,7 +70,11 @@ export class ManageChaptersPage {
                 let currentIdeas = this._document.mainIdeas.join("");
                 let flowId = system.space.getFlowIdByName("UpdateDocumentMainIdeas");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    await system.services.callFlow(flowId, this._document.id, ideas);
+                    let context = {
+                        documentId: this._document.id,
+                        mainIdeas: ideas
+                    }
+                    await system.services.callFlow(flowId, context);
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }

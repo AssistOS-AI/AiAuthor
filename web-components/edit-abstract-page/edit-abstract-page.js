@@ -70,7 +70,11 @@ export class EditAbstractPage {
         let suggestedAbstract= system.UI.reverseQuerySelector(_target,"alternative-abstract");
         let suggestedAbstractId = suggestedAbstract.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("SelectAlternativeAbstract");
-        await system.services.callFlow(flowId, this._document.id, suggestedAbstractId);
+        let context = {
+            documentId: this._document.id,
+            alternativeAbstractId: suggestedAbstractId
+        }
+        await system.services.callFlow(flowId, context);
         system.UI.removeActionBox(this.actionBox, this);
         this.invalidate();
     }
@@ -90,7 +94,12 @@ export class EditAbstractPage {
                 let sanitizedText =  system.UI.sanitize(abstractText.innerText);
                 let flowId = system.space.getFlowIdByName("UpdateAlternativeAbstract");
                 if (sanitizedText !== abstract.content && !confirmationPopup) {
-                    await system.services.callFlow(flowId, this._document.id, abstract.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        abstractId: abstract.id,
+                        text: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     abstractText.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstractText.offsetWidth/2}"></confirmation-popup>`);
                 }

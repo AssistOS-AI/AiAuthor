@@ -76,7 +76,12 @@ export class EditTitlePage {
                 let sanitizedText = system.UI.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
                     let flowId = system.space.getFlowIdByName("UpdateAlternativeDocumentTitle");
-                    await system.services.callFlow(flowId, this._document.id, altTitleObj.id, sanitizedText);
+                    let context = {
+                        documentId: this._document.id,
+                        alternativeTitleId: altTitleObj.id,
+                        text: sanitizedText
+                    }
+                    await system.services.callFlow(flowId, context);
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -96,14 +101,22 @@ export class EditTitlePage {
     async delete(_target) {
         let alternativeTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
         let flowId = system.space.getFlowIdByName("DeleteAlternativeDocumentTitle");
-        await system.services.callFlow(flowId, this._document.id, alternativeTitle.getAttribute("data-id"));
+        let context = {
+            documentId: this._document.id,
+            alternativeTitleId: alternativeTitle.getAttribute("data-id")
+        };
+        await system.services.callFlow(flowId, context);
         this.invalidate();
     }
     async select(_target){
         let suggestedTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
         let flowId = system.space.getFlowIdByName("SelectAlternativeDocumentTitle");
-        await system.services.callFlow(flowId, this._document.id, suggestedTitleId);
+        let context = {
+            documentId: this._document.id,
+            alternativeTitleId: suggestedTitleId
+        }
+        await system.services.callFlow(flowId, context);
         system.UI.removeActionBox(this.actionBox, this);
         this.invalidate();
     }

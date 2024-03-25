@@ -35,7 +35,13 @@ export class SummarizeChapterModal{
         let formInfo = await system.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         let flowId = system.space.getFlowIdByName("SummarizeChapter");
-        let result = await system.services.callFlow(flowId, this._document.id, this._chapter.id, this.prompt, "");
+        let context = {
+            documentId: this._document.id,
+            chapterId: this._chapter.id,
+            prompt: this.prompt,
+            maxTokens: ""
+        }
+        let result = await system.services.callFlow(flowId, context);
         this.chapterMainIdeas = result.responseJson;
         this.invalidate();
     }
