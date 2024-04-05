@@ -24,6 +24,7 @@ chapter-editor-page {
 .entire-content {
     width: calc(100% - 270px);
 }
+
 .section-title-left, .section-title-right {
     display: flex;
     align-items: baseline;
@@ -34,6 +35,7 @@ chapter-editor-page {
     width: 100%;
     padding: 0 20px 20px;
 }
+
 .chapter-title-section {
     display: flex;
     align-items: center;
@@ -42,7 +44,7 @@ chapter-editor-page {
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
-    padding:10px;
+    padding: 10px;
     line-height: normal;
 }
 
@@ -51,23 +53,24 @@ chapter-editor-page {
     transition-duration: 0.3s;
 }
 
-.chapter-title:focus{
-    outline:none;
-    background-color:var(--white-text);
-    border-radius:3px;
+.chapter-title:focus {
+    outline: none;
+    background-color: var(--white-text);
+    border-radius: 3px;
 }
 
-.ten-px-margin-left{
-    margin-left:10px;
+.ten-px-margin-left {
+    margin-left: 10px;
 }
+
 .chapter-unit {
     cursor: default;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    width:100%;
-    padding:10px;
+    width: 100%;
+    padding: 10px;
 }
 
 .chapter-content {
@@ -84,11 +87,14 @@ chapter-editor-page {
     margin-left: 20px;
 }
 
-.chapter-arrows{
+.chapter-arrows {
     cursor: pointer;
 }
 
-.chapter-arrows{display:none;}
+.chapter-arrows {
+    display: none;
+}
+
 .chapter-paragraphs:focus {
     background-color: var(--harsh-gray);
     color: #252525;
@@ -123,7 +129,7 @@ chapter-editor-page {
     height: min-content;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
@@ -139,8 +145,10 @@ p {
     padding: 5px 5px 5px 10px;
     display: inline-block;
 }
-.chapter-text,.chapter-unit{
-    width:100%;
+
+.chapter-text, .chapter-unit {
+    width: 100%;
+    color: var(--user-text);
 }
 
 .chapter-paragraphs {
@@ -155,6 +163,10 @@ p {
     width: 100%;
 }
 
-#highlighted-chapter{
-    background-color:var(--medium-white);
+#highlighted-chapter {
+    background-color: var(--medium-white);
+}
+
+html[theme="dark"] #highlighted-chapter {
+    background-color: var(--black);
 }
