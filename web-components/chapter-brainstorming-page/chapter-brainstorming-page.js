@@ -5,7 +5,7 @@ export class ChapterBrainstormingPage {
         this.element = element;
         let documentId, chapterId;
         [documentId,chapterId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + ":chapter-brainstorming-page", invalidate);
         this.invalidate = invalidate;
@@ -35,7 +35,7 @@ export class ChapterBrainstormingPage {
     }
 
     async enterEditMode(_target) {
-        let title = system.UI.reverseQuerySelector(_target, ".main-idea-title");
+        let title = assistOS.UI.reverseQuerySelector(_target, ".main-idea-title");
         title.setAttribute("contenteditable", "true");
         title.focus();
         const controller = new AbortController();
@@ -44,13 +44,13 @@ export class ChapterBrainstormingPage {
     async exitEditMode (title, controller, event) {
         if (title.getAttribute("contenteditable") === "true" && title !== event.target && !title.contains(event.target)) {
             title.setAttribute("contenteditable", "false");
-            let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
+            let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
             let context = {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
                 title: title.innerText
             }
-            await system.services.callFlow(flowId, context);
+            await assistOS.services.callFlow(flowId, context);
             title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
             data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
             controller.abort();
@@ -58,94 +58,94 @@ export class ChapterBrainstormingPage {
     }
 
     async suggestParagraph(){
-        await system.UI.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
+        await assistOS.UI.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 
     async openChapterEditorPage(){
-        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
     async openChapterBrainstormingPage(){
-        await system.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
     async openChapterProofreadPage(){
     }
     async suggestChapter(){
-        let flowId = system.space.getFlowIdByName("SuggestChapter");
+        let flowId = assistOS.space.getFlowIdByName("SuggestChapter");
         let context1 = {
             idea: JSON.stringify(this._chapter.mainIdeas)
         }
-        let result = await system.services.callFlow(flowId, context1);
+        let result = await assistOS.services.callFlow(flowId, context1);
         let chapterObj=result;
-        let flowId2 = system.space.getFlowIdByName("AddAlternativeChapter");
+        let flowId2 = assistOS.space.getFlowIdByName("AddAlternativeChapter");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapter: chapterObj
         }
-        await system.services.callFlow(flowId2, context);
+        await assistOS.services.callFlow(flowId2, context);
         this.invalidate();
     }
     async openCloneChapterModal(){
-        await system.UI.showModal( "clone-chapter-modal", { presenter: "clone-chapter-modal"});
+        await assistOS.UI.showModal( "clone-chapter-modal", { presenter: "clone-chapter-modal"});
 
     }
     async openParagraphBrainstormingPage(_target) {
-        system.space.currentParagraphId = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit").getAttribute("data-id");
-        await system.UI.changeToDynamicPage("paragraph-brainstorming-page",
-            `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${system.space.currentParagraphId}`);
+        assistOS.space.currentParagraphId = assistOS.UI.reverseQuerySelector(_target, "reduced-paragraph-unit").getAttribute("data-id");
+        await assistOS.UI.changeToDynamicPage("paragraph-brainstorming-page",
+            `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${assistOS.space.currentParagraphId}`);
     }
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        this.actionBox = await system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
+        this.actionBox = await assistOS.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 
     async editAction(_target){
         await this.openParagraphBrainstormingPage(_target);
     }
     async deleteAction(_target){
-        let paragraph = system.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
+        let paragraph = assistOS.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("DeleteParagraph");
+        let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: paragraphId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
     async delete(_target){
-        let alternativeChapter = system.UI.reverseQuerySelector(_target, "alternative-chapter");
+        let alternativeChapter = assistOS.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("DeleteAlternativeChapter");
+        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeChapter");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapterId: alternativeChapterId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
     async select(_target){
-        let alternativeChapter = system.UI.reverseQuerySelector(_target, "alternative-chapter");
+        let alternativeChapter = assistOS.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("SelectAlternativeChapter");
+        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeChapter");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapterId: alternativeChapterId
         }
-        await system.services.callFlow(flowId, context);
-        system.UI.removeActionBox(this.actionBox, this);
-        system.space.currentChapterId = alternativeChapterId;
-        await system.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${alternativeChapterId}`);
+        await assistOS.services.callFlow(flowId, context);
+        assistOS.UI.removeActionBox(this.actionBox, this);
+        assistOS.space.currentChapterId = alternativeChapterId;
+        await assistOS.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${alternativeChapterId}`);
     }
 }

@@ -9,21 +9,21 @@ export class AddDocumentModal {
     beforeRender() {}
 
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 
     async addDocument(_target) {
-        let formData = await system.UI.extractFormInformation(_target);
+        let formData = await assistOS.UI.extractFormInformation(_target);
         if(formData.isValid) {
-            let flowId = system.space.getFlowIdByName("AddDocument");
+            let flowId = assistOS.space.getFlowIdByName("AddDocument");
             let context = {
                 title: formData.data.documentTitle,
                 topic: formData.data.documentTopic
             }
-            let docId = await system.services.callFlow(flowId, context);
+            let docId = await assistOS.services.callFlow(flowId, context);
             docId? docId = docId : docId = docId;
-            system.UI.closeModal(_target);
-            await system.UI.changeToDynamicPage(`document-view-page`, `${getBasePath()}/document-view-page/${docId}`);
+            assistOS.UI.closeModal(_target);
+            await assistOS.UI.changeToDynamicPage(`document-view-page`, `${getBasePath()}/document-view-page/${docId}`);
         }
     }
 }

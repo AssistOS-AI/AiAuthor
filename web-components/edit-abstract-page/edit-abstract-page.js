@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class EditAbstractPage {
     constructor(element, invalidate) {
         this.element=element;
-        this._document = system.space.getDocument(parseURL());
+        this._document = assistOS.space.getDocument(parseURL());
         this._document.observeChange(this._document.getNotificationId()+ ":edit-abstract-page", invalidate);
         this.invalidate = invalidate;
         this.invalidate();
@@ -16,7 +16,7 @@ export class EditAbstractPage {
         let i = 1;
         this._document.alternativeAbstracts.forEach((abstract)=>{
             this.alternativeAbstracts += `<alternative-abstract data-nr="${i}" data-id="${abstract.id}" 
-            data-title="${ system.UI.sanitize(abstract.content)}" ></alternative-abstract>`;
+            data-title="${ assistOS.UI.sanitize(abstract.content)}" ></alternative-abstract>`;
             i++;
         });
     }
@@ -28,16 +28,16 @@ export class EditAbstractPage {
         if (abstract.getAttribute("contenteditable") === "false") {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
-            let flowId = system.space.getFlowIdByName("UpdateAbstract");
-            let timer = system.services.SaveElementTimer(async () => {
+            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText =  system.UI.sanitize(abstract.innerText);
+                let sanitizedText =  assistOS.UI.sanitize(abstract.innerText);
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
                     let context = {
                         documentId: this._document.id,
                         text: sanitizedText
                     };
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -55,51 +55,51 @@ export class EditAbstractPage {
     }
 
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        this.actionBox = await  system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
+        this.actionBox = await  assistOS.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 
     async suggestAbstract(_target){
-        await  system.UI.showModal("suggest-abstract-modal", { presenter: "suggest-abstract-modal"});
+        await  assistOS.UI.showModal("suggest-abstract-modal", { presenter: "suggest-abstract-modal"});
     }
 
     async select(_target){
-        let suggestedAbstract= system.UI.reverseQuerySelector(_target,"alternative-abstract");
+        let suggestedAbstract= assistOS.UI.reverseQuerySelector(_target,"alternative-abstract");
         let suggestedAbstractId = suggestedAbstract.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("SelectAlternativeAbstract");
+        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeAbstract");
         let context = {
             documentId: this._document.id,
             alternativeAbstractId: suggestedAbstractId
         }
-        await system.services.callFlow(flowId, context);
-        system.UI.removeActionBox(this.actionBox, this);
+        await assistOS.services.callFlow(flowId, context);
+        assistOS.UI.removeActionBox(this.actionBox, this);
         this.invalidate();
     }
     async edit(_target) {
-        let component =  system.UI.reverseQuerySelector(_target, "alternative-abstract");
+        let component =  assistOS.UI.reverseQuerySelector(_target, "alternative-abstract");
         let abstractText = component.querySelector(".content");
         if(this.actionBox){
-            system.UI.removeActionBox(this.actionBox, this);
+            assistOS.UI.removeActionBox(this.actionBox, this);
         }
         if (abstractText.getAttribute("contenteditable") === "false") {
             let alternativeAbstractId = component.getAttribute("data-id");
             let abstract = this._document.getAlternativeAbstract(alternativeAbstractId);
             abstractText.setAttribute("contenteditable", "true");
             abstractText.focus();
-            let timer =system.services.SaveElementTimer(async () => {
+            let timer =assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText =  system.UI.sanitize(abstractText.innerText);
-                let flowId = system.space.getFlowIdByName("UpdateAlternativeAbstract");
+                let sanitizedText =  assistOS.UI.sanitize(abstractText.innerText);
+                let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeAbstract");
                 if (sanitizedText !== abstract.content && !confirmationPopup) {
                     let context = {
                         documentId: this._document.id,
                         abstractId: abstract.id,
                         text: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     abstractText.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstractText.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -117,27 +117,27 @@ export class EditAbstractPage {
     }
 
     async delete(_target) {
-        let abstract = system.UI.reverseQuerySelector(_target, "alternative-abstract");
-        let flowId = system.space.getFlowIdByName("DeleteAlternativeAbstract");
+        let abstract = assistOS.UI.reverseQuerySelector(_target, "alternative-abstract");
+        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeAbstract");
         let context = {
             documentId: this._document.id,
             alternativeAbstractId: abstract.getAttribute("data-id")
         };
-        await system.services.callFlow(flowId, context);
-        await system.factories.updateDocument(system.space.id, this._document);
+        await assistOS.services.callFlow(flowId, context);
+        await assistOS.factories.updateDocument(assistOS.space.id, this._document);
         this.invalidate();
     }
     async openEditAbstractPage() {
-        await system.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async proofreadAbstract(){
-        await system.UI.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
     }
 }
 

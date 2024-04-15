@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class GenerateChaptersPage {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = system.space.getDocument(parseURL());
+        this._document = assistOS.space.getDocument(parseURL());
         this.invalidate = invalidate;
         this.invalidate();
         this.ideas = [];
@@ -56,15 +56,15 @@ export class GenerateChaptersPage {
 
     async generateIdeas(){
         let form = this.element.querySelector(".generate-ideas-form");
-        let formInfo = await system.UI.extractFormInformation(form);
+        let formInfo = await assistOS.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = system.space.getFlowIdByName("GenerateIdeas");
+            let flowId = assistOS.space.getFlowIdByName("GenerateIdeas");
             let context = {
                 topic: formInfo.data.idea,
                 variants: formInfo.data.nr,
                 maxTokens: ""
             }
-            let result = await system.services.callFlow(flowId, context);
+            let result = await assistOS.services.callFlow(flowId, context);
             this.ideas = result;
             this.invalidate();
         }
@@ -73,7 +73,7 @@ export class GenerateChaptersPage {
 
     async generateEmptyChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await system.UI.extractFormInformation(_target, conditions);
+        let formInfo = await assistOS.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -81,16 +81,16 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = system.space.getFlowIdByName("GenerateEmptyChapters");
+            let flowId = assistOS.space.getFlowIdByName("GenerateEmptyChapters");
             let context = {
                 documentId: this._document.id,
                 prompt: formInfo.data.prompt,
                 ideas: selectedIdeas,
                 chapterNr: selectedIdeas.length
             }
-            let result = await system.services.callFlow(flowId, context);
+            let result = await assistOS.services.callFlow(flowId, context);
             if(result){
-                await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+                await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
@@ -109,7 +109,7 @@ export class GenerateChaptersPage {
     }
     async generateChapters(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await system.UI.extractFormInformation(_target, conditions);
+        let formInfo = await assistOS.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -117,30 +117,30 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = system.space.getFlowIdByName("GenerateChapters");
+            let flowId = assistOS.space.getFlowIdByName("GenerateChapters");
             let context = {
                 documentId: this._document.id,
                 prompt: formInfo.data.prompt,
                 ideas: selectedIdeas,
                 chapterNr: selectedIdeas.length
             }
-            let result = await system.services.callFlow(flowId, context);
+            let result = await assistOS.services.callFlow(flowId, context);
             if(result){
-                await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+                await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
         }
     }
 
     async openMangeChaptersPage() {
-        await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openGenerateChaptersPage(){
-        await system.UI.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("generate-chapters-page", `${getBasePath()}/generate-chapters-page/${this._document.id}`);
     }
 }

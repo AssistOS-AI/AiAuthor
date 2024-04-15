@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class AbstractProofreadPage {
     constructor(element, invalidate) {
         this.element=element;
-        this._document = system.space.getDocument(parseURL());
+        this._document = assistOS.space.getDocument(parseURL());
         this.invalidate = invalidate;
         this.invalidate();
     }
@@ -16,7 +16,7 @@ export class AbstractProofreadPage {
             this.selectedPersonality = `<option value="${this.personality.id}" selected>${this.personality.name}</option>`
         }
         let stringHTML = "";
-        for(let personality of system.space.personalities){
+        for(let personality of assistOS.space.personalities){
             stringHTML+=`<option value=${personality.id}>${personality.name}</option>`;
         }
         this.personalitiesOptions = stringHTML;
@@ -34,21 +34,21 @@ export class AbstractProofreadPage {
 
     async executeProofRead() {
         let form = this.element.querySelector(".proofread-form");
-        const formData = await system.UI.extractFormInformation(form);
+        const formData = await assistOS.UI.extractFormInformation(form);
 
         this.text = formData.data.text;
         if(formData.data.personality){
-            this.personality = system.space.getPersonality(formData.data.personality);
+            this.personality = assistOS.space.getPersonality(formData.data.personality);
         }
         this.details = formData.data.details;
-        let flowId = system.space.getFlowIdByName("Proofread");
+        let flowId = assistOS.space.getFlowIdByName("Proofread");
         let context = {
-            text: system.UI.unsanitize(this.abstractText),
+            text: assistOS.UI.unsanitize(this.abstractText),
             prompt: formData.data.details
         }
-        let result = await system.services.callFlow(flowId, context, formData.data.personality);
-        this.observations = system.UI.sanitize(result.observations);
-        this.improvedAbstract = system.UI.sanitize(result.improvedText);
+        let result = await assistOS.services.callFlow(flowId, context, formData.data.personality);
+        this.observations = assistOS.UI.sanitize(result.observations);
+        this.improvedAbstract = assistOS.UI.sanitize(result.improvedText);
         this.invalidate();
     }
 
@@ -57,16 +57,16 @@ export class AbstractProofreadPage {
         if (abstract.getAttribute("contenteditable") === "false") {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
-            let timer = system.services.SaveElementTimer(async () => {
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(abstract.innerText);
-                let flowId = system.space.getFlowIdByName("UpdateAbstract");
+                let sanitizedText = assistOS.UI.sanitize(abstract.innerText);
+                let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
                     let context = {
                         documentId: this._document.id,
                         text: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -106,26 +106,26 @@ export class AbstractProofreadPage {
     async acceptImprovements(_target) {
         let abstract = this.element.querySelector(".improved-abstract").innerText;
         if(abstract !== this._document.abstract) {
-            let flowId = system.space.getFlowIdByName("UpdateAbstract");
+            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
             let context = {
                 documentId: this._document.id,
                 text: abstract
             }
-            await system.services.callFlow(flowId, context);
+            await assistOS.services.callFlow(flowId, context);
             this.invalidate();
         }
     }
     async openAbstractProofreadPage(){
-        await system.UI.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("abstract-proofread-page", `${getBasePath()}/abstract-proofread-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openAbstractEditorPage(){
-        await system.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
 
     }
 }

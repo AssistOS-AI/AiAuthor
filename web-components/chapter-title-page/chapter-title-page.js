@@ -4,7 +4,7 @@ export class ChapterTitlePage {
         this.element = element;
         let documentId, chapterId;
         [documentId,chapterId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + "chapter-title-page", invalidate);
         this.invalidate = invalidate;
@@ -25,18 +25,18 @@ export class ChapterTitlePage {
     }
 
     async saveTitle(_target) {
-        const formInfo = await system.UI.extractFormInformation(_target);
+        const formInfo = await assistOS.UI.extractFormInformation(_target);
         if(formInfo.isValid) {
-            const documentIndex = system.space.documents.findIndex(doc => doc.id === this.docId);
+            const documentIndex = assistOS.space.documents.findIndex(doc => doc.id === this.docId);
             const chapterIndex = this._document.getChapterIndex(this.chapterId);
             if (documentIndex !== -1 && chapterIndex !== -1 && formInfo.data.title !== this._document.getChapterTitle(this.chapterId)) {
-                let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
+                let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
                 let context = {
                     documentId: this._document.id,
                     chapterId: this._chapter.id,
                     title: formInfo.data.title
                 }
-                await system.services.callFlow(flowId, context);
+                await assistOS.services.callFlow(flowId, context);
             }
         }
     }
@@ -46,17 +46,17 @@ export class ChapterTitlePage {
         if (title.getAttribute("contenteditable") === "false") {
             title.setAttribute("contenteditable", "true");
             title.focus();
-            let timer = system.services.SaveElementTimer(async () => {
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(title.innerText);
+                let sanitizedText = assistOS.UI.sanitize(title.innerText);
                 if (sanitizedText !== this._chapter.title && !confirmationPopup) {
-                    let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
+                    let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
                     let context = {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         title: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -74,21 +74,21 @@ export class ChapterTitlePage {
     }
 
     async edit(_target) {
-        let component = system.UI.reverseQuerySelector(_target, "alternative-title");
+        let component = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
         let newTitle = component.querySelector(".suggested-title");
 
         if(this.actionBox){
-            system.UI.removeActionBox(this.actionBox, this);
+            assistOS.UI.removeActionBox(this.actionBox, this);
         }
         if (newTitle.getAttribute("contenteditable") === "false") {
 
             let altTitleObj = this._chapter.getAlternativeTitle(component.getAttribute("data-id"));
             newTitle.setAttribute("contenteditable", "true");
             newTitle.focus();
-            let flowId = system.space.getFlowIdByName("UpdateAlternativeChapterTitle");
-            let timer = system.services.SaveElementTimer(async () => {
+            let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeChapterTitle");
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(newTitle.innerText);
+                let sanitizedText = assistOS.UI.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
                     let context = {
                         documentId: this._document.id,
@@ -96,7 +96,7 @@ export class ChapterTitlePage {
                         alternativeTitleId: altTitleObj.id,
                         newTitle: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -113,53 +113,53 @@ export class ChapterTitlePage {
         }
     }
     async delete(_target) {
-        let alternativeTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
-        let flowId = system.space.getFlowIdByName("DeleteAlternativeChapterTitle");
+        let alternativeTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
+        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeChapterTitle");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeTitleId: alternativeTitle.getAttribute("data-id")
         };
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
     async select(_target){
-        let suggestedTitle = system.UI.reverseQuerySelector(_target, "alternative-title");
+        let suggestedTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("SelectAlternativeChapterTitle");
+        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeChapterTitle");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeTitleId: suggestedTitleId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openChapterTitlePage() {
-        await system.UI.changeToDynamicPage("chapter-title-page",
+        await assistOS.UI.changeToDynamicPage("chapter-title-page",
             `${getBasePath()}/chapter-title-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
     async openChapterEditorPage(){
-        await system.UI.changeToDynamicPage("chapter-editor-page",
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page",
             `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 
     async showSuggestChapterTitlesModal() {
-        await system.UI.showModal( "suggest-chapter-titles-modal", { presenter: "suggest-chapter-titles-modal"});
+        await assistOS.UI.showModal( "suggest-chapter-titles-modal", { presenter: "suggest-chapter-titles-modal"});
     }
 
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        this.actionBox = await system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
+        this.actionBox = await assistOS.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 }

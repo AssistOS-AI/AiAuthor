@@ -4,7 +4,7 @@ export class GenerateParagraphsPage {
         this.element = element;
         let documentId, chapterId;
         [documentId, chapterId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this.invalidate = invalidate;
         this.invalidate();
@@ -61,15 +61,15 @@ export class GenerateParagraphsPage {
 
     async generateIdeas(){
         let form = this.element.querySelector(".generate-ideas-form");
-        let formInfo = await system.UI.extractFormInformation(form);
+        let formInfo = await assistOS.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = system.space.getFlowIdByName("GenerateIdeas");
+            let flowId = assistOS.space.getFlowIdByName("GenerateIdeas");
             let context = {
                 topic: formInfo.data.idea,
                 variants: formInfo.data.nr,
                 maxTokens: ""
             }
-            let result = await system.services.callFlow(flowId, context);
+            let result = await assistOS.services.callFlow(flowId, context);
             this.ideas= result;
             this.invalidate();
         }
@@ -89,7 +89,7 @@ export class GenerateParagraphsPage {
     }
     async generateParagraphs(_target){
         const conditions = {"verifyCheckedIdeas": {fn:this.verifyCheckedIdeas, errorMessage:"Select at least one idea!"} };
-        let formInfo = await system.UI.extractFormInformation(_target, conditions);
+        let formInfo = await assistOS.UI.extractFormInformation(_target, conditions);
         if(formInfo.isValid){
             let selectedIdeas = [];
             for (const [key, value] of Object.entries(formInfo.elements)) {
@@ -97,7 +97,7 @@ export class GenerateParagraphsPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = system.space.getFlowIdByName("GenerateParagraphs");
+            let flowId = assistOS.space.getFlowIdByName("GenerateParagraphs");
             let context = {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
@@ -105,25 +105,25 @@ export class GenerateParagraphsPage {
                 ideas: selectedIdeas,
                 paragraphsNr: selectedIdeas.length
             }
-            let result = await system.services.callFlow(flowId, context);
+            let result = await assistOS.services.callFlow(flowId, context);
             if(result){
-                await system.UI.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+                await assistOS.UI.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
             }
         }
     }
 
 
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openChapterEditorPage(){
-        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openGenerateParagraphsPage(){
-        await system.UI.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("generate-paragraphs-page", `${getBasePath()}/generate-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
 
     }
 

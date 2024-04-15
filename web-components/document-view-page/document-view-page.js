@@ -2,7 +2,7 @@ import {parseURL,getBasePath} from "../../utils/index.js"
 export class DocumentViewPage {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = system.space.getDocument(parseURL());
+        this._document = assistOS.space.getDocument(parseURL());
         this._document.observeChange(this._document.getNotificationId() + ":document-view-page", invalidate);
         this._document.observeChange(this._document.getNotificationId() + ":refresh", invalidate);
         this.invalidate = invalidate;
@@ -55,7 +55,7 @@ export class DocumentViewPage {
 
     saveParagraph(paragraph, swapAction) {
         if (!swapAction) {
-            system.space.currentParagraph = null;
+            assistOS.space.currentParagraph = null;
         }
         paragraph["timer"].stop(true);
         paragraph["paragraph"].removeEventListener("keydown", this.resetTimer);
@@ -65,34 +65,34 @@ export class DocumentViewPage {
     editParagraph(paragraph) {
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
-            let paragraphUnit = system.UI.reverseQuerySelector(paragraph, ".paragraph-unit");
+            let paragraphUnit = assistOS.UI.reverseQuerySelector(paragraph, ".paragraph-unit");
             paragraph.focus();
             this.previouslySelectedParagraph={};
             this.previouslySelectedParagraph["paragraph"] = paragraph;
             this.switchParagraphArrows(paragraphUnit, "on");
             let currentParagraphId = paragraphUnit.getAttribute("data-paragraph-id");
-            system.space.currentParagraphId = currentParagraphId;
+            assistOS.space.currentParagraphId = currentParagraphId;
             let currentParagraph = this.chapter.getParagraph(currentParagraphId);
 
-            let timer = system.services.SaveElementTimer(async () => {
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 if (!currentParagraph) {
                     await timer.stop();
                     return;
                 }
-                let paragraphText = system.UI.sanitize(system.UI.customTrim(paragraph.innerText));
+                let paragraphText = assistOS.UI.sanitize(assistOS.UI.customTrim(paragraph.innerText));
                 if (paragraphText !== currentParagraph.text) {
-                    let flowId = system.space.getFlowIdByName("UpdateParagraphText");
+                    let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
                     let context = {
                         documentId: this._document.id,
                         chapterId: this.chapter.id,
                         paragraphId: currentParagraph.id,
                         text: paragraphText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                 }
             }, 1000);
             this.previouslySelectedParagraph["timer"]=timer;
-            let flowId = system.space.getFlowIdByName("DeleteParagraph");
+            let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
             this.resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
@@ -102,15 +102,15 @@ export class DocumentViewPage {
                             chapterId: this.chapter.id,
                             paragraphId: currentParagraphId
                         }
-                        await system.services.callFlow(flowId, context);
+                        await assistOS.services.callFlow(flowId, context);
                         if (this.chapter.paragraphs.length > 0) {
                             if (curentParagraphIndex === 0) {
-                                system.space.currentParagraphId = this.chapter.paragraphs[0].id;
+                                assistOS.space.currentParagraphId = this.chapter.paragraphs[0].id;
                             } else {
-                                system.space.currentParagraphId = this.chapter.paragraphs[curentParagraphIndex - 1].id;
+                                assistOS.space.currentParagraphId = this.chapter.paragraphs[curentParagraphIndex - 1].id;
                             }
                         } else {
-                            system.space.currentParagraphId = null;
+                            assistOS.space.currentParagraphId = null;
                         }
                         this.invalidate();
                     }
@@ -124,8 +124,8 @@ export class DocumentViewPage {
     }
 
     async highlightElement(controller, event) {
-        this.chapterUnit = system.UI.getClosestParentElement(event.target, ".chapter-unit");
-        this.paragraphUnit = system.UI.getClosestParentElement(event.target, ".paragraph-text");
+        this.chapterUnit = assistOS.UI.getClosestParentElement(event.target, ".chapter-unit");
+        this.paragraphUnit = assistOS.UI.getClosestParentElement(event.target, ".paragraph-text");
         if (this.paragraphUnit) {
             /* clickul e pe un paragraf */
             if (this.chapterUnit.getAttribute("data-id") !== (this.previouslySelectedChapter?.getAttribute("data-id") || "")) {
@@ -164,23 +164,23 @@ export class DocumentViewPage {
                 }
             } else {
                 /* clickul e pe acelasi capitol dar nu pe un paragraf*/
-                if (system.UI.getClosestParentElement(event.target, ".paragraph-arrows")) {
+                if (assistOS.UI.getClosestParentElement(event.target, ".paragraph-arrows")) {
                     /* clickul e pe un buton de swap */
                     if (this.previouslySelectedParagraph) {
                         this.saveParagraph(this.previouslySelectedParagraph, "swap");
                     }
-                    if (system.UI.getClosestParentElement(event.target, ".arrow-up") || system.UI.getClosestParentElement(event.target, ".arrow-up-space")) {
+                    if (assistOS.UI.getClosestParentElement(event.target, ".arrow-up") || assistOS.UI.getClosestParentElement(event.target, ".arrow-up-space")) {
                         await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "up")
                     } else {
                         await this.moveParagraph(this.previouslySelectedParagraph["paragraph"], "down")
                     }
                 } else {
-                    if (system.UI.getClosestParentElement(event.target, ".chapter-arrows")) {
+                    if (assistOS.UI.getClosestParentElement(event.target, ".chapter-arrows")) {
                         /* clickul e pe un buton de swap al capitolului */
                         if(this.previouslySelectedParagraph){
                             this.saveParagraph(this.previouslySelectedParagraph);
                         }
-                        if (system.UI.getClosestParentElement(event.target, ".arrow-up")) {
+                        if (assistOS.UI.getClosestParentElement(event.target, ".arrow-up")) {
                             await this.moveChapter(event.target, "up");
                         }else{
                             await this.moveChapter(event.target, "down");
@@ -204,8 +204,8 @@ export class DocumentViewPage {
             }
             this.deselectPreviousParagraph();
             this.deselectPreviousChapter();
-            let rightSideBarItem = system.UI.getClosestParentElement(event.target, ".sidebar-item");
-            let leftSideBarItem = system.UI.getClosestParentElement(event.target, ".feature");
+            let rightSideBarItem = assistOS.UI.getClosestParentElement(event.target, ".sidebar-item");
+            let leftSideBarItem = assistOS.UI.getClosestParentElement(event.target, ".feature");
             /* data-keep-page inseamna ca nu schimbam pagina ci doar dam refresh(#Add chapter) -> */
             if (rightSideBarItem) {
                 if (!rightSideBarItem.getAttribute("data-keep-page")) {
@@ -224,13 +224,13 @@ export class DocumentViewPage {
         this.previouslySelectedChapter = this.chapterUnit;
         this.chapterUnit.setAttribute("id", "highlighted-chapter");
         this.switchArrowsDisplay(this.chapterUnit, "chapter", "on");
-        system.space.currentChapterId = this.chapterUnit.getAttribute("data-chapter-id");
-        this.chapter = this._document.getChapter(system.space.currentChapterId);
+        assistOS.space.currentChapterId = this.chapterUnit.getAttribute("data-chapter-id");
+        this.chapter = this._document.getChapter(assistOS.space.currentChapterId);
     }
 
     deselectPreviousParagraph() {
         if (this.previouslySelectedParagraph) {
-            system.space.currentParagraphId = null;
+            assistOS.space.currentParagraphId = null;
             this.previouslySelectedParagraph["paragraph"].setAttribute("contenteditable", "false");
             this.switchParagraphArrows(this.previouslySelectedParagraph["paragraph"], "off");
             delete this.previouslySelectedParagraph;
@@ -241,7 +241,7 @@ export class DocumentViewPage {
         if (this.previouslySelectedChapter) {
             this.switchArrowsDisplay(this.previouslySelectedChapter, "chapter", "off");
             this.previouslySelectedChapter.removeAttribute("id");
-            system.space.currentChapterId = null;
+            assistOS.space.currentChapterId = null;
             delete this.previouslySelectedChapter;
         }
     }
@@ -289,7 +289,7 @@ export class DocumentViewPage {
     }
 
     async moveChapter(_target, direction) {
-        const currentChapter = system.UI.reverseQuerySelector(_target, "chapter-unit");
+        const currentChapter = assistOS.UI.reverseQuerySelector(_target, "chapter-unit");
         const currentChapterId = currentChapter.getAttribute('data-chapter-id');
         const currentChapterIndex = this._document.getChapterIndex(currentChapterId);
 
@@ -302,19 +302,19 @@ export class DocumentViewPage {
 
         const adjacentChapterId = getAdjacentChapterId(currentChapterIndex, this._document.chapters);
 
-        let flowId = system.space.getFlowIdByName("SwapChapters");
+        let flowId = assistOS.space.getFlowIdByName("SwapChapters");
         let context = {
             documentId: this._document.id,
             chapterId1: currentChapterId,
             chapterId2: adjacentChapterId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
 
     async moveParagraph(_target, direction) {
-        let chapter = this._document.getChapter(system.space.currentChapterId);
-        const currentParagraph = system.UI.reverseQuerySelector(_target, "paragraph-unit");
+        let chapter = this._document.getChapter(assistOS.space.currentChapterId);
+        const currentParagraph = assistOS.UI.reverseQuerySelector(_target, "paragraph-unit");
         const currentParagraphId = currentParagraph.getAttribute('data-paragraph-id');
         const currentParagraphIndex = chapter.getParagraphIndex(currentParagraphId);
 
@@ -325,11 +325,11 @@ export class DocumentViewPage {
             return index === paragraphs.length - 1 ? paragraphs[0].id : paragraphs[index + 1].id;
         };
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, chapter.paragraphs);
-        const chapterId = system.UI.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
+        const chapterId = assistOS.UI.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
         if (chapter.swapParagraphs(currentParagraphId, adjacentParagraphId)) {
-            await system.factories.updateDocument(system.space.id, this._document);
-            system.space.currentParagraphId = currentParagraphId;
-            system.UI.refreshElement(system.UI.getClosestParentWithPresenter(_target, "chapter-unit"));
+            await assistOS.factories.updateDocument(assistOS.space.id, this._document);
+            assistOS.space.currentParagraphId = currentParagraphId;
+            assistOS.UI.refreshElement(assistOS.UI.getClosestParentWithPresenter(_target, "chapter-unit"));
         } else {
             console.error(`Unable to swap paragraphs. ${currentParagraphId}, ${adjacentParagraphId}, Chapter: ${chapterId}`);
         }
@@ -346,19 +346,19 @@ export class DocumentViewPage {
             title.addEventListener('keydown', titleEnterHandler);
             title.focus();
             title.parentElement.setAttribute("id", "highlighted-chapter");
-            let flowId = system.space.getFlowIdByName("UpdateDocumentTitle");
-            let timer = system.services.SaveElementTimer(async () => {
-                let titleText = system.UI.sanitize(system.UI.customTrim(title.innerText));
+            let flowId = assistOS.space.getFlowIdByName("UpdateDocumentTitle");
+            let timer = assistOS.services.SaveElementTimer(async () => {
+                let titleText = assistOS.UI.sanitize(assistOS.UI.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
                     let context = {
                         documentId: this._document.id,
                         title: titleText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                 }
             }, 1000);
             title.addEventListener("blur", async () => {
-                title.innerText = system.UI.customTrim(title.innerText) || system.UI.unsanitize(this._document.title);
+                title.innerText = assistOS.UI.customTrim(title.innerText) || assistOS.UI.unsanitize(this._document.title);
                 await timer.stop(true);
                 title.setAttribute("contenteditable", "false");
                 title.removeEventListener('keydown', titleEnterHandler);
@@ -374,24 +374,24 @@ export class DocumentViewPage {
 
     async editAbstract(abstract) {
         if (abstract.getAttribute("contenteditable") === "false") {
-            let abstractSection = system.UI.reverseQuerySelector(abstract, ".abstract-section");
+            let abstractSection = assistOS.UI.reverseQuerySelector(abstract, ".abstract-section");
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
             abstractSection.setAttribute("id", "highlighted-chapter");
-            let flowId = system.space.getFlowIdByName("UpdateAbstract");
-            let timer =  system.services.SaveElementTimer(async () => {
-                let abstractText = system.UI.sanitize(system.UI.customTrim(abstract.innerText));
+            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
+            let timer =  assistOS.services.SaveElementTimer(async () => {
+                let abstractText = assistOS.UI.sanitize(assistOS.UI.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
                     let context = {
                         documentId: this._document.id,
                         text: abstractText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                 }
             }, 1000);
 
             abstract.addEventListener("blur", async () => {
-                abstract.innerText = system.UI.customTrim(abstract.innerText) || system.UI.unsanitize(this._document.abstract);
+                abstract.innerText = assistOS.UI.customTrim(abstract.innerText) || assistOS.UI.unsanitize(this._document.abstract);
                 abstract.removeEventListener("keydown", resetTimer);
                 await timer.stop(true);
                 abstract.setAttribute("contenteditable", "false");
@@ -405,72 +405,72 @@ export class DocumentViewPage {
     }
 
     async addChapter() {
-        let flowId = system.space.getFlowIdByName("AddChapter");
+        let flowId = assistOS.space.getFlowIdByName("AddChapter");
         let context = {
             documentId: this._document.id
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
 
     async addParagraph(_target) {
-        let flowId = system.space.getFlowIdByName("AddParagraph");
+        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
         let context = {
             documentId: this._document.id,
-            chapterId: system.space.currentChapterId
+            chapterId: assistOS.space.currentChapterId
         }
-        await system.services.callFlow(flowId, context);
-        this._document.notifyObservers(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${system.space.currentChapterId}`);
+        await assistOS.services.callFlow(flowId, context);
+        this._document.notifyObservers(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${assistOS.space.currentChapterId}`);
     }
 
     async openEditTitlePage() {
-        await system.UI.changeToDynamicPage("edit-title-page", `${getBasePath()}/edit-title-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("edit-title-page", `${getBasePath()}/edit-title-page/${this._document.id}`);
     }
 
     async openEditAbstractPage() {
-        await system.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("edit-abstract-page", `${getBasePath()}/edit-abstract-page/${this._document.id}`);
     }
 
     async openDocumentSettingsPage() {
-        await system.UI.changeToDynamicPage("document-settings-page", `${getBasePath()}/document-settings-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-settings-page", `${getBasePath()}/document-settings-page/${this._document.id}`);
     }
 
     async openManageChaptersPage() {
-        await system.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
 
     async openChapterBrainstormingPage() {
-        await system.UI.changeToDynamicPage("chapter-brainstorming-page",
-            `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${system.space.currentChapterId}`);
+        await assistOS.UI.changeToDynamicPage("chapter-brainstorming-page",
+            `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}`);
 
     }
 
     async openManageParagraphsPage() {
-        await system.UI.changeToDynamicPage("manage-paragraphs-page",
-            `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${system.space.currentChapterId}`);
+        await assistOS.UI.changeToDynamicPage("manage-paragraphs-page",
+            `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}`);
     }
 
     async openParagraphProofreadPage() {
-        await system.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${system.space.currentChapterId}/paragraphs/${system.space.currentParagraphId}`);
+        await assistOS.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}/paragraphs/${assistOS.space.currentParagraphId}`);
     }
 
     async openParagraphBrainstormingPage() {
-        await system.UI.changeToDynamicPage("paragraph-brainstorming-page",
-            `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${system.space.currentChapterId}/paragraphs/${system.space.currentParagraphId}`);
+        await assistOS.UI.changeToDynamicPage("paragraph-brainstorming-page",
+            `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}/paragraphs/${assistOS.space.currentParagraphId}`);
     }
 
     async openEditChapterTitlePage() {
-        await system.UI.changeToDynamicPage("chapter-title-page",
-            `${getBasePath()}/chapter-title-page/${this._document.id}/chapters/${system.space.currentChapterId}`);
+        await assistOS.UI.changeToDynamicPage("chapter-title-page",
+            `${getBasePath()}/chapter-title-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}`);
     }
 
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openChapterEditor() {
-        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${system.space.currentChapterId}`);
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${assistOS.space.currentChapterId}`);
     }
 }

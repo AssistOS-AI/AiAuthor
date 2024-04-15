@@ -4,7 +4,7 @@ export class ParagraphBrainstormingPage {
         this.element = element;
         let documentId, chapterId, paragraphId;
         [documentId, chapterId, paragraphId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._paragraph = this._chapter.getParagraph(paragraphId);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
@@ -55,10 +55,10 @@ export class ParagraphBrainstormingPage {
         if (item.getAttribute("contenteditable") === "false") {
             item.setAttribute("contenteditable", "true");
             item.focus();
-            let flowId = system.space.getFlowIdByName("UpdateParagraphMainIdea");
-            let timer = system.services.SaveElementTimer(async () => {
+            let flowId = assistOS.space.getFlowIdByName("UpdateParagraphMainIdea");
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(item.innerText);
+                let sanitizedText = assistOS.UI.sanitize(item.innerText);
                 if(itemName === "mainIdea"){
                     if (sanitizedText !== this._paragraph.mainIdea && !confirmationPopup) {
                         let context = {
@@ -67,20 +67,20 @@ export class ParagraphBrainstormingPage {
                             paragraphId: this._paragraph.id,
                             idea: sanitizedText
                         }
-                        await system.services.callFlow(flowId, context);
+                        await assistOS.services.callFlow(flowId, context);
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }
                 }else {
                     if(sanitizedText !== this._paragraph.text && !confirmationPopup){
-                        let flowId = system.space.getFlowIdByName("UpdateParagraphText");
+                        let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
                         let context = {
                             documentId: this._document.id,
                             chapterId: this._chapter.id,
                             paragraphId: this._paragraph.id,
                             text: sanitizedText
                         }
-                        await system.services.callFlow(flowId, context);
+                        await assistOS.services.callFlow(flowId, context);
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }
@@ -100,51 +100,51 @@ export class ParagraphBrainstormingPage {
     }
 
     async suggestParagraph(){
-        await system.UI.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
+        await assistOS.UI.showModal( "suggest-paragraph-modal", { presenter: "suggest-paragraph-modal"});
     }
 
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
 
     async openChapterBrainStormingPage(){
-        await system.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
 
     async openParagraphProofreadPage(){
-        await system.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
+        await assistOS.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
     }
     async openChapterEditorPage() {
-        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
 
     async summarize(){
-        await system.UI.showModal( "summarize-paragraph-modal", { presenter: "summarize-paragraph-modal"});
+        await assistOS.UI.showModal( "summarize-paragraph-modal", { presenter: "summarize-paragraph-modal"});
     }
 
     async showActionBox(_target, primaryKey, componentName, insertionMode) {
-        this.actionBox = await system.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
+        this.actionBox = await assistOS.UI.showActionBox(_target, primaryKey, componentName, insertionMode);
     }
 
     async edit(_target){
-        let component = system.UI.reverseQuerySelector(_target, "alternative-paragraph");
+        let component = assistOS.UI.reverseQuerySelector(_target, "alternative-paragraph");
         let paragraph = component.querySelector(".content");
         if(this.actionBox){
-            system.UI.removeActionBox(this.actionBox, this);
+            assistOS.UI.removeActionBox(this.actionBox, this);
         }
         if (paragraph.getAttribute("contenteditable") === "false") {
             let paragraphId = component.getAttribute("data-id");
             let currentAltParagraph = this._paragraph.getAlternativeParagraph(paragraphId);
             paragraph.setAttribute("contenteditable", "true");
             paragraph.focus();
-            let timer = system.services.SaveElementTimer(async () => {
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(paragraph.innerText);
+                let sanitizedText = assistOS.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== currentAltParagraph.text && !confirmationPopup) {
-                    let flowId = system.space.getFlowIdByName("UpdateAlternativeParagraph");
+                    let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeParagraph");
                     let context = {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
@@ -152,7 +152,7 @@ export class ParagraphBrainstormingPage {
                         alternativeParagraphId: currentAltParagraph.id,
                         text: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -169,32 +169,32 @@ export class ParagraphBrainstormingPage {
         }
     }
     async delete(_target){
-        let paragraph = system.UI.reverseQuerySelector(_target, "alternative-paragraph");
+        let paragraph = assistOS.UI.reverseQuerySelector(_target, "alternative-paragraph");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("DeleteAlternativeParagraph");
+        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraphId: paragraphId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
 
     async select(_target){
-        let paragraphElement = system.UI.reverseQuerySelector(_target,"alternative-paragraph");
+        let paragraphElement = assistOS.UI.reverseQuerySelector(_target,"alternative-paragraph");
         let alternativeParagraphId = paragraphElement.getAttribute("data-id");
-        let flowId = system.space.getFlowIdByName("SelectAlternativeParagraph");
+        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraphId: alternativeParagraphId
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
-        system.UI.removeActionBox(this.actionBox, this);
+        assistOS.UI.removeActionBox(this.actionBox, this);
 
     }
 }

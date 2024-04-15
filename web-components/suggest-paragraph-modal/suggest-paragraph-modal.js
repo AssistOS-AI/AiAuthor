@@ -3,7 +3,7 @@ export class SuggestParagraphModal {
     constructor(element, invalidate) {
         let documentId, chapterId, paragraphId;
         [documentId, chapterId, paragraphId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._paragraph = this._chapter.getParagraph(paragraphId);
         this.invalidate = invalidate;
@@ -26,39 +26,39 @@ export class SuggestParagraphModal {
     }
 
     async generate(_target){
-        let formInfo = await system.UI.extractFormInformation(_target);
+        let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = system.space.getFlowIdByName("SuggestParagraph");
+        let flowId = assistOS.space.getFlowIdByName("SuggestParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             prompt: this.prompt,
         }
-        let result = await system.services.callFlow(flowId, context);
+        let result = await assistOS.services.callFlow(flowId, context);
         this.suggestedParagraph = result.text;
         this.suggestedParagraphIdea = result.mainIdea;
         this.invalidate();
     }
 
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 
     async addSelectedParagraph(_target) {
         let altParagraphData = {
-            text:system.UI.sanitize(this.suggestedParagraph),
-            id:system.services.generateId(),
-            mainIdea:system.UI.sanitize(this.suggestedParagraphIdea)
+            text:assistOS.UI.sanitize(this.suggestedParagraph),
+            id:assistOS.services.generateId(),
+            mainIdea:assistOS.UI.sanitize(this.suggestedParagraphIdea)
         };
-        let flowId = system.space.getFlowIdByName("AcceptSuggestedParagraph");
+        let flowId = assistOS.space.getFlowIdByName("AcceptSuggestedParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraph: altParagraphData
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 }

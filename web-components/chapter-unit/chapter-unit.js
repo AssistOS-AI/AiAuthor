@@ -2,7 +2,7 @@ import {parseURL} from "../../utils/index.js"
 export class ChapterUnit {
     constructor(element, invalidate) {
         this.element = element;
-        this._document = system.space.getDocument(parseURL());
+        this._document = assistOS.space.getDocument(parseURL());
         let chapterId = this.element.getAttribute("data-chapter-id");
         this.chapter = this._document.getChapter(chapterId);
         this._document.observeChange(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${chapterId}`, invalidate);
@@ -35,15 +35,15 @@ export class ChapterUnit {
         let selectedParagraphs = this.element.querySelectorAll(".paragraph-text");
         let currentParagraph = "";
         for(let paragraph of selectedParagraphs){
-            if (system.UI.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === system.space.currentParagraphId) {
+            if (assistOS.UI.reverseQuerySelector(paragraph, '[data-paragraph-id]').getAttribute("data-paragraph-id") === assistOS.space.currentParagraphId) {
                 currentParagraph = paragraph;
                 currentParagraph.click();
-                system.UI.moveCursorToEnd(currentParagraph);
+                assistOS.UI.moveCursorToEnd(currentParagraph);
                 //currentParagraph.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
                 break;
             }
         }
-        if (this.chapter.id === system.space.currentChapterId&&!currentParagraph) {
+        if (this.chapter.id === assistOS.space.currentChapterId&&!currentParagraph) {
             this.chapterUnit.click();
             //this.element.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
         }
@@ -59,18 +59,18 @@ export class ChapterUnit {
         if (!event.ctrlKey || event.key !== 'Enter') {
             return;
         }
-        const fromParagraph = system.UI.reverseQuerySelector(event.target, '[data-paragraph-id]','chapter-unit');
-        const fromChapter = system.UI.reverseQuerySelector(event.target, '.chapter-unit');
+        const fromParagraph = assistOS.UI.reverseQuerySelector(event.target, '[data-paragraph-id]','chapter-unit');
+        const fromChapter = assistOS.UI.reverseQuerySelector(event.target, '.chapter-unit');
 
         if (!fromParagraph && !fromChapter) {
             return;
         }
-        let flowId = system.space.getFlowIdByName("AddParagraph");
+        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
         let context = {
             documentId: this._document.id,
             chapterId: this.chapter.id
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this.invalidate();
     }
 
@@ -85,23 +85,23 @@ export class ChapterUnit {
         title.addEventListener('keydown', titleEnterHandler);
         title.focus();
 
-        let timer = system.services.SaveElementTimer(async () => {
-            let titleText = system.UI.sanitize(system.UI.customTrim(title.innerText))
+        let timer = assistOS.services.SaveElementTimer(async () => {
+            let titleText = assistOS.UI.sanitize(assistOS.UI.customTrim(title.innerText))
             if (titleText !== this.chapter.title && titleText !== "") {
-                let flowId = system.space.getFlowIdByName("UpdateChapterTitle");
+                let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
                 let context = {
                     documentId: this._document.id,
                     chapterId: this.chapter.id,
                     newTitle: titleText
                 }
-                await system.services.callFlow(flowId, context);
+                await assistOS.services.callFlow(flowId, context);
             }
         }, 3000);
         /* NO chapter Title */
         /* constants for page names */
         /* save button hidden */
         title.addEventListener("blur", async () => {
-            title.innerText = system.UI.customTrim(title.innerText)||system.UI.unsanitize(this.chapter.title);
+            title.innerText = assistOS.UI.customTrim(title.innerText)||assistOS.UI.unsanitize(this.chapter.title);
             await timer.stop(true);
             title.removeAttribute("contenteditable");
             title.removeEventListener('keydown', titleEnterHandler);
@@ -113,8 +113,8 @@ export class ChapterUnit {
         title.addEventListener("keydown", resetTimer);
     }
     async moveParagraph(_target, direction) {
-        let chapter = this._document.getChapter(system.space.currentChapterId);
-        const currentParagraph = system.UI.reverseQuerySelector(_target, "paragraph-unit");
+        let chapter = this._document.getChapter(assistOS.space.currentChapterId);
+        const currentParagraph = assistOS.UI.reverseQuerySelector(_target, "paragraph-unit");
         const currentParagraphId = currentParagraph.getAttribute('data-paragraph-id');
         const currentParagraphIndex = chapter.getParagraphIndex(currentParagraphId);
 
@@ -125,11 +125,11 @@ export class ChapterUnit {
             return index === paragraphs.length - 1 ? paragraphs[0].id : paragraphs[index + 1].id;
         };
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, chapter.paragraphs);
-        const chapterId = system.UI.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
+        const chapterId = assistOS.UI.reverseQuerySelector(_target, "chapter-unit").getAttribute('data-chapter-id');
         if (chapter.swapParagraphs(currentParagraphId, adjacentParagraphId)) {
-            await system.factories.updateDocument(system.space.id, this._document);
-            system.space.currentParagraphId = currentParagraphId;
-            system.UI.refreshElement(system.UI.getClosestParentWithPresenter(_target, "chapter-unit"));
+            await assistOS.factories.updateDocument(assistOS.space.id, this._document);
+            assistOS.space.currentParagraphId = currentParagraphId;
+            assistOS.UI.refreshElement(assistOS.UI.getClosestParentWithPresenter(_target, "chapter-unit"));
         } else {
             console.error(`Unable to swap paragraphs. ${currentParagraphId}, ${adjacentParagraphId}, Chapter: ${chapterId}`);
         }
@@ -137,7 +137,7 @@ export class ChapterUnit {
 
     highlightChapter(){
         this.chapterUnit.setAttribute("id", "highlighted-chapter");
-        system.space.currentChapterId = this.chapter.id;
+        assistOS.space.currentChapterId = this.chapter.id;
         if(this._document.chapters.length===1){
             return;
         }

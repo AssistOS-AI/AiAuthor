@@ -4,7 +4,7 @@ export class ParagraphProofreadPage {
         this.element=element;
         let documentId, chapterId, paragraphId;
         [documentId, chapterId, paragraphId] = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this._chapter = this._document.getChapter(chapterId);
         this._paragraph = this._chapter.getParagraph(paragraphId);
         this.invalidate = invalidate;
@@ -22,7 +22,7 @@ export class ParagraphProofreadPage {
             this.selectedPersonality = `<option value="${this.personality.id}" selected>${this.personality.name}</option>`
         }
         let stringHTML = "";
-        for(let personality of system.space.personalities){
+        for(let personality of assistOS.space.personalities){
             stringHTML+=`<option value=${personality.id}>${personality.name}</option>`;
         }
         this.personalitiesOptions = stringHTML;
@@ -39,39 +39,39 @@ export class ParagraphProofreadPage {
     }
 
     async openDocumentsPage() {
-        await system.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
+        await assistOS.UI.changeToDynamicPage("documents-page", `${getBasePath()}/documents-page`);
     }
     async openDocumentViewPage() {
-        await system.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
+        await assistOS.UI.changeToDynamicPage("document-view-page", `${getBasePath()}/document-view-page/${this._document.id}`);
     }
     async openChapterEditorPage() {
-        await system.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
+        await assistOS.UI.changeToDynamicPage("chapter-editor-page", `${getBasePath()}/chapter-editor-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async openParagraphBrainstormingPage() {
-        await system.UI.changeToDynamicPage("paragraph-brainstorming-page", `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
+        await assistOS.UI.changeToDynamicPage("paragraph-brainstorming-page", `${getBasePath()}/paragraph-brainstorming-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
     }
     async openParagraphProofreadPage(){
-        await system.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
+        await assistOS.UI.changeToDynamicPage("paragraph-proofread-page", `${getBasePath()}/paragraph-proofread-page/${this._document.id}/chapters/${this._chapter.id}/paragraphs/${this._paragraph.id}`);
 
     }
 
     async executeProofRead() {
         let form = this.element.querySelector(".proofread-form");
-        const formData = await system.UI.extractFormInformation(form);
+        const formData = await assistOS.UI.extractFormInformation(form);
 
         this.text = formData.data.text;
         if(formData.data.personality){
-            this.personality = system.space.getPersonality(formData.data.personality);
+            this.personality = assistOS.space.getPersonality(formData.data.personality);
         }
         this.details = formData.data.details;
-        let flowId = system.space.getFlowIdByName("Proofread");
+        let flowId = assistOS.space.getFlowIdByName("Proofread");
         let context = {
-            text: system.UI.unsanitize(this.paragraphText),
+            text: assistOS.UI.unsanitize(this.paragraphText),
             prompt: formData.data.details
         }
-        let result = await system.services.callFlow(flowId, context, formData.data.personality);
-        this.observations = system.UI.sanitize(result.observations);
-        this.improvedParagraph = system.UI.sanitize(result.improvedText);
+        let result = await assistOS.services.callFlow(flowId, context, formData.data.personality);
+        this.observations = assistOS.UI.sanitize(result.observations);
+        this.improvedParagraph = assistOS.UI.sanitize(result.improvedText);
         this.invalidate();
     }
 
@@ -80,18 +80,18 @@ export class ParagraphProofreadPage {
         if (paragraph.getAttribute("contenteditable") === "false") {
             paragraph.setAttribute("contenteditable", "true");
             paragraph.focus();
-            let timer = system.services.SaveElementTimer(async () => {
+            let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
-                let sanitizedText = system.UI.sanitize(paragraph.innerText);
+                let sanitizedText = assistOS.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== this._paragraph.text && !confirmationPopup) {
-                    let flowId = system.space.getFlowIdByName("UpdateParagraphText");
+                    let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
                     let context = {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         paragraphId: this._paragraph.id,
                         text: sanitizedText
                     }
-                    await system.services.callFlow(flowId, context);
+                    await assistOS.services.callFlow(flowId, context);
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -131,7 +131,7 @@ export class ParagraphProofreadPage {
     async acceptImprovements(_target) {
         let paragraph = this.element.querySelector(".improved-paragraph").innerText;
         if(paragraph !== this._paragraph.text) {
-            let flowId = system.space.getFlowIdByName("UpdateParagraphText");
+            let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
             let context = {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
@@ -139,7 +139,7 @@ export class ParagraphProofreadPage {
                 text: paragraph
 
             }
-            await system.services.callFlow(flowId, context);
+            await assistOS.services.callFlow(flowId, context);
             this.invalidate();
         }
     }

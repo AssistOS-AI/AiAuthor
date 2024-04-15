@@ -13,5 +13,5 @@ export function getAppName(){
     return 'AiAuthor';
 }
 export function getBasePath(){
-    return `${system.space.id}`+`/`+`${getAppName()}`;
+    return `${assistOS.space.id}`+`/`+`${getAppName()}`;
 }

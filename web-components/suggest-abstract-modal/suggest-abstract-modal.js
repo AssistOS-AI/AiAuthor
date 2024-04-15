@@ -3,7 +3,7 @@ import {parseURL} from "../../utils/index.js"
 export class SuggestAbstractModal {
     constructor(element, invalidate) {
         this.id = parseURL();
-        this._document = system.space.getDocument(this.id);
+        this._document = assistOS.space.getDocument(this.id);
         this._document.observeChange(this._document.getNotificationId(), invalidate);
         this.invalidate = invalidate;
         this.element = element;
@@ -22,30 +22,30 @@ export class SuggestAbstractModal {
         }
     }
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 
     async generate(_target){
-        let formInfo = await system.UI.extractFormInformation(_target);
+        let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = system.space.getFlowIdByName("SuggestAbstract");
+        let flowId = assistOS.space.getFlowIdByName("SuggestAbstract");
         let context = {
             documentId: this._document.id,
             prompt: this.prompt,
             maxTokens: ""
         }
-        let result = await system.services.callFlow(flowId, context);
+        let result = await assistOS.services.callFlow(flowId, context);
         this.suggestedAbstract = result;
         this.invalidate();
     }
     async addSelectedAbstract(_target) {
-        let flowId = system.space.getFlowIdByName("AcceptSuggestedAbstract");
+        let flowId = assistOS.space.getFlowIdByName("AcceptSuggestedAbstract");
         let context = {
             documentId: this._document.id,
             abstract: this.suggestedAbstract
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId());
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 }

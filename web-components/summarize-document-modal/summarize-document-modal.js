@@ -2,7 +2,7 @@ import {parseURL} from "../../utils/index.js"
 export class SummarizeDocumentModal{
     constructor(element,invalidate){
         let documentId = parseURL();
-        this._document = system.space.getDocument(documentId);
+        this._document = assistOS.space.getDocument(documentId);
         this.invalidate = invalidate;
         this.element = element;
         this.invalidate();
@@ -11,7 +11,7 @@ export class SummarizeDocumentModal{
     beforeRender(){
         let string = "";
         for(let idea of this.documentMainIdeas){
-            string += `<li>${system.UI.sanitize(idea)}</li>`;
+            string += `<li>${assistOS.UI.sanitize(idea)}</li>`;
         }
         this.mainIdeas = string;
     }
@@ -26,29 +26,29 @@ export class SummarizeDocumentModal{
         }
     }
     async generate(_target){
-        let formInfo = await system.UI.extractFormInformation(_target);
+        let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = system.space.getFlowIdByName("SummarizeDocument");
+        let flowId = assistOS.space.getFlowIdByName("SummarizeDocument");
         let context = {
             documentId: this._document.id,
             prompt: this.prompt,
             maxTokens: ""
         }
-        let result = await system.services.callFlow(flowId, context);
+        let result = await assistOS.services.callFlow(flowId, context);
         this.documentMainIdeas = result;
         this.invalidate();
     }
     closeModal(_target) {
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
     async addSelectedIdeas(_target) {
-        let flowId = system.space.getFlowIdByName("AcceptDocumentIdeas");
+        let flowId = assistOS.space.getFlowIdByName("AcceptDocumentIdeas");
         let context = {
             documentId: this._document.id,
             ideas: this.documentMainIdeas
         }
-        await system.services.callFlow(flowId, context);
+        await assistOS.services.callFlow(flowId, context);
         this._document.notifyObservers(this._document.getNotificationId() + ":manage-chapters-page");
-        system.UI.closeModal(_target);
+        assistOS.UI.closeModal(_target);
     }
 }
