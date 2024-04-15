@@ -64,12 +64,10 @@ export class ParagraphProofreadPage {
             this.personality = assistOS.space.getPersonality(formData.data.personality);
         }
         this.details = formData.data.details;
-        let flowId = assistOS.space.getFlowIdByName("Proofread");
-        let context = {
+        let result = await assistOS.callFlow("Proofread", {
             text: assistOS.UI.unsanitize(this.paragraphText),
             prompt: formData.data.details
-        }
-        let result = await assistOS.services.callFlow(flowId, context, formData.data.personality);
+        }, formData.data.personality);
         this.observations = assistOS.UI.sanitize(result.observations);
         this.improvedParagraph = assistOS.UI.sanitize(result.improvedText);
         this.invalidate();
@@ -84,14 +82,12 @@ export class ParagraphProofreadPage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== this._paragraph.text && !confirmationPopup) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
-                    let context = {
+                    await assistOS.callFlow("UpdateParagraphText", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         paragraphId: this._paragraph.id,
                         text: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -131,15 +127,12 @@ export class ParagraphProofreadPage {
     async acceptImprovements(_target) {
         let paragraph = this.element.querySelector(".improved-paragraph").innerText;
         if(paragraph !== this._paragraph.text) {
-            let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
-            let context = {
+            await assistOS.callFlow("UpdateParagraphText", {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
                 paragraphId: this._paragraph.id,
                 text: paragraph
-
-            }
-            await assistOS.services.callFlow(flowId, context);
+            });
             this.invalidate();
         }
     }

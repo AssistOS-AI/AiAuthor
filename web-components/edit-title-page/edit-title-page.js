@@ -22,16 +22,14 @@ export class EditTitlePage {
         if (title.getAttribute("contenteditable") === "false") {
             title.setAttribute("contenteditable", "true");
             title.focus();
-            let flowId = assistOS.space.getFlowIdByName("UpdateDocumentTitle");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(title.innerText);
                 if (sanitizedText !== this._document.title && !confirmationPopup) {
-                    let context = {
+                    await assistOS.callFlow("UpdateDocumentTitle",  {
                         documentId: this._document.id,
                         title: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -75,13 +73,11 @@ export class EditTitlePage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeDocumentTitle");
-                    let context = {
+                    await assistOS.callFlow("UpdateAlternativeDocumentTitle", {
                         documentId: this._document.id,
                         alternativeTitleId: altTitleObj.id,
                         text: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -100,23 +96,19 @@ export class EditTitlePage {
 
     async delete(_target) {
         let alternativeTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
-        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeDocumentTitle");
-        let context = {
+        await assistOS.callFlow("DeleteAlternativeDocumentTitle", {
             documentId: this._document.id,
             alternativeTitleId: alternativeTitle.getAttribute("data-id")
-        };
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async select(_target){
         let suggestedTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeDocumentTitle");
-        let context = {
+        await assistOS.callFlow("SelectAlternativeDocumentTitle", {
             documentId: this._document.id,
             alternativeTitleId: suggestedTitleId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         assistOS.UI.removeActionBox(this.actionBox, this);
         this.invalidate();
     }

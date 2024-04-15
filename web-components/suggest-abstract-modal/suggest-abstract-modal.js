@@ -28,23 +28,18 @@ export class SuggestAbstractModal {
     async generate(_target){
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = assistOS.space.getFlowIdByName("SuggestAbstract");
-        let context = {
+        this.suggestedAbstract = await assistOS.callFlow("SuggestAbstract", {
             documentId: this._document.id,
             prompt: this.prompt,
             maxTokens: ""
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
-        this.suggestedAbstract = result;
+        });
         this.invalidate();
     }
     async addSelectedAbstract(_target) {
-        let flowId = assistOS.space.getFlowIdByName("AcceptSuggestedAbstract");
-        let context = {
+        await assistOS.callFlow("AcceptSuggestedAbstract",  {
             documentId: this._document.id,
             abstract: this.suggestedAbstract
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this._document.notifyObservers(this._document.getNotificationId());
         assistOS.UI.closeModal(_target);
     }

@@ -55,32 +55,28 @@ export class ParagraphBrainstormingPage {
         if (item.getAttribute("contenteditable") === "false") {
             item.setAttribute("contenteditable", "true");
             item.focus();
-            let flowId = assistOS.space.getFlowIdByName("UpdateParagraphMainIdea");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(item.innerText);
                 if(itemName === "mainIdea"){
                     if (sanitizedText !== this._paragraph.mainIdea && !confirmationPopup) {
-                        let context = {
+                        await assistOS.callFlow("UpdateParagraphMainIdea", {
                             documentId: this._document.id,
                             chapterId: this._chapter.id,
                             paragraphId: this._paragraph.id,
                             idea: sanitizedText
-                        }
-                        await assistOS.services.callFlow(flowId, context);
+                        });
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }
                 }else {
                     if(sanitizedText !== this._paragraph.text && !confirmationPopup){
-                        let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
-                        let context = {
+                        await assistOS.callFlow("UpdateParagraphText", {
                             documentId: this._document.id,
                             chapterId: this._chapter.id,
                             paragraphId: this._paragraph.id,
                             text: sanitizedText
-                        }
-                        await assistOS.services.callFlow(flowId, context);
+                        });
                         item.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                         data-message="Saved!" data-left="${item.offsetWidth/2}"></confirmation-popup>`);
                     }
@@ -144,15 +140,13 @@ export class ParagraphBrainstormingPage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(paragraph.innerText);
                 if (sanitizedText !== currentAltParagraph.text && !confirmationPopup) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeParagraph");
-                    let context = {
+                    await assistOS.callFlow("UpdateAlternativeParagraph", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         paragraphId: this._paragraph.id,
                         alternativeParagraphId: currentAltParagraph.id,
                         text: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     paragraph.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${paragraph.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -171,28 +165,24 @@ export class ParagraphBrainstormingPage {
     async delete(_target){
         let paragraph = assistOS.UI.reverseQuerySelector(_target, "alternative-paragraph");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeParagraph");
-        let context = {
+        await assistOS.callFlow("DeleteAlternativeParagraph", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraphId: paragraphId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 
     async select(_target){
         let paragraphElement = assistOS.UI.reverseQuerySelector(_target,"alternative-paragraph");
         let alternativeParagraphId = paragraphElement.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeParagraph");
-        let context = {
+        await assistOS.callFlow("SelectAlternativeParagraph", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraphId: alternativeParagraphId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
         assistOS.UI.removeActionBox(this.actionBox, this);
 

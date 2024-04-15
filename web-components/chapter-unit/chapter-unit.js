@@ -65,12 +65,10 @@ export class ChapterUnit {
         if (!fromParagraph && !fromChapter) {
             return;
         }
-        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
-        let context = {
+        await assistOS.callFlow("AddParagraph", {
             documentId: this._document.id,
             chapterId: this.chapter.id
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 
@@ -88,13 +86,11 @@ export class ChapterUnit {
         let timer = assistOS.services.SaveElementTimer(async () => {
             let titleText = assistOS.UI.sanitize(assistOS.UI.customTrim(title.innerText))
             if (titleText !== this.chapter.title && titleText !== "") {
-                let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
-                let context = {
+                await assistOS.callFlow("UpdateChapterTitle", {
                     documentId: this._document.id,
                     chapterId: this.chapter.id,
                     newTitle: titleText
-                }
-                await assistOS.services.callFlow(flowId, context);
+                });
             }
         }, 3000);
         /* NO chapter Title */

@@ -16,14 +16,12 @@ export class GenerateDocumentModal{
     async generateDocument(_target) {
         let formData = await assistOS.UI.extractFormInformation(_target);
         if(formData.isValid) {
-            let flowId = assistOS.space.getFlowIdByName("GenerateDocument");
             assistOS.UI.closeModal(_target);
-            let context = {
+            await assistOS.callFlow("GenerateDocument", {
                 title: formData.data.documentTitle,
                 topic: formData.data.documentTopic,
                 chaptersCount: formData.data.chaptersCount,
-            }
-            await assistOS.services.callFlow(flowId, context, formData.data.documentPersonality);
+            }, formData.data.documentPersonality);
         }
         assistOS.factories.notifyObservers("docs");
     }

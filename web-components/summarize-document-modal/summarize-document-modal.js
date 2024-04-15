@@ -28,26 +28,21 @@ export class SummarizeDocumentModal{
     async generate(_target){
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = assistOS.space.getFlowIdByName("SummarizeDocument");
-        let context = {
+        this.documentMainIdeas = await assistOS.callFlow("SummarizeDocument", {
             documentId: this._document.id,
             prompt: this.prompt,
             maxTokens: ""
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
-        this.documentMainIdeas = result;
+        });
         this.invalidate();
     }
     closeModal(_target) {
         assistOS.UI.closeModal(_target);
     }
     async addSelectedIdeas(_target) {
-        let flowId = assistOS.space.getFlowIdByName("AcceptDocumentIdeas");
-        let context = {
+        await assistOS.callFlow("AcceptDocumentIdeas", {
             documentId: this._document.id,
             ideas: this.documentMainIdeas
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this._document.notifyObservers(this._document.getNotificationId() + ":manage-chapters-page");
         assistOS.UI.closeModal(_target);
     }

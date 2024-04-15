@@ -68,13 +68,11 @@ export class ManageChaptersPage {
                 let ideas = mainIdeas.innerText.split("\n");
                 let ideasString = ideas.join("");
                 let currentIdeas = this._document.mainIdeas.join("");
-                let flowId = assistOS.space.getFlowIdByName("UpdateDocumentMainIdeas");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    let context = {
+                    await assistOS.callFlow("UpdateDocumentMainIdeas",  {
                         documentId: this._document.id,
                         mainIdeas: ideas
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -102,11 +100,9 @@ export class ManageChaptersPage {
         await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
     }
     async addChapter(){
-        let flowId = assistOS.space.getFlowIdByName("AddChapter");
-        let context = {
+        await assistOS.callFlow("AddChapter", {
             documentId: this._document.id
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async summarize(){
@@ -129,12 +125,10 @@ export class ManageChaptersPage {
     async deleteAction(_target){
         let chapter = assistOS.UI.reverseQuerySelector(_target, "reduced-chapter-unit");
         let chapterId = chapter.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("DeleteChapter");
-        let context = {
+        await assistOS.callFlow("DeleteChapter", {
             documentId: this._document.id,
             chapterId: chapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 }

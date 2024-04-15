@@ -41,12 +41,10 @@ export class AbstractProofreadPage {
             this.personality = assistOS.space.getPersonality(formData.data.personality);
         }
         this.details = formData.data.details;
-        let flowId = assistOS.space.getFlowIdByName("Proofread");
-        let context = {
+        let result = await assistOS.callFlow("Proofread", {
             text: assistOS.UI.unsanitize(this.abstractText),
             prompt: formData.data.details
-        }
-        let result = await assistOS.services.callFlow(flowId, context, formData.data.personality);
+        }, formData.data.personality);
         this.observations = assistOS.UI.sanitize(result.observations);
         this.improvedAbstract = assistOS.UI.sanitize(result.improvedText);
         this.invalidate();
@@ -60,13 +58,11 @@ export class AbstractProofreadPage {
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(abstract.innerText);
-                let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
-                    let context = {
+                    await assistOS.callFlow("UpdateAbstract", {
                         documentId: this._document.id,
                         text: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -106,12 +102,10 @@ export class AbstractProofreadPage {
     async acceptImprovements(_target) {
         let abstract = this.element.querySelector(".improved-abstract").innerText;
         if(abstract !== this._document.abstract) {
-            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
-            let context = {
+            await assistOS.callFlow("UpdateAbstract", {
                 documentId: this._document.id,
                 text: abstract
-            }
-            await assistOS.services.callFlow(flowId, context);
+            });
             this.invalidate();
         }
     }

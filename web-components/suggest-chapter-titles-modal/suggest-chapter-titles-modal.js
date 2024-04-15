@@ -51,15 +51,13 @@ export class SuggestChapterTitlesModal {
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
-        let flowId = assistOS.space.getFlowIdByName("SuggestChapterTitles");
-        let context = {
+        let result = await assistOS.callFlow("SuggestChapterTitles", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             prompt: this.prompt,
             maxTokens: "",
             titlesNr: this.titlesNr
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
+        });
         if(result){
             this.suggestedTitles = result;
             this.invalidate();
@@ -76,13 +74,11 @@ export class SuggestChapterTitlesModal {
                 selectedTitles.push({title:assistOS.UI.sanitize(value.element.value)});
             }
         }
-        let flowId = assistOS.space.getFlowIdByName("AddAlternativeChapterTitles");
-        let context = {
+        await assistOS.callFlow("AddAlternativeChapterTitles", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             titles: selectedTitles
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         await this._document.notifyObservers(this._document.getNotificationId());
         assistOS.UI.closeModal(_target);
     }

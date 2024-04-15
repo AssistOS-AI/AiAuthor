@@ -63,14 +63,11 @@ export class GenerateParagraphsPage {
         let form = this.element.querySelector(".generate-ideas-form");
         let formInfo = await assistOS.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = assistOS.space.getFlowIdByName("GenerateIdeas");
-            let context = {
+            this.ideas = await assistOS.callFlow("GenerateIdeas", {
                 topic: formInfo.data.idea,
                 variants: formInfo.data.nr,
                 maxTokens: ""
-            }
-            let result = await assistOS.services.callFlow(flowId, context);
-            this.ideas= result;
+            });
             this.invalidate();
         }
 
@@ -97,15 +94,13 @@ export class GenerateParagraphsPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = assistOS.space.getFlowIdByName("GenerateParagraphs");
-            let context = {
+            let result = await assistOS.callFlow("GenerateParagraphs", {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
                 prompt: formInfo.data.prompt,
                 ideas: selectedIdeas,
                 paragraphsNr: selectedIdeas.length
-            }
-            let result = await assistOS.services.callFlow(flowId, context);
+            });
             if(result){
                 await assistOS.UI.changeToDynamicPage("manage-paragraphs-page",`${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
             }

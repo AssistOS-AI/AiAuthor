@@ -39,11 +39,9 @@ export class DocumentsPage {
         await assistOS.UI.showModal( "clone-document-modal", { presenter: "clone-document-modal"});
     }
     async deleteAction(_target){
-        let flowId = assistOS.space.getFlowIdByName("DeleteDocument");
-        let context = {
+        await assistOS.callFlow("DeleteDocument", {
             documentId: this.getDocumentId(_target)
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         assistOS.factories.notifyObservers("docs");
     }
 }

@@ -44,13 +44,11 @@ export class ChapterBrainstormingPage {
     async exitEditMode (title, controller, event) {
         if (title.getAttribute("contenteditable") === "true" && title !== event.target && !title.contains(event.target)) {
             title.setAttribute("contenteditable", "false");
-            let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
-            let context = {
+            await assistOS.callFlow("UpdateChapterTitle", {
                 documentId: this._document.id,
                 chapterId: this._chapter.id,
                 title: title.innerText
-            }
-            await assistOS.services.callFlow(flowId, context);
+            });
             title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
             data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
             controller.abort();
@@ -79,19 +77,14 @@ export class ChapterBrainstormingPage {
     async openChapterProofreadPage(){
     }
     async suggestChapter(){
-        let flowId = assistOS.space.getFlowIdByName("SuggestChapter");
-        let context1 = {
+        let chapterObj = await assistOS.callFlow("SuggestChapter", {
             idea: JSON.stringify(this._chapter.mainIdeas)
-        }
-        let result = await assistOS.services.callFlow(flowId, context1);
-        let chapterObj=result;
-        let flowId2 = assistOS.space.getFlowIdByName("AddAlternativeChapter");
-        let context = {
+        });
+        await assistOS.callFlow("AddAlternativeChapter", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapter: chapterObj
-        }
-        await assistOS.services.callFlow(flowId2, context);
+        });
         this.invalidate();
     }
     async openCloneChapterModal(){
@@ -113,37 +106,31 @@ export class ChapterBrainstormingPage {
     async deleteAction(_target){
         let paragraph = assistOS.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
-        let context = {
+        await assistOS.callFlow("DeleteParagraph", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: paragraphId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async delete(_target){
         let alternativeChapter = assistOS.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeChapter");
-        let context = {
+        await assistOS.callFlow("DeleteAlternativeChapter", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapterId: alternativeChapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async select(_target){
         let alternativeChapter = assistOS.UI.reverseQuerySelector(_target, "alternative-chapter");
         let alternativeChapterId = alternativeChapter.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeChapter");
-        let context = {
+        await assistOS.callFlow("SelectAlternativeChapter", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeChapterId: alternativeChapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         assistOS.UI.removeActionBox(this.actionBox, this);
         assistOS.space.currentChapterId = alternativeChapterId;
         await assistOS.UI.changeToDynamicPage("chapter-brainstorming-page", `${getBasePath()}/chapter-brainstorming-page/${this._document.id}/chapters/${alternativeChapterId}`);

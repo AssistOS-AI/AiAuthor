@@ -81,28 +81,24 @@ export class DocumentViewPage {
                 }
                 let paragraphText = assistOS.UI.sanitize(assistOS.UI.customTrim(paragraph.innerText));
                 if (paragraphText !== currentParagraph.text) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
-                    let context = {
+                    await assistOS.callFlow("UpdateParagraphText", {
                         documentId: this._document.id,
                         chapterId: this.chapter.id,
                         paragraphId: currentParagraph.id,
                         text: paragraphText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                 }
             }, 1000);
             this.previouslySelectedParagraph["timer"]=timer;
-            let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
             this.resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
                         let curentParagraphIndex = this.chapter.getParagraphIndex(currentParagraphId);
-                        let context = {
+                        await assistOS.callFlow("DeleteParagraph", {
                             documentId: this._document.id,
                             chapterId: this.chapter.id,
                             paragraphId: currentParagraphId
-                        }
-                        await assistOS.services.callFlow(flowId, context);
+                        });
                         if (this.chapter.paragraphs.length > 0) {
                             if (curentParagraphIndex === 0) {
                                 assistOS.space.currentParagraphId = this.chapter.paragraphs[0].id;
@@ -301,14 +297,11 @@ export class DocumentViewPage {
         };
 
         const adjacentChapterId = getAdjacentChapterId(currentChapterIndex, this._document.chapters);
-
-        let flowId = assistOS.space.getFlowIdByName("SwapChapters");
-        let context = {
+        await assistOS.callFlow("SwapChapters", {
             documentId: this._document.id,
             chapterId1: currentChapterId,
             chapterId2: adjacentChapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 
@@ -346,15 +339,13 @@ export class DocumentViewPage {
             title.addEventListener('keydown', titleEnterHandler);
             title.focus();
             title.parentElement.setAttribute("id", "highlighted-chapter");
-            let flowId = assistOS.space.getFlowIdByName("UpdateDocumentTitle");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let titleText = assistOS.UI.sanitize(assistOS.UI.customTrim(title.innerText));
                 if (titleText !== this._document.title && titleText !== "") {
-                    let context = {
+                    await assistOS.callFlow("UpdateDocumentTitle", {
                         documentId: this._document.id,
                         title: titleText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                 }
             }, 1000);
             title.addEventListener("blur", async () => {
@@ -378,15 +369,13 @@ export class DocumentViewPage {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
             abstractSection.setAttribute("id", "highlighted-chapter");
-            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
             let timer =  assistOS.services.SaveElementTimer(async () => {
                 let abstractText = assistOS.UI.sanitize(assistOS.UI.customTrim(abstract.innerText));
                 if (abstractText !== this._document.abstract && abstractText !== "") {
-                    let context = {
+                    await assistOS.callFlow("UpdateAbstract", {
                         documentId: this._document.id,
                         text: abstractText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                 }
             }, 1000);
 
@@ -405,21 +394,17 @@ export class DocumentViewPage {
     }
 
     async addChapter() {
-        let flowId = assistOS.space.getFlowIdByName("AddChapter");
-        let context = {
+        await assistOS.callFlow("AddChapter", {
             documentId: this._document.id
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 
     async addParagraph(_target) {
-        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
-        let context = {
+        await assistOS.callFlow("AddParagraph", {
             documentId: this._document.id,
             chapterId: assistOS.space.currentChapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this._document.notifyObservers(this._document.getNotificationId() + ":document-view-page:" + "chapter:" + `${assistOS.space.currentChapterId}`);
     }
 

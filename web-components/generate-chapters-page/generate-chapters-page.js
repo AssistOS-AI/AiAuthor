@@ -58,14 +58,11 @@ export class GenerateChaptersPage {
         let form = this.element.querySelector(".generate-ideas-form");
         let formInfo = await assistOS.UI.extractFormInformation(form);
         if(formInfo.isValid) {
-            let flowId = assistOS.space.getFlowIdByName("GenerateIdeas");
-            let context = {
+            this.ideas = await assistOS.callFlow("GenerateIdeas", {
                 topic: formInfo.data.idea,
                 variants: formInfo.data.nr,
                 maxTokens: ""
-            }
-            let result = await assistOS.services.callFlow(flowId, context);
-            this.ideas = result;
+            });
             this.invalidate();
         }
 
@@ -81,14 +78,12 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = assistOS.space.getFlowIdByName("GenerateEmptyChapters");
-            let context = {
+            let result = await assistOS.callFlow("GenerateEmptyChapters", {
                 documentId: this._document.id,
                 prompt: formInfo.data.prompt,
                 ideas: selectedIdeas,
                 chapterNr: selectedIdeas.length
-            }
-            let result = await assistOS.services.callFlow(flowId, context);
+            });
             if(result){
                 await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }
@@ -117,14 +112,12 @@ export class GenerateChaptersPage {
                     selectedIdeas.push(value.element.value);
                 }
             }
-            let flowId = assistOS.space.getFlowIdByName("GenerateChapters");
-            let context = {
+            let result = await assistOS.callFlow("GenerateChapters", {
                 documentId: this._document.id,
                 prompt: formInfo.data.prompt,
                 ideas: selectedIdeas,
                 chapterNr: selectedIdeas.length
-            }
-            let result = await assistOS.services.callFlow(flowId, context);
+            });
             if(result){
                 await assistOS.UI.changeToDynamicPage("manage-chapters-page", `${getBasePath()}/manage-chapters-page/${this._document.id}`);
             }

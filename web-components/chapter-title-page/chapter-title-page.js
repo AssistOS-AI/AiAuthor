@@ -30,13 +30,11 @@ export class ChapterTitlePage {
             const documentIndex = assistOS.space.documents.findIndex(doc => doc.id === this.docId);
             const chapterIndex = this._document.getChapterIndex(this.chapterId);
             if (documentIndex !== -1 && chapterIndex !== -1 && formInfo.data.title !== this._document.getChapterTitle(this.chapterId)) {
-                let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
-                let context = {
+                await assistOS.callFlow("UpdateChapterTitle", {
                     documentId: this._document.id,
                     chapterId: this._chapter.id,
                     title: formInfo.data.title
-                }
-                await assistOS.services.callFlow(flowId, context);
+                });
             }
         }
     }
@@ -50,13 +48,11 @@ export class ChapterTitlePage {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(title.innerText);
                 if (sanitizedText !== this._chapter.title && !confirmationPopup) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
-                    let context = {
+                    await assistOS.callFlow("UpdateChapterTitle", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         title: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     title.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${title.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -85,18 +81,16 @@ export class ChapterTitlePage {
             let altTitleObj = this._chapter.getAlternativeTitle(component.getAttribute("data-id"));
             newTitle.setAttribute("contenteditable", "true");
             newTitle.focus();
-            let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeChapterTitle");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText = assistOS.UI.sanitize(newTitle.innerText);
                 if (sanitizedText !== altTitleObj.title && !confirmationPopup) {
-                    let context = {
+                    await assistOS.callFlow("UpdateAlternativeChapterTitle", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         alternativeTitleId: altTitleObj.id,
                         newTitle: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     newTitle.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${newTitle.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -114,25 +108,21 @@ export class ChapterTitlePage {
     }
     async delete(_target) {
         let alternativeTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
-        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeChapterTitle");
-        let context = {
+        await assistOS.callFlow("DeleteAlternativeChapterTitle", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeTitleId: alternativeTitle.getAttribute("data-id")
-        };
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async select(_target){
         let suggestedTitle = assistOS.UI.reverseQuerySelector(_target, "alternative-title");
         let suggestedTitleId = suggestedTitle.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeChapterTitle");
-        let context = {
+        await assistOS.callFlow("SelectAlternativeChapterTitle", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             alternativeTitleId: suggestedTitleId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async openDocumentsPage() {

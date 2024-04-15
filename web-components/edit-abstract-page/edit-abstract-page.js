@@ -28,16 +28,14 @@ export class EditAbstractPage {
         if (abstract.getAttribute("contenteditable") === "false") {
             abstract.setAttribute("contenteditable", "true");
             abstract.focus();
-            let flowId = assistOS.space.getFlowIdByName("UpdateAbstract");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText =  assistOS.UI.sanitize(abstract.innerText);
                 if (sanitizedText !== this._document.abstract && !confirmationPopup) {
-                    let context = {
+                    await assistOS.callFlow("UpdateAbstract", {
                         documentId: this._document.id,
                         text: sanitizedText
-                    };
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     abstract.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstract.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -69,12 +67,10 @@ export class EditAbstractPage {
     async select(_target){
         let suggestedAbstract= assistOS.UI.reverseQuerySelector(_target,"alternative-abstract");
         let suggestedAbstractId = suggestedAbstract.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("SelectAlternativeAbstract");
-        let context = {
+        await assistOS.callFlow("SelectAlternativeAbstract", {
             documentId: this._document.id,
             alternativeAbstractId: suggestedAbstractId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         assistOS.UI.removeActionBox(this.actionBox, this);
         this.invalidate();
     }
@@ -92,14 +88,12 @@ export class EditAbstractPage {
             let timer =assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let sanitizedText =  assistOS.UI.sanitize(abstractText.innerText);
-                let flowId = assistOS.space.getFlowIdByName("UpdateAlternativeAbstract");
                 if (sanitizedText !== abstract.content && !confirmationPopup) {
-                    let context = {
+                    await assistOS.callFlow("UpdateAlternativeAbstract", {
                         documentId: this._document.id,
                         abstractId: abstract.id,
                         text: sanitizedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     abstractText.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${abstractText.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -118,12 +112,10 @@ export class EditAbstractPage {
 
     async delete(_target) {
         let abstract = assistOS.UI.reverseQuerySelector(_target, "alternative-abstract");
-        let flowId = assistOS.space.getFlowIdByName("DeleteAlternativeAbstract");
-        let context = {
+        await assistOS.callFlow("DeleteAlternativeAbstract", {
             documentId: this._document.id,
             alternativeAbstractId: abstract.getAttribute("data-id")
-        };
-        await assistOS.services.callFlow(flowId, context);
+        });
         await assistOS.factories.updateDocument(assistOS.space.id, this._document);
         this.invalidate();
     }

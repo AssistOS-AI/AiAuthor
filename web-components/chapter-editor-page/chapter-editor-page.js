@@ -46,13 +46,11 @@ export class ChapterEditorPage{
         title.focus();
         let timer = assistOS.services.SaveElementTimer(async () => {
             if (title.innerText !== this._chapter.title) {
-                let flowId = assistOS.space.getFlowIdByName("UpdateChapterTitle");
-                let context = {
+                await assistOS.callFlow("UpdateChapterTitle", {
                     documentId: this._document.id,
                     chapterId: this._chapter.id,
                     title: title.innerText
-                }
-                await assistOS.services.callFlow(flowId, context);
+                });
             }
         }, 1000);
         title.addEventListener("blur", async () => {
@@ -100,12 +98,10 @@ export class ChapterEditorPage{
         await this.addParagraph(event.target);
     }
     async addParagraph(_target){
-        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
-        let context = {
+        await assistOS.callFlow("AddParagraph", {
             documentId: this._document.id,
             chapterId: this.chapterId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         let controller = new AbortController();
         document.addEventListener("click",this.checkParagraphClick.bind(this, controller), {signal:controller.signal});
         this.invalidate();
@@ -155,14 +151,12 @@ export class ChapterEditorPage{
                 }
                 let updatedText = paragraph.innerText;
                 if (updatedText !== currentParagraph.text) {
-                    let flowId = assistOS.space.getFlowIdByName("UpdateParagraphText");
-                    let context = {
+                    await assistOS.callFlow("UpdateParagraphText", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         paragraphId: currentParagraph.id,
                         text: updatedText
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                 }
             }, 1000);
             paragraph.addEventListener("blur", async () => {
@@ -170,16 +164,14 @@ export class ChapterEditorPage{
                 await timer.stop(true);
                 paragraph.setAttribute("contenteditable", "false");
             }, {once: true});
-            let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
             const resetTimer = async (event) => {
                 if (paragraph.innerText.trim() === "" && event.key === "Backspace") {
                     if (currentParagraph) {
-                        let context = {
+                        await assistOS.callFlow("DeleteParagraph", {
                             documentId: this._document.id,
                             chapterId: this._chapter.id,
                             paragraphId: currentParagraph.id
-                        }
-                        await assistOS.services.callFlow(flowId, context);
+                        });
                         this.invalidate();
                     }
                     await timer.stop();
@@ -211,15 +203,12 @@ export class ChapterEditorPage{
         };
 
         const adjacentParagraphId = getAdjacentParagraphId(currentParagraphIndex, this._chapter.paragraphs);
-
-        let flowId = assistOS.space.getFlowIdByName("SwapParagraphs");
-        let context = {
+        await assistOS.callFlow("SwapParagraphs", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId1: currentParagraphId,
             paragraphId2: adjacentParagraphId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async openDocumentsPage() {

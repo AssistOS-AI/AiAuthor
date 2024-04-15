@@ -28,13 +28,11 @@ export class SuggestParagraphModal {
     async generate(_target){
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = assistOS.space.getFlowIdByName("SuggestParagraph");
-        let context = {
+        let result = await assistOS.callFlow("SuggestParagraph", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             prompt: this.prompt,
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
+        });
         this.suggestedParagraph = result.text;
         this.suggestedParagraphIdea = result.mainIdea;
         this.invalidate();
@@ -50,14 +48,12 @@ export class SuggestParagraphModal {
             id:assistOS.services.generateId(),
             mainIdea:assistOS.UI.sanitize(this.suggestedParagraphIdea)
         };
-        let flowId = assistOS.space.getFlowIdByName("AcceptSuggestedParagraph");
-        let context = {
+        await assistOS.callFlow("AcceptSuggestedParagraph",{
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: this._paragraph.id,
             alternativeParagraph: altParagraphData
-        }
-        await assistOS.services.callFlow(flowId, context);
+             });
         this._document.notifyObservers(this._document.getNotificationId());
         assistOS.UI.closeModal(_target);
     }

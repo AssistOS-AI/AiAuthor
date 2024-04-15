@@ -14,14 +14,12 @@ export class SuggestTitlesModal {
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
         this.titlesNr = formInfo.data.nr;
-        let flowId = assistOS.space.getFlowIdByName("SuggestDocumentTitles");
-        let context = {
+        let result = await assistOS.callFlow("SuggestDocumentTitles", {
             documentId: this._document.id,
             prompt: this.prompt,
             titlesNr: this.titlesNr,
             maxTokens: ""
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
+        });
         if(result){
             this.suggestedTitles = result;
             this.invalidate();
@@ -75,13 +73,10 @@ export class SuggestTitlesModal {
                 selectedTitles.push({title:assistOS.UI.sanitize(value.element.value)});
             }
         }
-        let flowId = assistOS.space.getFlowIdByName("AddAlternativeDocumentTitles");
-        let context = {
+        await assistOS.callFlow("AddAlternativeDocumentTitles",  {
             documentId: this._document.id,
             selectedTitles: selectedTitles
-
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this._document.notifyObservers(this._document.getNotificationId());
         assistOS.UI.closeModal(_target);
     }

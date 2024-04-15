@@ -65,19 +65,17 @@ export class ManageParagraphsPage {
         if (mainIdeas.getAttribute("contenteditable") === "false") {
             mainIdeas.setAttribute("contenteditable", "true");
             mainIdeas.focus();
-            let flowId = assistOS.space.getFlowIdByName("UpdateChapterMainIdeas");
             let timer = assistOS.services.SaveElementTimer(async () => {
                 let confirmationPopup = this.element.querySelector("confirmation-popup");
                 let ideas = mainIdeas.innerText.split("\n");
                 let ideasString = ideas.join("");
                 let currentIdeas = this._chapter.mainIdeas.join("");
                 if (!confirmationPopup && ideasString !== currentIdeas) {
-                    let context = {
+                    await assistOS.callFlow("UpdateChapterMainIdeas", {
                         documentId: this._document.id,
                         chapterId: this._chapter.id,
                         mainIdeas: ideas
-                    }
-                    await assistOS.services.callFlow(flowId, context);
+                    });
                     mainIdeas.insertAdjacentHTML("afterbegin", `<confirmation-popup data-presenter="confirmation-popup" 
                     data-message="Saved!" data-left="${mainIdeas.offsetWidth/2}"></confirmation-popup>`);
                 }
@@ -108,12 +106,10 @@ export class ManageParagraphsPage {
         await assistOS.UI.changeToDynamicPage("manage-paragraphs-page", `${getBasePath()}/manage-paragraphs-page/${this._document.id}/chapters/${this._chapter.id}`);
     }
     async addParagraph(){
-        let flowId = assistOS.space.getFlowIdByName("AddParagraph");
-        let context = {
+        await assistOS.callFlow("AddParagraph",  {
             documentId: this._document.id,
             chapterId: this._chapter.id
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
     async summarize(){
@@ -136,13 +132,11 @@ export class ManageParagraphsPage {
     async deleteAction(_target){
         let paragraph = assistOS.UI.reverseQuerySelector(_target, "reduced-paragraph-unit");
         let paragraphId = paragraph.getAttribute("data-id");
-        let flowId = assistOS.space.getFlowIdByName("DeleteParagraph");
-        let context = {
+        await assistOS.callFlow("DeleteParagraph", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             paragraphId: paragraphId
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this.invalidate();
     }
 }

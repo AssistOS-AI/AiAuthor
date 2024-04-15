@@ -34,25 +34,20 @@ export class SummarizeChapterModal{
     async generate(_target){
         let formInfo = await assistOS.UI.extractFormInformation(_target);
         this.prompt = formInfo.data.prompt;
-        let flowId = assistOS.space.getFlowIdByName("SummarizeChapter");
-        let context = {
+        this.chapterMainIdeas = await assistOS.callFlow("SummarizeChapter", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             prompt: this.prompt,
             maxTokens: ""
-        }
-        let result = await assistOS.services.callFlow(flowId, context);
-        this.chapterMainIdeas = result;
+        });
         this.invalidate();
     }
     async addSelectedIdeas(_target) {
-        let flowId = assistOS.space.getFlowIdByName("AcceptChapterIdeas");
-        let context = {
+        await assistOS.callFlow("AcceptChapterIdeas", {
             documentId: this._document.id,
             chapterId: this._chapter.id,
             ideas: this.chapterMainIdeas
-        }
-        await assistOS.services.callFlow(flowId, context);
+        });
         this._document.notifyObservers(this._document.getNotificationId()+":manage-paragraphs-page");
         assistOS.UI.closeModal(_target);
     }

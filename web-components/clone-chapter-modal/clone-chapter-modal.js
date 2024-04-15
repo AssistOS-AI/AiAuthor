@@ -22,15 +22,13 @@ export class CloneChapterModal {
     async cloneChapter(_target) {
         let formData = await assistOS.UI.extractFormInformation(_target);
         let proofread = formData.data.proofread === "on";
-        let flowId = assistOS.space.getFlowIdByName("CloneChapter");
-        let context = {
+        await assistOS.callFlow("CloneChapter", {
             documentId: this.documentId,
             chapterId: this.chapterId,
             personalityId: formData.data.chapterPersonality,
             title: formData.data.chapterTitle,
             proofread: proofread
-        };
-        await assistOS.services.callFlow(flowId, context);
+        });
         assistOS.space.getDocument(this.documentId).notifyObservers("doc:chapter-brainstorming-page");
         assistOS.UI.closeModal(_target);
     }
