@@ -2,7 +2,7 @@ import {getBasePath} from "../../utils/index.js"
 export class DocumentsPage {
     constructor(element, invalidate) {
         this.notificationId = "docs"
-        assistOS.factories.observeChange(this.notificationId, invalidate);
+        assistOS.space.observeChange(this.notificationId, invalidate);
         this.invalidate = invalidate;
         this.invalidate();
     }
