@@ -62,7 +62,8 @@
     line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
-    color: var(--document-path);
+    color: #2D9FFF;
+    /*TODO: change to another color*/
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -104,7 +105,8 @@ html[theme="dark"] .document-title-container {
     font-weight: 600;
     cursor: pointer;
     color: var(--white-text);
-    background-color: var(--new-chapter-btn);
+    background-color: #2D9FFF;
+    /*TODO: change to another color*/
 }
 
 .add-new-chapter-section {
@@ -136,7 +138,7 @@ html[theme="dark"] .document-title-container {
 }
 
 #highlighted-abstract {
-    background-color: var(--medium-white);
+    background-color: var(--white-blue-tint);
 }
 
 .sidebar-item {

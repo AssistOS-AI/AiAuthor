@@ -164,7 +164,7 @@ p {
 }
 
 #highlighted-chapter {
-    background-color: var(--medium-white);
+    background-color: var(--white-blue-tint);
 }
 
 html[theme="dark"] #highlighted-chapter {
